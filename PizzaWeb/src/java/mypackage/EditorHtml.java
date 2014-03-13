@@ -61,16 +61,18 @@ public class EditorHtml {
         public void setQuantita(int iQuantita){
             quantita=iQuantita;
         }
-        //public 
+        public int getQuantita(){
+            return quantita;
+        } 
         
     }
     public class Prenotazione{
         int id;
         Utente cliente;
-        ArrayList <Pizza> prenotaz;
+        ArrayList <Ordine> prenotaz;
         String stato;
         
-        public Prenotazione(int iId, Utente iCliente, ArrayList <Pizza> iPrenotaz, String iStato){
+        public Prenotazione(int iId, Utente iCliente, ArrayList <Ordine> iPrenotaz, String iStato){
             id=iId;
             cliente=iCliente;
             for(int i=0;i<iPrenotaz.size();i++)
