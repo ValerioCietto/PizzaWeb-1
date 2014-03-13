@@ -42,56 +42,48 @@ public class Controller extends HttpServlet {
         String action= req.getParameter("action");
         if(action!=null){
             switch (action) {
-                case "login":
+                /*case "switch":
                     login(req);
+                    break;*/
+                case "login":
+                    Model.login(req);
                     break;
                 case "logout":
-                    logout(req);
+                    Model.logout(req);
                     break;
-                case "remove":
-                    remove(req);
-                    break;
-                case "aggiungi":
+                case "aggPizza":
                     aggiungi(req);
                     break;
+                case "remPizza":
+                    remove(req);
+                    break;
+                case "modPizza":
+                    aggiungi(req);
+                    break;
+                case "aggLogin":
+                    aggiungi(req);
+                    break;
+                case "remLogin":
+                    remove(req);
+                    break;
+                case "modLogin":
+                    aggiungi(req);
+                    break;    
             }
         }
     }
-    public static void login(HttpServletRequest req){
-        HttpSession s=req.getSession();
-        String name = req.getParameter("login");
-        String password = req.getParameter("password");
-        if(name!=null && password!=null && !name.equals("") && !password.equals("")){
-            ArrayList<String[]> login=DBManager.query("SELECT NOME,RUOLO FROM UTENTI WHERE NOME='"+name+"' AND PASSWORD='"+password+"'");
-            if(login.size()==2){
-                s.setAttribute("username", login.get(1)[0]);
-                s.setAttribute("ruolo", login.get(1)[1]);
-                s.setAttribute("message","login effettuato");
-                return;
-            }
-            s.setAttribute("message","login errato");
-        }else
-            System.out.println("vuoto o nullo");
-        
-        
-    }
-    public static void logout(HttpServletRequest req){
-        HttpSession s=req.getSession();
-        s.invalidate();
-        s=req.getSession();
-        s.setAttribute("message", "logout effettuato");
-    }
+    
     public static void remove(HttpServletRequest req){
         HttpSession s=req.getSession();
         String name = req.getParameter("pizza");
         if(name!=null && !name.equals("")){
-            DBManager.removePizza(name);
+            DBManager.remPizza(name);
             s.setAttribute("message","rimossa pizza "+name);
             return;
         }
         name = req.getParameter("login");
         if(name!=null && !name.equals("")){
-            DBManager.removeLogin(name);
+            DBManager.remLogin(name);
             s.setAttribute("message","rimosso login "+name);
             return;
         }

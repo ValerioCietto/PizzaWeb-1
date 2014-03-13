@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import javax.servlet.http.*;
 
 public class Model {
-    public class Pizza{
+    public static class Pizza{
         String nome;
         String ingredienti;
         double prezzo;
@@ -18,18 +18,25 @@ public class Model {
         }
         public void setPizza(String nIngredienti,double nPrezzo){
             String oNome=this.nome;
-            DBManager.updatePizza(oNome, nIngredienti, nPrezzo);
+            DBManager.modPizza(oNome, nIngredienti, nPrezzo);
         
         }
     }
-    public class Utente{
-        String nome;
-        String pwd;
-        String ruolo;
+    public static class Utente{
+        String nome="";
+        String pwd="";
+        String ruolo="";
         public Utente(String iNome,String iPwd, String iRuolo){
             nome=iNome;
             pwd=iPwd;
             ruolo=iRuolo;
+        }
+        public Utente(String []input){
+            if(input==null)
+                return;
+            nome=input[0];
+            pwd=input[1];
+            ruolo=input[2];
         }
         public String getNome(){
             return nome;
@@ -78,12 +85,36 @@ public class Model {
             return prenotaz.get(i);
         }
     }
+    
+    public static void login(HttpServletRequest req){
+        HttpSession s=req.getSession();
+        String name = req.getParameter("login");
+        String password = req.getParameter("password");
+        if(name!=null && password!=null && !name.equals("") && !password.equals("")){
+            Utente login = new Utente( DBManager.getLogin(name,password) );
+            if(!login.getNome().equals("")){
+                s.setAttribute("username",login.getNome());
+                s.setAttribute("ruolo", login.getRuolo());
+                s.setAttribute("message","login effettuato");
+            }else
+                s.setAttribute("message","login errato");
+        }else
+            s.setAttribute("message","input vuoto");
+    }
+    public static void logout(HttpServletRequest req){
+        HttpSession s=req.getSession();
+        s.invalidate();
+        s=req.getSession();
+        s.setAttribute("message", "logout effettuato");
+    }
+    
+    
     public static String pagina(HttpServletRequest req){
         String out="";
         out+="<header><h1>PIZZERIA ONLINE</h1></header>";
-        out+="<nav>"+nav(req)+"</nav>";
+        //out+="<nav>"+nav(req)+"</nav>";
         out+="<article>"+article(req)+"</article>";
-        out+="<aside>"+aside(req)+"</aside>";
+        //out+="<aside>"+aside(req)+"</aside>";
         out+="<footer>footer</footer>";
         return out;
     }
@@ -107,7 +138,7 @@ public class Model {
     public static String catalogo(HttpServletRequest req){
         String ruolo=(String)(req.getSession()).getAttribute("ruolo");
         String out="";
-        ArrayList<String[]> ris=DBManager.query("SELECT * FROM PIZZE");
+        ArrayList<String[]> ris=DBManager.query("SELECT * FROM PIZZE",true);
         out+="<table>";
         //intestazione
         out+="<tr>";
@@ -148,7 +179,7 @@ public class Model {
     }
     public static String listaLogin(HttpServletRequest req){
         String out="";
-        ArrayList<String[]> ris=DBManager.query("SELECT * FROM UTENTI");
+        ArrayList<String[]> ris=DBManager.query("SELECT * FROM UTENTI",true);
         out+="<table>";
         
         for(int i=0;i<ris.size();i++){
@@ -164,7 +195,7 @@ public class Model {
         out+="</table>";
         return out;
     }
-    
+    /*
     public static String nav(HttpServletRequest req){
         String out="<ul>";
         String ruolo=(String)(req.getSession()).getAttribute("ruolo");
@@ -209,5 +240,5 @@ public class Model {
         out+="</table>";
         return out;
     }
-    
+    */
 }

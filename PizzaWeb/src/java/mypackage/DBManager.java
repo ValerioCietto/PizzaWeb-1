@@ -12,12 +12,7 @@ public class DBManager {
 
     /**
      * @param args the command line arguments
-     */
-    public static void main(String []args){
-        inizializza();
-        ArrayList<String[]> login=query("SELECT * FROM UTENTI");
-        System.out.println(login.size());
-    }   
+     */   
     public static void inizializza(){
        try { // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
@@ -59,20 +54,27 @@ public class DBManager {
     public static void addPizza(String nome, String ingr, int prezzo){
         esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
     }
-    public static void removePizza(String nome){
+    public static void remPizza(String nome){
         esegui("DELETE FROM PIZZE WHERE (NOME='"+nome+"')");
-    }
-    
-    public static void updatePizza(String nome, String nIngr, double nPrezzo){
+    }   
+    public static void modPizza(String nome, String nIngr, double nPrezzo){
         esegui("UPDATE PIZZE SET INGREDIENTI='" + nIngr+ "', PREZZO=" +nPrezzo+" WHERE NOME ='" +nome+"'");
     }
-    
-    //UPDATE PIZZE SET INGREDIENTI='VAL',... WHERE NOME='KEY'
     public static void addLogin(String nome, String password, String ruolo){
         esegui("INSERT INTO UTENTI (NOME, PASSWORD, RUOLO) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
     }
-    public static void removeLogin(String nome){
+    public static void remLogin(String nome){
         esegui("DELETE FROM UTENTI WHERE (NOME='"+nome+"')");
+    }
+    public static ArrayList<String[]> getAllLogin(){
+        return query("SELECT * FROM UTENTI",false);
+    }
+    public static String[] getLogin(String usr,String pwd){
+        ArrayList<String[]> temp= query("SELECT * FROM UTENTI WHERE NOME='"+usr+"' AND PASSWORD ='"+pwd+"'",false);
+        if(temp.isEmpty())
+            return null;
+        else
+            return temp.get(0);
     }
     public static void addPrenotazione(String Cliente, String[] pizza, int[] quantita){
         idordine+=1;
@@ -84,12 +86,6 @@ public class DBManager {
         }
         esegui(sql);
     }
-    /*public static void editSqlAdd(String tab, String nome, String mezzo, String fine){
-        if (tab.equals("utenti"))
-            addLogin(nome, mezzo, fine);
-        else if(tab.equals("pizze"))
-            addPizza(nome, mezzo, Integer.parseInt(fine));
-    }*/
     public static void esegui(String sql) {
         try{
             Connection conn = DriverManager.getConnection(ur, us, p);
@@ -108,7 +104,7 @@ public class DBManager {
         addPizza("Margherita","pomodoro e mozzarella", 15);
         addPizza("Funghi","pomodoro e funghi", 6);
     }
-    public static ArrayList<String[]> query(String query) {
+    public static ArrayList<String[]> query(String query,boolean h) {
         ArrayList<String[]> out=new ArrayList<String[]>();
         try{
             Connection conn = DriverManager.getConnection(ur, us, p);
@@ -118,9 +114,11 @@ public class DBManager {
             int num = md.getColumnCount();
             String [] temp = new String[num];
             //carica i metadata in riga 0
-            for(int i=0;i<num;i++)
-                temp[i]=md.getColumnName(i+1);
-            out.add(temp);
+            if(h){
+                for(int i=0;i<num;i++)
+                    temp[i]=md.getColumnName(i+1);
+                out.add(temp);
+            }
             //carica i risultati della query da 1 in poi
             while(rs.next()){
                 temp = new String[num];
@@ -154,21 +152,6 @@ public class DBManager {
         }
         
     }
-    /*public static void queryMetadata(String tabella){
-       try {
-           Connection conn = DriverManager.getConnection(ur, us, p);
-           Statement st = conn.createStatement();
-           ResultSet rs = st.executeQuery("SELECT * FROM "+tabella);
-           ResultSetMetaData md = rs.getMetaData();
-           int num = md.getColumnCount();
-           System.out.println("Numero di colonne: " + num);
-           for (int i=1; i<=num; i++)
-               System.out.println(md.getColumnName(i) +" " + md.getColumnType(i));
-           rs.close(); st.close();
-       }catch(SQLException e){
-           System.out.println(e.getMessage() + ": errore metadata : "+tabella);
-       }
-    }*/
 }
     
 
