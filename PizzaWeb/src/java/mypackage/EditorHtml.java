@@ -71,7 +71,6 @@ public class EditorHtml {
         Utente cliente;
         ArrayList <Ordine> prenotaz;
         String stato;
-        
         public Prenotazione(int iId, Utente iCliente, ArrayList <Ordine> iPrenotaz, String iStato){
             id=iId;
             cliente=iCliente;
@@ -80,18 +79,17 @@ public class EditorHtml {
             stato=iStato;
             
         }
-        
         public int getId(){
-        return id;
+            return id;
         }
-        
         public Utente getUtente(){
-        return cliente;
+            return cliente;
         }
-
-        
-         public String getStato(){
+        public String getStato(){
             return stato;
+        }
+        public Ordine getOrdine(int i){
+            return prenotaz.get(i);
         }
     }
     public static String pagina(HttpServletRequest req){
