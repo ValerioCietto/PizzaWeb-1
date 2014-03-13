@@ -11,11 +11,7 @@
         <% DBManager.inizializza();%>
         <% //=EditorHtml.pagina(request)%>
         <%
-        String view=request.getParameter("view");
-        String ruolo=(String)(request.getSession()).getAttribute("ruolo");
-        String message=(String)(request.getSession()).getAttribute("message");
-        String action=request.getParameter("action");
-        %>
+        String view=request.getParameter("view");%>
         <header><h1>PIZZERIA ONLINE</h1></header>
         <%@include file="nav.jsp"%>
         <%@include file="aside.jsp"%>

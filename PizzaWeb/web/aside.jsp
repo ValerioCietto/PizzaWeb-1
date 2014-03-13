@@ -7,9 +7,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
+        <%String ruoloA=(String)(request.getSession()).getAttribute("ruolo");
+        String messageA=(String)(request.getSession()).getAttribute("message");%>
         <aside>
             <table>
-                <%if(ruolo==null || ruolo.equals("")){%>
+                <%if(ruoloA==null || ruoloA.equals("")){%>
                     <tr>
                         <td>
                             <form action="/PizzaWeb/Servlet" method="get">
@@ -35,10 +37,10 @@
                         </td>
                     </tr>
                 <%}
-                if(message!=null && !message.equals("")){%>
+                if(messageA!=null && !messageA.equals("")){%>
                     <tr>
                         <td>
-                            <p><%=message%></p>
+                            <p><%=messageA%></p>
                         </td>
                     </tr>
                     <%(request.getSession()).setAttribute("message","");

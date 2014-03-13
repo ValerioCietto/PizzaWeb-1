@@ -7,12 +7,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
+        <%String ruoloN=(String)(request.getSession()).getAttribute("ruolo");%>
         <nav>
             <ul>
                 <li><a href="catalogo.jsp">Catalogo</a></li>
-                <% if(ruolo!=null && ruolo.equals("user")){%>
+                <% if(ruoloN!=null && ruoloN.equals("user")){%>
                     <li>Visualizza Tue Prenotazioni</li>
-                <%}else if(ruolo!=null && ruolo.equals("admin")){%>
+                <%}else if(ruoloN!=null && ruoloN.equals("admin")){%>
                     <li>Visualizza Tutte le Prenotazioni</li>"
                     <li><a href="loginmanager.jsp">Modifica Permessi</a></li>
                 <%}%>

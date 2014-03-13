@@ -17,7 +17,7 @@ import javax.servlet.http.*;
  * prova commit
  */
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
-public class Servlet extends HttpServlet {
+public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
@@ -31,7 +31,7 @@ public class Servlet extends HttpServlet {
             out.println("<title>Pizzeria</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println(EditorHtml.pagina(request));
+            out.println(Model.pagina(request));
             out.println("</body>");
             out.println("</html>");
         } finally {            

@@ -3,7 +3,7 @@ package mypackage;
 import java.util.ArrayList;
 import javax.servlet.http.*;
 
-public class EditorHtml {
+public class Model {
     public class Pizza{
         String nome;
         String ingredienti;
@@ -13,25 +13,15 @@ public class EditorHtml {
             ingredienti=iIngredienti;
             prezzo=iPrezzo;
         }
-        
         public double getPrezzo(){
             return prezzo;
         }
-        
         public void setPizza(String nIngredienti,double nPrezzo){
             String oNome=this.nome;
             DBManager.updatePizza(oNome, nIngredienti, nPrezzo);
         
         }
     }
-    /*public class Catalogo {
-        ArrayList <Pizza>lista=new ArrayList<Pizza>();
-        public Catalogo( ArrayList <Pizza>iLista ){
-            //lista=iLista;
-            for(int i=0;i<iLista.size();i++)
-                lista.add(iLista.get(i));
-        }
-    }*/
     public class Utente{
         String nome;
         String pwd;
@@ -51,10 +41,8 @@ public class EditorHtml {
             return ruolo;
         }
     }
-    
     public class Ordine extends Pizza{
-        int quantita=1;
-        
+        int quantita=1;   
         public Ordine(String iNome,String iIngredienti, double iPrezzo){
             super(iNome, iIngredienti, iPrezzo);
         }
@@ -63,8 +51,7 @@ public class EditorHtml {
         }
         public int getQuantita(){
             return quantita;
-        } 
-        
+        }
     }
     public class Prenotazione{
         int id;
@@ -77,7 +64,6 @@ public class EditorHtml {
             for(int i=0;i<iPrenotaz.size();i++)
                 prenotaz.add(iPrenotaz.get(i));
             stato=iStato;
-            
         }
         public int getId(){
             return id;

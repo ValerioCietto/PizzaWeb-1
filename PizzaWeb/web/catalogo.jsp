@@ -9,6 +9,7 @@
         <title>Catalogo</title>
     </head>
     <body>
+        <%String ruolo=(String)(request.getSession()).getAttribute("ruolo");%>
         <article>
             <% ArrayList<String[]> ris=DBManager.query("SELECT * FROM PIZZE");%>
             <table>
