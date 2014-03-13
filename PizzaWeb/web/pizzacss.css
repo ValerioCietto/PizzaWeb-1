@@ -1,0 +1,103 @@
+root { 
+    display: block;
+}
+html { height: 100% }
+body {
+    margin:0; padding:0;
+    font-family:Verdana,sans-serif;
+    font-size:small;
+    background:white;
+    width:100%;
+    min-width:750px;
+    /* max-width:1220px;*/
+}
+
+.h2class {
+    /*padding:.2em 0 .2em 1em;*/
+    font-family:"Trebuchet MS", sans-serif;
+    font-size:110%;
+    color:orange;
+}
+
+.normalText {
+    /*padding:.2em 0 .2em 1em;*/
+    font-family:"Trebuchet MS", sans-serif;
+    font-size:100%;
+    color:green;
+}
+header {
+    position: absolute;
+    height:19.5%;
+    min-height: 24px;
+    width:100%;
+    top:0px;
+    left:0px;
+    background:yellow;
+    font-size:20px;
+    font-style:bold;
+    text-align:center;
+    text-decoration-color: red;
+}
+nav { /* link di navigazione principali nella pagina */
+    position: absolute;
+    height:75%;
+    width:20%;
+    top:20%;
+    left:0px;
+    text-align: left;
+    background-color: #f3b42e;
+    //background-color: #FF8888
+} 
+article {
+    position: absolute;
+    height:75%;
+    width:59%;
+    top:20%;
+    left:20.5%;
+    background-color: #f3c72e;
+    //background-color: #EEEEEE
+}
+table,tr{
+    width: 100%;
+    border:solid 3px black;
+}
+th{
+    border:solid 1px black;
+    background-color: green;
+}
+td,th{
+    max-width: 25%;
+    text-align: center;
+}
+td input{
+    width: 95%; 
+}
+aside { 
+   // float:right;
+    position: absolute;
+    height:75%;
+    width:20%;
+    top:20%;
+    left:80%;
+    background-color: #F3B42E;
+    //background-color: #8888FF
+}
+footer {
+    position: absolute;
+    height:4.5%;
+    width:100%;
+    top:95%;
+    left:0px;
+    font-size:110%;
+    font-style:bold;
+    background-color: #FF0000
+}
+/*footer>nav { // link di navigazione principali nella pagina
+    float:left;
+    width:33%; 
+} */
+#info {
+    float:right;
+    width:33%;
+}
+a:hover {background-color: yellow;}
