@@ -51,20 +51,20 @@ public class DBManager {
         }
         //chiudo statement (non serve più)        
     }
-    public static void addPizza(String nome, String ingr, double prezzo){
-        esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
+    public static boolean addPizza(String nome, String ingr, double prezzo){
+        return esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
     }
-    public static void remPizza(String nome){
-        esegui("DELETE FROM PIZZE WHERE (NOME='"+nome+"')");
+    public static boolean remPizza(String nome){
+        return esegui("DELETE FROM PIZZE WHERE (NOME='"+nome+"')");
     }   
-    public static void modPizza(String nome, String nIngr, double nPrezzo){
-        esegui("UPDATE PIZZE SET INGREDIENTI='" + nIngr+ "', PREZZO=" +nPrezzo+" WHERE NOME ='" +nome+"'");
+    public static boolean modPizza(String nome, String nIngr, double nPrezzo){
+        return esegui("UPDATE PIZZE SET INGREDIENTI='" + nIngr+ "', PREZZO=" +nPrezzo+" WHERE NOME ='" +nome+"'");
     }
-    public static void addLogin(String nome, String password, String ruolo){
-        esegui("INSERT INTO UTENTI (NOME, PASSWORD, RUOLO) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
+    public static boolean addLogin(String nome, String password, String ruolo){
+        return esegui("INSERT INTO UTENTI (NOME, PASSWORD, RUOLO) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
     }
-    public static void remLogin(String nome){
-        esegui("DELETE FROM UTENTI WHERE (NOME='"+nome+"')");
+    public static boolean remLogin(String nome){
+        return esegui("DELETE FROM UTENTI WHERE (NOME='"+nome+"')");
     }
     public static ArrayList<String[]> getAllLogin(){
         return query("SELECT * FROM UTENTI",false);
@@ -86,7 +86,7 @@ public class DBManager {
         }
         esegui(sql);
     }
-    public static void esegui(String sql) {
+    public static boolean esegui(String sql) {
         try{
             Connection conn = DriverManager.getConnection(ur, us, p);
             Statement st = conn.createStatement();
@@ -96,7 +96,9 @@ public class DBManager {
             System.out.println("Ho eseguito: "+sql);
         } catch (SQLException e){
             System.out.println(e.getMessage() + ": errore carica : "+sql);
+            return false;
         }
+        return true;
     }
     public static void startDati() { //startDati(String tab, String nome, String mezzo, String fine)
         addLogin("admin","admin","admin");

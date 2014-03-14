@@ -27,7 +27,8 @@ public class Model {
     }
     public static void remPizza(HttpServletRequest req){
         String pizza= req.getParameter("pizza");
-        DBManager.remPizza(pizza);
+        if(!DBManager.remPizza(pizza))
+            (req.getSession()).setAttribute("message","Problema sql");
     }
     public static void addPizza(HttpServletRequest req){
         HttpSession s=req.getSession();
@@ -36,10 +37,12 @@ public class Model {
             String n= temp.getNome();
             String i= req.getParameter("ingredienti");
             Double p= temp.getPrezzo();
-            DBManager.addPizza(n, i, p);
-            s.setAttribute("message","aggiunta pizza "+n);
+            if(DBManager.addPizza(n, i, p))
+               s.setAttribute("message","aggiunta pizza "+n);
+            else
+               s.setAttribute("message","Problema sql");
         }else
-            s.setAttribute("message","parametro pizza non trovato");
+            s.setAttribute("message","errore input");
     } 
 }
 class Pizza{

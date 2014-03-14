@@ -24,8 +24,7 @@
                         <th>ordinate</th>
                     <%}%>
                 </tr> 
-                <%System.out.println("4");
-                for(int i=1;i<ris.size();i++){%>
+                <%for(int i=1;i<ris.size();i++){%>
                     <tr>
                         <%for(int j=0;j<ris.get(i).length;j++){%>
                             <td><%=ris.get(i)[j]%></td>
