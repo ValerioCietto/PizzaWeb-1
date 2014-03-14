@@ -24,7 +24,7 @@ public class Controller extends HttpServlet {
                 case "logout":
                     Model.logout(request);
                     break;
-                case "aggPizza":
+                case "addPizza":
                     Model.addPizza(request);
                     break;
                 case "remPizza":
