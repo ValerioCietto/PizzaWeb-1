@@ -29,24 +29,17 @@ public class Model {
         String pizza= req.getParameter("pizza");
         DBManager.remPizza(pizza);
     }
-    public static void aggiungi(HttpServletRequest req){
+    public static void addPizza(HttpServletRequest req){
         HttpSession s=req.getSession();
-        String name = req.getParameter("pizza");
-        if(name!=null && !name.equals("")){
-            String ingredienti=req.getParameter("ingredienti");
-            if(ingredienti!=null){
-                try{
-                    double prezzo= Double.parseDouble(req.getParameter("prezzo"));
-                    DBManager.addPizza(name, ingredienti, prezzo);
-                    s.setAttribute("message","aggiunta pizza "+name);
-                }catch(NumberFormatException e){
-                    s.setAttribute("message","errore input prezzo");
-                }
-            }else
-                s.setAttribute("message","errore input ingredienti");
-            return;
-        }
-        s.setAttribute("message","parametro pizza non trovato");
+        Pizza temp=new Pizza(req.getParameter("pizza"),req.getParameter("ingredienti"),req.getParameter("prezzo"));
+        if (temp.getNome()!=null){
+            String n= temp.getNome();
+            String i= req.getParameter("ingredienti");
+            Double p= temp.getPrezzo();
+            DBManager.addPizza(n, i, p);
+            s.setAttribute("message","aggiunta pizza "+n);
+        }else
+            s.setAttribute("message","parametro pizza non trovato");
     } 
 }
 class Pizza{
@@ -76,6 +69,9 @@ class Pizza{
     }
     public double getPrezzo(){
         return prezzo;
+    }
+    public String getNome(){
+    return nome;
     }
     public void setPizza(String nIngredienti,double nPrezzo){
         String oNome=this.nome;
