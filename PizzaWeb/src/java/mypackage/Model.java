@@ -54,14 +54,25 @@ class Pizza{
     String ingredienti;
     double prezzo;
     public Pizza(String iNome,String iIngredienti,double iPrezzo){
-        nome=iNome;
-        ingredienti=iIngredienti;
-        prezzo=iPrezzo;
+        if(iNome!=null && !iNome.equals("")){
+           
+            if(iIngredienti!=null){
+                
+                if (iPrezzo>0){
+                    ingredienti=iIngredienti;
+                    nome=iNome;
+                    prezzo=iPrezzo;
+                }}}
+
     }
     public Pizza(String iNome,String iIngredienti,String iPrezzo){
-    try{}
-        
-    catch {}
+    try{
+            double prezzo= Double.parseDouble(iPrezzo);
+            new Pizza(iNome, iIngredienti,prezzo);
+                  
+       }catch(NumberFormatException e){
+                    System.out.println(e);
+                }
     }
     public double getPrezzo(){
         return prezzo;
