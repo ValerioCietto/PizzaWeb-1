@@ -49,7 +49,7 @@
                             <td><input type="text" name= "pizza"        value="nome"></td>
                             <td><input type="text" name= "ingredienti"  value="ingredienti"></td>
                             <td><input type="text" name= "prezzo"       value="prezzo"></td>
-                            <td colspan=4><input type="submit" name= "action" value="aggiungi"></td>
+                            <td colspan=4><input type="submit" name= "action" value="addPizza"></td>
                         </tr>
                     </form>
                 <%}%>
