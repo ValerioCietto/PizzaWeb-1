@@ -44,28 +44,12 @@ public class Controller extends HttpServlet {
                     break;*/    
             }
         }
-        
-        
-        RequestDispatcher rd =getServletContext().getNamedDispatcher("index.jsp");
+        RequestDispatcher rd;
+        //request e non named perchè richiediamo una jsp
+        rd = getServletContext().getRequestDispatcher("/index.jsp");
         rd.include(request, response);
-
-        /*PrintWriter out = response.getWriter();
-        operazione(request);
-        try {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<link rel=\"stylesheet\" href=\"pizzacss.css\" type=\"text/css\">");
-            out.println("<head>");
-            out.println("<title>Pizzeria</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println(Model.pagina(request));
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }*/
     }
+    
     public void switchPage(HttpServletRequest req){
         String page= req.getParameter("name");
         if(page!=null && !page.equals("")/*&&(page.equals("catalogo"))*/)
