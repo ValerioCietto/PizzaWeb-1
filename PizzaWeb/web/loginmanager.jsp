@@ -17,9 +17,9 @@
                         <th><%=ris.get(0)[j]%></th>
                     <%}%>
                 </tr>
-                <%for(int i=0;i<ris.size();i++){%>
+                <%for(int i=1;i<ris.size();i++){%>
                     <tr>
-                        <%for(int j=1;j<ris.get(i).length;j++){%>
+                        <%for(int j=0;j<ris.get(i).length;j++){%>
                             <td><%=ris.get(i)[j]%></td>
                         <%}%>
                     </tr>

@@ -19,7 +19,7 @@
             <article><p>home</p></article>
         <%}else if(view.equals("catalogo")){%>
             <%@include file="catalogo.jsp"%>
-        <%}else if(view.equals("modPermessi")){%>
+        <%}else if(view.equals("loginManager")){%>
             <%@include file="loginmanager.jsp"%>
         <%}else{ //non ancora pronto%>
             <article><p>non ancora pronto</p></article>
