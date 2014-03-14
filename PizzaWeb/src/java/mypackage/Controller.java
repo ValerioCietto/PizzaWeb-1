@@ -26,10 +26,11 @@ public class Controller extends HttpServlet {
                     break;
                 /*case "aggPizza":
                     aggiungi(req);
-                    break;
+                    break;*/
                 case "remPizza":
-                    remove(req);
+                    Model.remPizza(request);
                     break;
+                /*
                 case "modPizza":
                     aggiungi(req);
                     break;

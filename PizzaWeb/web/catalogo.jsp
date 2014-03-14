@@ -32,9 +32,10 @@
                         <%}if(ruolo!=null && ruolo.equals("admin")){%>
                             <td>mod</td>
                             <td>
-                                <form action="/PizzaWeb/Servlet" method="post">
+                                <form action="/PizzaWeb/Servlet" method="get">
                                     <input type="hidden" name= "pizza"  value="ris.get(i)[0]">
-                                    <input type="submit" name= "action" value="remove">
+                                    <input type="hidden" action="action" value="remPizza"
+                                    <input type="submit" value="-">
                                 </form>
                             </td>
                         <%}if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>

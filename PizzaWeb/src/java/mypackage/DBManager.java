@@ -36,7 +36,7 @@ public class DBManager {
             st.executeUpdate("CREATE TABLE PIZZE(" +
                     "NOME VARCHAR(30) PRIMARY KEY, " +
                     "INGREDIENTI VARCHAR(40) NOT NULL, " +
-                    "PREZZO INT)" );
+                    "PREZZO DOUBLE)" );
             st.executeUpdate("CREATE TABLE PRENOTAZ(" +
                     "IDPRENOT INT NOT NULL, " +
                     "CLIENTE VARCHAR(30) NOT NULL, " +
@@ -51,7 +51,7 @@ public class DBManager {
         }
         //chiudo statement (non serve più)        
     }
-    public static void addPizza(String nome, String ingr, int prezzo){
+    public static void addPizza(String nome, String ingr, double prezzo){
         esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
     }
     public static void remPizza(String nome){
