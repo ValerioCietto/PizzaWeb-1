@@ -4,88 +4,6 @@ import java.util.ArrayList;
 import javax.servlet.http.*;
 
 public class Model {
-    public static class Pizza{
-        String nome;
-        String ingredienti;
-        double prezzo;
-        public Pizza(String iNome,String iIngredienti,double iPrezzo){
-            nome=iNome;
-            ingredienti=iIngredienti;
-            prezzo=iPrezzo;
-        }
-        public double getPrezzo(){
-            return prezzo;
-        }
-        public void setPizza(String nIngredienti,double nPrezzo){
-            String oNome=this.nome;
-            DBManager.modPizza(oNome, nIngredienti, nPrezzo);
-        
-        }
-    }
-    public static class Utente{
-        String nome="";
-        String pwd="";
-        String ruolo="";
-        public Utente(String iNome,String iPwd, String iRuolo){
-            nome=iNome;
-            pwd=iPwd;
-            ruolo=iRuolo;
-        }
-        public Utente(String []input){
-            if(input==null)
-                return;
-            nome=input[0];
-            pwd=input[1];
-            ruolo=input[2];
-        }
-        public String getNome(){
-            return nome;
-        }
-        public String getPwd(){
-            return pwd;
-        }
-        public String getRuolo(){
-            return ruolo;
-        }
-    }
-    public class Ordine extends Pizza{
-        int quantita=1;   
-        public Ordine(String iNome,String iIngredienti, double iPrezzo){
-            super(iNome, iIngredienti, iPrezzo);
-        }
-        public void setQuantita(int iQuantita){
-            quantita=iQuantita;
-        }
-        public int getQuantita(){
-            return quantita;
-        }
-    }
-    public class Prenotazione{
-        int id;
-        Utente cliente;
-        ArrayList <Ordine> prenotaz;
-        String stato;
-        public Prenotazione(int iId, Utente iCliente, ArrayList <Ordine> iPrenotaz, String iStato){
-            id=iId;
-            cliente=iCliente;
-            for(int i=0;i<iPrenotaz.size();i++)
-                prenotaz.add(iPrenotaz.get(i));
-            stato=iStato;
-        }
-        public int getId(){
-            return id;
-        }
-        public Utente getUtente(){
-            return cliente;
-        }
-        public String getStato(){
-            return stato;
-        }
-        public Ordine getOrdine(int i){
-            return prenotaz.get(i);
-        }
-    }
-    
     public static void login(HttpServletRequest req){
         HttpSession s=req.getSession();
         String name = req.getParameter("login");
@@ -241,4 +159,85 @@ public class Model {
         return out;
     }
     */
+}
+class Pizza{
+    String nome;
+    String ingredienti;
+    double prezzo;
+    public Pizza(String iNome,String iIngredienti,double iPrezzo){
+        nome=iNome;
+        ingredienti=iIngredienti;
+        prezzo=iPrezzo;
+    }
+    public double getPrezzo(){
+        return prezzo;
+    }
+    public void setPizza(String nIngredienti,double nPrezzo){
+        String oNome=this.nome;
+        DBManager.modPizza(oNome, nIngredienti, nPrezzo);
+
+    }
+}
+class Utente{
+    String nome="";
+    String pwd="";
+    String ruolo="";
+    public Utente(String iNome,String iPwd, String iRuolo){
+        nome=iNome;
+        pwd=iPwd;
+        ruolo=iRuolo;
+    }
+    public Utente(String []input){
+        if(input==null)
+            return;
+        nome=input[0];
+        pwd=input[1];
+        ruolo=input[2];
+    }
+    public String getNome(){
+        return nome;
+    }
+    public String getPwd(){
+        return pwd;
+    }
+    public String getRuolo(){
+        return ruolo;
+    }
+}
+class Ordine extends Pizza{
+    int quantita=1;   
+    public Ordine(String iNome,String iIngredienti, double iPrezzo){
+        super(iNome, iIngredienti, iPrezzo);
+    }
+    public void setQuantita(int iQuantita){
+        quantita=iQuantita;
+    }
+    public int getQuantita(){
+        return quantita;
+    }
+}
+class Prenotazione{
+    int id;
+    Utente cliente;
+    ArrayList <Ordine> prenotaz;
+    String stato;
+    public Prenotazione(int iId, Utente iCliente, ArrayList <Ordine> iPrenotaz, String iStato){
+        id=iId;
+        cliente=iCliente;
+        for(int i=0;i<iPrenotaz.size();i++)
+            prenotaz.add(iPrenotaz.get(i));
+        stato=iStato;
+    }
+    public int getId(){
+        return id;
+    }
+    public Utente getUtente(){
+        return cliente;
+    }
+    public String getStato(){
+        return stato;
+    }
+    public Ordine getOrdine(int i){
+        return prenotaz.get(i);
+    }
 }

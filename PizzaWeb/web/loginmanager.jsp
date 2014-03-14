@@ -10,7 +10,7 @@
     </head>
     <body>
         <article>
-            <%ArrayList<String[]> ris=DBManager.query("SELECT * FROM UTENTI");%>
+            <%ArrayList<String[]> ris=DBManager.query("SELECT * FROM UTENTI",true);%>
             <table>
                 <tr>
                     <%for(int j=0;j<ris.get(0).length;j++){%>

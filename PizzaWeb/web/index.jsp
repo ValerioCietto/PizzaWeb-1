@@ -10,16 +10,11 @@
     <body>
         <% DBManager.inizializza();%>
         <% //=EditorHtml.pagina(request)%>
-        <%
-        String view=request.getParameter("view");%>
         <header><h1>PIZZERIA ONLINE</h1></header>
         <%@include file="nav.jsp"%>
         <%@include file="aside.jsp"%>
         <%
-        if(view!=null && !view.equals("")){
-            (request.getSession()).setAttribute("view", view);
-        }
-        view=(String)(request.getSession()).getAttribute("view");
+        String view=(String)(request.getSession()).getAttribute("view");
         if(view==null || view.equals("")){%>
             <article><p>home</p></article>
         <%}else if(view.equals("catalogo")){%>

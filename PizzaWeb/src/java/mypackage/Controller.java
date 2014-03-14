@@ -1,57 +1,30 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package mypackage;
 
 import java.io.*;
 import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-/**
- *
- * @author st116578
- * prova commit
- */
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
 public class Controller extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        operazione(request);
-        try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<link rel=\"stylesheet\" href=\"pizzacss.css\" type=\"text/css\">");
-            out.println("<head>");
-            out.println("<title>Pizzeria</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println(Model.pagina(request));
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
-        }
-    }
-    public void operazione(HttpServletRequest req)throws ServletException, IOException{
-        String action= req.getParameter("action");
+        String action= request.getParameter("action");
         if(action!=null){
             switch (action) {
-                /*case "switch":
-                    login(req);
-                    break;*/
+                case "switch":
+                    switchPage(request);
+                    break;
                 case "login":
-                    Model.login(req);
+                    Model.login(request);
                     break;
                 case "logout":
-                    Model.logout(req);
+                    Model.logout(request);
                     break;
-                case "aggPizza":
+                /*case "aggPizza":
                     aggiungi(req);
                     break;
                 case "remPizza":
@@ -68,12 +41,37 @@ public class Controller extends HttpServlet {
                     break;
                 case "modLogin":
                     aggiungi(req);
-                    break;    
+                    break;*/    
             }
         }
+        
+        
+        RequestDispatcher rd =getServletContext().getNamedDispatcher("index.jsp");
+        rd.include(request, response);
+
+        /*PrintWriter out = response.getWriter();
+        operazione(request);
+        try {
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<link rel=\"stylesheet\" href=\"pizzacss.css\" type=\"text/css\">");
+            out.println("<head>");
+            out.println("<title>Pizzeria</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println(Model.pagina(request));
+            out.println("</body>");
+            out.println("</html>");
+        } finally {            
+            out.close();
+        }*/
     }
-    
-    public static void remove(HttpServletRequest req){
+    public void switchPage(HttpServletRequest req){
+        String page= req.getParameter("name");
+        if(page!=null && !page.equals("")/*&&(page.equals("catalogo"))*/)
+            req.getSession().setAttribute("view",page);
+    }
+    /*public static void remove(HttpServletRequest req){
         HttpSession s=req.getSession();
         String name = req.getParameter("pizza");
         if(name!=null && !name.equals("")){
