@@ -33,9 +33,9 @@
                             <td>mod</td>
                             <td>
                                 <form action="/PizzaWeb/Servlet" method="get">
-                                    <input type="hidden" name= "pizza"  value="ris.get(i)[0]">
-                                    <input type="hidden" action="action" value="remPizza"
-                                    <input type="submit" value="-">
+                                    <input type="hidden" name="pizza"  value=<%=ris.get(i)[0]%>>
+                                    <input type="hidden" name="action" value="remPizza">
+                                    <input type="submit" name="name"   value="remove">
                                 </form>
                             </td>
                         <%}if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>
