@@ -25,6 +25,29 @@ public class Model {
         s=req.getSession();
         s.setAttribute("message", "logout effettuato");
     }
+    public static void remPizza(HttpServletRequest req){
+        String pizza= req.getParameter("pizza");
+        DBManager.remPizza(pizza);
+    }
+    public static void aggiungi(HttpServletRequest req){
+        HttpSession s=req.getSession();
+        String name = req.getParameter("pizza");
+        if(name!=null && !name.equals("")){
+            String ingredienti=req.getParameter("ingredienti");
+            if(ingredienti!=null){
+                try{
+                    double prezzo= Double.parseDouble(req.getParameter("prezzo"));
+                    DBManager.addPizza(name, ingredienti, prezzo);
+                    s.setAttribute("message","aggiunta pizza "+name);
+                }catch(NumberFormatException e){
+                    s.setAttribute("message","errore input prezzo");
+                }
+            }else
+                s.setAttribute("message","errore input ingredienti");
+            return;
+        }
+        s.setAttribute("message","parametro pizza non trovato");
+    } 
 }
 class Pizza{
     String nome;
@@ -34,6 +57,11 @@ class Pizza{
         nome=iNome;
         ingredienti=iIngredienti;
         prezzo=iPrezzo;
+    }
+    public Pizza(String iNome,String iIngredienti,String iPrezzo){
+    try{}
+        
+    catch {}
     }
     public double getPrezzo(){
         return prezzo;
@@ -107,3 +135,4 @@ class Prenotazione{
         return prenotaz.get(i);
     }
 }
+
