@@ -10,15 +10,22 @@
     <body>
         <%String ruoloN=(String)(request.getSession()).getAttribute("ruolo");%>
         <nav>
-            <ul>
-                <li><a href="catalogo.jsp">Catalogo</a></li>
+            <table>
+                <tr>
+                    <td>
+                        <form action="/PizzaWeb/Servlet" method="get">
+                            <input type="hidden" name="action" value="switch">
+                            <input type="submit" name="name" value="catalogo">
+                        </form>
+                    </td>
+                </tr>
                 <% if(ruoloN!=null && ruoloN.equals("user")){%>
-                    <li>Visualizza Tue Prenotazioni</li>
+                    <tr><td>Visualizza Tue Prenotazioni</td></tr>
                 <%}else if(ruoloN!=null && ruoloN.equals("admin")){%>
-                    <li>Visualizza Tutte le Prenotazioni</li>"
-                    <li><a href="loginmanager.jsp">Modifica Permessi</a></li>
+                    <tr><td>Visualizza Tutte le Prenotazioni</td></tr>
+                    <tr><td>Modifica Permessi</td></tr>
                 <%}%>
-            </ul>
+            </table>
         </nav>   
     </body>
 </html>
