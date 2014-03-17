@@ -44,6 +44,10 @@ public class Model {
         }else
             s.setAttribute("message","errore input");
     } 
+
+    static void modPizza(HttpServletRequest request) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
 class Pizza{
     String nome;
