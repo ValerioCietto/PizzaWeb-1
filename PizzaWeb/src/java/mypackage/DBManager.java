@@ -66,6 +66,9 @@ public class DBManager {
     public static boolean remLogin(String nome){
         return esegui("DELETE FROM UTENTI WHERE (NOME='"+nome+"')");
     }
+    public static boolean modLogin(String nome, String nNome, String nPassword, String nRuolo){
+        return esegui("UPDATE FROM SET NOME='" + nNome+ "', PASSWORD=" +nPassword+" RUOLO ='" +nRuolo+"'");
+    }
     public static ArrayList<String[]> getAllLogin(){
         return query("SELECT * FROM UTENTI",false);
     }
@@ -76,14 +79,18 @@ public class DBManager {
         else
             return temp.get(0);
     }
-    public static void addPrenotazione(String Cliente, String[] pizza, int[] quantita){
+    public static void addPrenotazione(String cliente, String[] pizza, int[] quantita){
         idordine+=1;
         String sql="INSERT INTO PRENOTAZ (IDPRENOT,CLIENTE,PIZZA,QUANTITA,STATO) VALUES ";
         for(int i=0;i<pizza.length && i<quantita.length;i++){
-            sql+="("+ idordine +", "+Cliente+", '"+pizza[i]+"', "+quantita[i]+", Ordinato)";
+            sql+="("+ idordine +", "+cliente+", '"+pizza[i]+"', "+quantita[i]+", Ordinato)";
             if(i-1<pizza.length)
                 sql+=",";
         }
+        esegui(sql);
+    }
+    public static void remPrenotazione(String cliente){
+        String sql="DELETE FROM PRENOTAZ WHERE (CLIENTE="+cliente+") ";
         esegui(sql);
     }
     public static boolean esegui(String sql) {
