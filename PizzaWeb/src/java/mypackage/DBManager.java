@@ -89,8 +89,9 @@ public class DBManager {
         }
         esegui(sql);
     }
-    public static void remPrenotazione(String cliente){
-        String sql="DELETE FROM PRENOTAZ WHERE (CLIENTE="+cliente+") ";
+    //la prenotazione deve essere rimossa tramite id
+    public static void remPrenotazione(String id){
+        String sql="DELETE FROM PRENOTAZ WHERE (IDPRENOT="+id+") ";
         esegui(sql);
     }
     public static boolean esegui(String sql) {
