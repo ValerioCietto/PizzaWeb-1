@@ -13,11 +13,11 @@ public class Model {
             if(!login.getNome().equals("")){
                 s.setAttribute("username",login.getNome());
                 s.setAttribute("ruolo", login.getRuolo());
-                s.setAttribute("message","login effettuato");
+                s.setAttribute("message","login effettuato, benvenuto!");
             }else
-                s.setAttribute("message","login errato");
+                s.setAttribute("message","login errato, sicuro di esserti registrato?");
         }else
-            s.setAttribute("message","input vuoto");
+            s.setAttribute("message","inserisci il tuo nome utente e la tua password.");
     }
     public static void logout(HttpServletRequest req){
         HttpSession s=req.getSession();
@@ -42,7 +42,7 @@ public class Model {
             else
                s.setAttribute("message","Problema sql");
         }else
-            s.setAttribute("message","errore input");
+            s.setAttribute("message","inserisci un nome, gli ingredienti e il prezzo.");
     } 
 
     static void modPizza(HttpServletRequest request) {
