@@ -30,6 +30,12 @@ public class Controller extends HttpServlet {
                 case "remPizza":
                     Model.remPizza(request);
                     break;
+                case "modPizza":
+                    Model.modPizza(request);
+                    break;
+                case "registration":
+                    Model.addUser(request);
+                    break;
                 /*
                 case "modPizza":
                     aggiungi(req);

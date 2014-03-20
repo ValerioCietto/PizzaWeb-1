@@ -57,16 +57,7 @@
                         <%}%>
                     </tr>
                 <%}if(ruolo!=null && ruolo.equals("admin")){%>
-                    <form action="/PizzaWeb/Servlet" method="post">
-                        <tr>
-                            <td><input type="text" name= "idprenot"        value=""></td>
-                            <td><input type="text" name= "cliente"  value=""></td>
-                            <td><input type="text" name= "pizza"       value=""></td>
-                            <td><input type="text" name= "quantita"       value=""></td>
-                            <td><input type="text" name= "stato"       value=""></td>
-                            <td colspan=4><input type="submit" name= "action" value="addPrenotazione"></td>
-                        </tr>
-                    </form>
+                   
                 <%}%>
             </table>
         </article>   

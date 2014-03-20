@@ -21,6 +21,8 @@
             <%@include file="catalogo.jsp"%>
         <%}else if(view.equals("loginManager")){%>
             <%@include file="loginmanager.jsp"%>
+        <%}else if(view.equals("prenotazioni")){%>
+            <%@include file="prenotazioni.jsp"%>    
         <%}else{ //non ancora pronto%>
             <article><p>non ancora pronto</p></article>
         <%}%>

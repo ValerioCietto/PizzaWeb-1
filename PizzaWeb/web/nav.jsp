@@ -22,7 +22,12 @@
                 <% if(ruoloN!=null && ruoloN.equals("user")){%>
                     <tr><td>Visualizza Tue Prenotazioni</td></tr>
                 <%}else if(ruoloN!=null && ruoloN.equals("admin")){%>
-                    <tr><td>Visualizza Tutte le Prenotazioni</td></tr>
+                    <tr><td><form action="/PizzaWeb/Servlet" method="get">
+                                <input type="hidden" name="action" value="switch">
+                                <input type="submit" name="name" value="prenotazioni">
+                            </form>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <form action="/PizzaWeb/Servlet" method="get">

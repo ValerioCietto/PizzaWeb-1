@@ -14,18 +14,18 @@
                 <%if(ruoloA==null || ruoloA.equals("")){%>
                     <tr>
                         <td>
-                            <form action="/PizzaWeb/Servlet" method="get">
+                            <form action="/PizzaWeb/Servlet" method="get" >
                                 <p>Login</p>
-                                <input type ="text" name="login">
+                                <input type ="text" name="login" required>
                                 <p>Password</p>
-                                <input type ="password" name="password">
+                                <input type ="password" name="password" required>
                                 <input type= "submit"   name="action" value= "login">
                             </form>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <p>registrati</p>
+                            <p><a href="index.jsp?action=registration">registrati!</a></p>
                         </td>
                     </tr>
                 <%}else{%>
