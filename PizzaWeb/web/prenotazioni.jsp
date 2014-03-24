@@ -1,9 +1,3 @@
-<%-- 
-    Document   : prenotazioni
-    Created on : Mar 18, 2014, 3:26:55 PM
-    Author     : valerio
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="mypackage.*"%>
@@ -12,22 +6,23 @@
 <html>
     <link rel="stylesheet" href="pizzacss.css" type="text/css"> 
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Catalogo</title>
     </head>
     <body>
-        <%String ruolo=(String)(request.getSession()).getAttribute("ruolo");%>
+        <%String ruolo=(String)(request.getSession()).getAttribute("ruolo");
+        String login=(String)(request.getSession()).getAttribute("username");%>
         <article>
-            <% 
-                String[] res = {"id","Nome","Pizza","quantità","stato"};
-                String[] res1 = {"1","Gianni","margherita","3","da accettare"};
-                ArrayList<String[]> ris= new ArrayList<String[]>();
-                ris.add(res);
-                ris.add(res1);
+            <%  ArrayList<String[]> ris=(ArrayList<String[]>)(request.getSession()).getAttribute("dati");
+                /*if(ruolo!=null && ruolo.equals("admin"))
+                    ris=;
+                else
+                    ris=DBManager.query("SELECT * FROM PRENOT WHERE CLIENTE='"+login+"'", true);
+                        */
             %>
             <table>
                 <tr>
-                   <%for(int j=0;j<ris.get(0).length;j++){%>
+                    <%for(int j=0;ris.size()>0 && j<ris.get(0).length;j++){%>
                         <th><%=ris.get(0)[j]%></th>
                     <%}if(ruolo!=null && ruolo.equals("admin")){%>
                         <th>modifica</th>
@@ -35,8 +30,7 @@
                     <%}if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>
                         <th>add</th>
                         <th>ordinate</th>
-                    <%}%>
-                   --/>     
+                    <%}%>     
                 </tr> 
                 <%for(int i=1;i<ris.size();i++){%>
                     <tr>

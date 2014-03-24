@@ -51,6 +51,13 @@ public class Model {
     static void addUser(HttpServletRequest request) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    static void addPren(HttpServletRequest req) {
+        //HttpSession s=req.getSession();
+        String p=req.getParameter("pizza");
+        String clName=req.getParameter("login");
+        int i=0;
+        DBManager.addPrenotazione(clName, p, i, "2038-01-19 03:14:07");
+    }
 }
 class Pizza{
     String nome;

@@ -9,7 +9,6 @@
     </head>
     <body>
         <% DBManager.inizializza();%>
-        <% //=EditorHtml.pagina(request)%>
         <header><h1>PIZZERIA ONLINE</h1></header>
         <%@include file="nav.jsp"%>
         <%@include file="aside.jsp"%>

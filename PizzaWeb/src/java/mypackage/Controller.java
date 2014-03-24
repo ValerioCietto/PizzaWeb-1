@@ -36,6 +36,9 @@ public class Controller extends HttpServlet {
                 case "registration":
                     Model.addUser(request);
                     break;
+                case "addPrenotaz":
+                    Model.addPren(request);
+                    break;
                 /*
                 case "modPizza":
                     aggiungi(req);
@@ -59,8 +62,17 @@ public class Controller extends HttpServlet {
     
     public void switchPage(HttpServletRequest req){
         String page= req.getParameter("name");
-        if(page!=null && !page.equals("")/*&&(page.equals("catalogo"))*/)
+        if(page!=null)
             req.getSession().setAttribute("view",page);
+        else
+            req.getSession().setAttribute("view","");
+        page=(String)(req.getSession()).getAttribute("view");
+        if(page.equals("catalogo"))
+            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PIZZE",true));
+        else if(page.equals("loginManager"))
+            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM UTENTI",true));
+        else if(page.equals("prenotazioni"))
+            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ", true));
     }
     /*public static void remove(HttpServletRequest req){
         HttpSession s=req.getSession();

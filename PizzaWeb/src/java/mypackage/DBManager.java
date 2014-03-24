@@ -12,39 +12,48 @@ public class DBManager {
 
     /**
      * @param args the command line arguments
-     */   
+     */
+    /*public static void main(String[]args)
+    {
+        inizializza();
+    }*/
     public static void inizializza(){
        try { // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            //creaTabella();
-            //startDati();
+            creaTabella();
+            startDati();
        } catch (SQLException e) {System.out.println(e.getMessage());}
     }
     public static void creaTabella(){
         try {
-            Connection conn = DriverManager.getConnection(ur,us,p);
-            Statement st = conn.createStatement();
+        Connection conn = DriverManager.getConnection(ur,us,p);
+        Statement st = conn.createStatement();
             //////////////////////////////////////////////////////////
 
                 //st.execute("DROP TABLE PRENOTAZ");
                 //st.execute("DROP TABLE UTENTI");
                 //st.execute("DROP TABLE PIZZE");
-            st.executeUpdate("CREATE TABLE UTENTI" +
-                    "(NOME VARCHAR(30)PRIMARY KEY, " +
-                    "PASSWORD VARCHAR(30) NOT NULL, " + 
-                    "RUOLO VARCHAR(30) NOT NULL)");
-            st.executeUpdate("CREATE TABLE PIZZE(" +
-                    "NOME VARCHAR(30) PRIMARY KEY, " +
-                    "INGREDIENTI VARCHAR(40) NOT NULL, " +
-                    "PREZZO DOUBLE)" );
-            st.executeUpdate("CREATE TABLE PRENOTAZ(" +
-                    "IDPRENOT INT NOT NULL, " +
-                    "CLIENTE VARCHAR(30) NOT NULL, " +
-                    "PIZZA VARCHAR(30) NOT NULL, " +
-                    "QUANTITA INT NOT NULL," +
-                    "STATO VARCHAR(30) NOT NULL" +
-                    "CONSTRAINT PRKEY PRIMARY KEY (IDPRENOT, PIZZA)"+
-                    ")" );
+            try {   
+                st.executeUpdate("CREATE TABLE UTENTI" +
+                        "(NOME VARCHAR(30)PRIMARY KEY, " +
+                        "PASSWORD VARCHAR(30) NOT NULL, " + 
+                        "RUOLO VARCHAR(30) NOT NULL)");
+            } catch (SQLException e){System.out.println(e.getMessage());}
+            try {
+                st.executeUpdate("CREATE TABLE PIZZE(" +
+                        "NOME VARCHAR(30) PRIMARY KEY, " +
+                        "INGREDIENTI VARCHAR(40) NOT NULL, " +
+                        "PREZZO DOUBLE)" );
+            } catch (SQLException e){System.out.println(e.getMessage());}
+            try {
+                st.executeUpdate("CREATE TABLE PRENOTAZ(" +
+                        "IDPRENOT INT PRIMARY KEY, " +
+                        "CLIENTE VARCHAR(30) NOT NULL, " +
+                        "PIZZA VARCHAR(30) NOT NULL, " +
+                        "QUANTITA INT NOT NULL," +
+                        "STATO VARCHAR(30) NOT NULL" +
+                        ")" );
+            } catch (SQLException e){System.out.println(e.getMessage());}
             st.close();
          } catch (SQLException e){
             System.out.println(e.getMessage());
@@ -78,6 +87,14 @@ public class DBManager {
             return null;
         else
             return temp.get(0);
+    }
+    public static void addPrenotazione(String cliente, String pizza, int quantita, String data){
+        /*String sql="INSERT INTO PRENOTAZ (CLIENTE,PIZZA,QUANTITA, DATA, STATO) VALUES ";
+            sql+="('" +cliente+"', '"+pizza+"', "+quantita+", '"+data+"', 'Ordinato' )";
+        esegui(sql);*/
+        String []pi={pizza};
+        int []q={quantita};
+        addPrenotazione(cliente,pi,q);
     }
     public static void addPrenotazione(String cliente, String[] pizza, int[] quantita){
         idordine+=1;

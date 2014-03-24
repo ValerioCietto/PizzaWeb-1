@@ -1,4 +1,3 @@
-<%@page import="mypackage.Model.*"%>
 <%@page import="mypackage.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -20,7 +19,12 @@
                     </td>
                 </tr>
                 <% if(ruoloN!=null && ruoloN.equals("user")){%>
-                    <tr><td>Visualizza Tue Prenotazioni</td></tr>
+                    <tr><td><form action="/PizzaWeb/Servlet" method="get">
+                                <input type="hidden" name="action" value="switch">
+                                <input type="submit" name="name" value="prenotazioni">
+                            </form>
+                        </td>
+                    </tr>
                 <%}else if(ruoloN!=null && ruoloN.equals("admin")){%>
                     <tr><td><form action="/PizzaWeb/Servlet" method="get">
                                 <input type="hidden" name="action" value="switch">

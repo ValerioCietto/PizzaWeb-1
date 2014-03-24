@@ -11,7 +11,7 @@
     <body>
         <%String ruolo=(String)(request.getSession()).getAttribute("ruolo");%>
         <article>
-            <% ArrayList<String[]> ris=DBManager.query("SELECT * FROM PIZZE",true);%>
+            <% ArrayList<String[]> ris=(ArrayList<String[]>)(request.getSession()).getAttribute("dati");%>
             <table>
                 <tr>
                     <%for(int j=0;j<ris.get(0).length;j++){%>
