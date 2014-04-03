@@ -53,10 +53,10 @@ public class Model {
     }
     static void addPren(HttpServletRequest req) {
         //HttpSession s=req.getSession();
-        String p=req.getParameter("pizza");
+        String[] p={req.getParameter("pizza")};
         String clName=req.getParameter("login");
-        int i=0;
-        DBManager.addPrenotazione(clName, p, i, "2038-01-19 03:14:07");
+        int []i={2};
+        DBManager.addPrenotazione(clName,"2038-01-19 03:14:07", p, i);
     }
 }
 class Pizza{
@@ -138,19 +138,16 @@ class Ordine extends Pizza{
     }
 }
 class Prenotazione{
-    int id;
     Utente cliente;
-    ArrayList <Ordine> prenotaz;
+    String data;
+    Ordine [] prenotaz;
     String stato;
-    public Prenotazione(int iId, Utente iCliente, ArrayList <Ordine> iPrenotaz, String iStato){
-        id=iId;
+    public Prenotazione(Utente iCliente,String iData, Ordine[] iPrenotaz, String iStato){
+        data=iData;
         cliente=iCliente;
-        for(int i=0;i<iPrenotaz.size();i++)
-            prenotaz.add(iPrenotaz.get(i));
+        for(int i=0;i<iPrenotaz.length;i++)
+            prenotaz[i]=iPrenotaz[i];
         stato=iStato;
-    }
-    public int getId(){
-        return id;
     }
     public Utente getUtente(){
         return cliente;
@@ -159,7 +156,7 @@ class Prenotazione{
         return stato;
     }
     public Ordine getOrdine(int i){
-        return prenotaz.get(i);
+        return prenotaz[i];
     }
 }
 

@@ -33,6 +33,7 @@ public class DBManager {
                 //st.execute("DROP TABLE PRENOTAZ");
                 //st.execute("DROP TABLE UTENTI");
                 //st.execute("DROP TABLE PIZZE");
+        /*
             try {   
                 st.executeUpdate("CREATE TABLE UTENTI" +
                         "(NOME VARCHAR(30)PRIMARY KEY, " +
@@ -44,14 +45,15 @@ public class DBManager {
                         "NOME VARCHAR(30) PRIMARY KEY, " +
                         "INGREDIENTI VARCHAR(40) NOT NULL, " +
                         "PREZZO DOUBLE)" );
-            } catch (SQLException e){System.out.println(e.getMessage());}
+            } catch (SQLException e){System.out.println(e.getMessage());}*/
             try {
                 st.executeUpdate("CREATE TABLE PRENOTAZ(" +
-                        "IDPRENOT INT PRIMARY KEY, " +
                         "CLIENTE VARCHAR(30) NOT NULL, " +
                         "PIZZA VARCHAR(30) NOT NULL, " +
                         "QUANTITA INT NOT NULL," +
+                        "DATA VARCHAR(30) NOT NULL,"+
                         "STATO VARCHAR(30) NOT NULL" +
+                        //"CONSTRAINT prk PRIMARY KEY(CLIENTE,DATA,PIZZA)"+ non funziona
                         ")" );
             } catch (SQLException e){System.out.println(e.getMessage());}
             st.close();
@@ -88,27 +90,35 @@ public class DBManager {
         else
             return temp.get(0);
     }
-    public static void addPrenotazione(String cliente, String pizza, int quantita, String data){
-        /*String sql="INSERT INTO PRENOTAZ (CLIENTE,PIZZA,QUANTITA, DATA, STATO) VALUES ";
-            sql+="('" +cliente+"', '"+pizza+"', "+quantita+", '"+data+"', 'Ordinato' )";
-        esegui(sql);*/
-        String []pi={pizza};
-        int []q={quantita};
-        addPrenotazione(cliente,pi,q);
+    public static void addPrenotazione(String cliente,String data, String pizza, int quantita){
+        String[]pi={pizza};
+        int[]qu={quantita};
+        addPrenotazione(cliente,data,pi,qu);
     }
-    public static void addPrenotazione(String cliente, String[] pizza, int[] quantita){
-        idordine+=1;
-        String sql="INSERT INTO PRENOTAZ (IDPRENOT,CLIENTE,PIZZA,QUANTITA,STATO) VALUES ";
+    public static void addPrenotazione(String cliente,String data, String[] pizza, int[] quantita){
+        String sql="INSERT INTO PRENOTAZ (CLIENTE,PIZZA,QUANTITA,DATA,STATO) VALUES ";
         for(int i=0;i<pizza.length && i<quantita.length;i++){
-            sql+="("+ idordine +", "+cliente+", '"+pizza[i]+"', "+quantita[i]+", Ordinato)";
+            sql+="('"+cliente+", '"+pizza[i]+"', '"+data+"',"+quantita[i]+", 'Ordinato')";
             if(i-1<pizza.length)
                 sql+=",";
         }
         esegui(sql);
     }
     //la prenotazione deve essere rimossa tramite id
-    public static void remPrenotazione(String id){
-        String sql="DELETE FROM PRENOTAZ WHERE (IDPRENOT="+id+") ";
+    public static void remPrenotazione(String cliente){
+        remPrenotazione(cliente,null,null);
+    }
+    public static void remPrenotazione(String cliente, String data){
+        remPrenotazione(cliente,data,null);
+    }
+    public static void remPrenotazione(String cliente, String data,String pizza){
+        String sql="DELETE FROM PRENOTAZ WHERE (CLIENTE="+cliente;
+        if(data!=null){
+            sql+="AND DATA="+data;
+            if(pizza!=null)
+                sql+="AND PIZZA="+pizza;
+        }
+        sql+=")";
         esegui(sql);
     }
     public static boolean esegui(String sql) {
@@ -130,6 +140,7 @@ public class DBManager {
         addLogin("user","user","user");
         addPizza("Margherita","pomodoro e mozzarella", 15);
         addPizza("Funghi","pomodoro e funghi", 6);
+        addPrenotazione("user","210491", "Margherita",3);
     }
     public static ArrayList<String[]> query(String query,boolean h) {
         ArrayList<String[]> out=new ArrayList<String[]>();
