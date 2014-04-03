@@ -20,8 +20,8 @@ public class DBManager {
     public static void inizializza(){
        try { // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            creaTabella();
-            startDati();
+            //creaTabella();
+            //startDati();
        } catch (SQLException e) {System.out.println(e.getMessage());}
     }
     public static void creaTabella(){
@@ -98,8 +98,8 @@ public class DBManager {
     public static void addPrenotazione(String cliente,String data, String[] pizza, int[] quantita){
         String sql="INSERT INTO PRENOTAZ (CLIENTE,PIZZA,QUANTITA,DATA,STATO) VALUES ";
         for(int i=0;i<pizza.length && i<quantita.length;i++){
-            sql+="('"+cliente+", '"+pizza[i]+"', '"+data+"',"+quantita[i]+", 'Ordinato')";
-            if(i-1<pizza.length)
+            sql+="('"+cliente+"', '"+pizza[i]+"',"+quantita[i]+", '"+data+"', 'Ordinato')";
+            if(i+1<pizza.length)
                 sql+=",";
         }
         esegui(sql);
@@ -112,11 +112,11 @@ public class DBManager {
         remPrenotazione(cliente,data,null);
     }
     public static void remPrenotazione(String cliente, String data,String pizza){
-        String sql="DELETE FROM PRENOTAZ WHERE (CLIENTE="+cliente;
+        String sql="DELETE FROM PRENOTAZ WHERE (CLIENTE= '"+cliente+ "'";
         if(data!=null){
-            sql+="AND DATA="+data;
+            sql+=" AND DATA= '"+data+ "'";
             if(pizza!=null)
-                sql+="AND PIZZA="+pizza;
+                sql+=" AND PIZZA= '"+pizza+ "'";
         }
         sql+=")";
         esegui(sql);

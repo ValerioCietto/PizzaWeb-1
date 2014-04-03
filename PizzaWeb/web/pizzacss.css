@@ -34,9 +34,9 @@ header {
     left:0px;
     background:yellow;
     font-size:20px;
-    font-style:bold;
+    font-weight: bold;
     text-align:center;
-    text-decoration-color: red;
+    text-decoration-color: RED;
 }
 nav { /* link di navigazione principali nella pagina */
     position: absolute;
@@ -46,7 +46,6 @@ nav { /* link di navigazione principali nella pagina */
     left:0px;
     text-align: left;
     background-color: #f3b42e;
-    //background-color: #FF8888
 } 
 article {
     position: absolute;
@@ -55,7 +54,6 @@ article {
     top:20%;
     left:20.5%;
     background-color: #f3c72e;
-    //background-color: #EEEEEE
 }
 table,tr{
     width: 100%;
@@ -80,7 +78,7 @@ aside {
     top:20%;
     left:80%;
     background-color: #F3B42E;
-    //background-color: #8888FF
+    
 }
 footer {
     position: absolute;
@@ -89,7 +87,7 @@ footer {
     top:95%;
     left:0px;
     font-size:110%;
-    font-style:bold;
+    font-weight:bold;
     background-color: #FF0000
 }
 /*footer>nav { // link di navigazione principali nella pagina

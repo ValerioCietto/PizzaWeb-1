@@ -57,7 +57,24 @@ public class Model {
         String clName=req.getParameter("login");
         int []i={2};
         DBManager.addPrenotazione(clName,"2038-01-19 03:14:07", p, i);
+   
     }
+    static void remPren(HttpServletRequest req){
+        
+        //in teoria name non dovrebbe mai essere nullo se lo facciamo vedere dalla pagina prenot, accessibile solo dall'utente registrato
+        
+        String name=req.getParameter("nomecliente");
+        String pizza= req.getParameter("nomepizza");
+        String data= req.getParameter("data");
+
+        
+        if (name!=null)
+            DBManager.remPrenotazione(name, data, pizza);
+        
+        else System.out.println("specificare parametri");
+    }
+        
+    
 }
 class Pizza{
     String nome;

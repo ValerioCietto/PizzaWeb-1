@@ -40,8 +40,10 @@
                             <td>mod</td>
                             <td>
                                 <form action="/PizzaWeb/Servlet" method="get">
-                                    <input type="hidden" name="prenotazione"  value=<%=ris.get(i)[0]%>>
                                     <input type="hidden" name="action" value="remPrenotaz">
+                                    <input type ="hidden" name="nomecliente" value="<%= ris.get(i)[0]%>">
+                                    <input type ="hidden" name="nomepizza" value="<%= ris.get(i)[1]%>">
+                                    <input type ="hidden" name="data" value="<%= ris.get(i)[3]%>">
                                     <input type="submit" name="name"   value="rimuovi">
                                 </form>
                             </td>
