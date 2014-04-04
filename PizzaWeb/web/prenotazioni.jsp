@@ -22,6 +22,7 @@
             %>
             <table>
                 <tr>
+                    
                     <%for(int j=0;ris.size()>0 && j<ris.get(0).length;j++){%>
                         <th><%=ris.get(0)[j]%></th>
                     <%}if(ruolo!=null && ruolo.equals("admin")){%>
@@ -47,7 +48,7 @@
                                     <input type="submit" name="name"   value="rimuovi">
                                 </form>
                             </td>
-                        <%}if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>
+                        <%} if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>
                             <td>add</td>
                             <td>att</td>
                         <%}%>

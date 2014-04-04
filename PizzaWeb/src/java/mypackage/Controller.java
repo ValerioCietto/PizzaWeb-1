@@ -66,6 +66,10 @@ public class Controller extends HttpServlet {
     
     public void switchPage(HttpServletRequest req){
         String page= req.getParameter("name");
+        //
+        String ruolo=(String)(req.getSession()).getAttribute("ruolo");
+        String login=(String)(req.getSession()).getAttribute("username");
+        //
         if(page!=null)
             req.getSession().setAttribute("view",page);
         else
@@ -75,8 +79,13 @@ public class Controller extends HttpServlet {
             req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PIZZE",true));
         else if(page.equals("loginManager"))
             req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM UTENTI",true));
-        else if(page.equals("prenotazioni"))
-            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ", true));
+        else if(page.equals("prenotazioni")){
+            //
+            if (ruolo.equals("user"))
+                req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ WHERE CLIENTE= '"+login+ "'", true));
+            //
+            else req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ", true));
+        }
     }
     /*public static void remove(HttpServletRequest req){
         HttpSession s=req.getSession();

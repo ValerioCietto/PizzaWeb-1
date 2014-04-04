@@ -138,9 +138,14 @@ public class DBManager {
     public static void startDati() { //startDati(String tab, String nome, String mezzo, String fine)
         addLogin("admin","admin","admin");
         addLogin("user","user","user");
+        addLogin("mario","mario","user");
+        addLogin("b","b","user");
         addPizza("Margherita","pomodoro e mozzarella", 15);
         addPizza("Funghi","pomodoro e funghi", 6);
         addPrenotazione("user","210491", "Margherita",3);
+        addPrenotazione("user","220591", "funghi",4);
+        addPrenotazione("mario","100291", "bianca",2);
+        addPrenotazione("mario","100291", "rossa",2);
     }
     public static ArrayList<String[]> query(String query,boolean h) {
         ArrayList<String[]> out=new ArrayList<String[]>();
