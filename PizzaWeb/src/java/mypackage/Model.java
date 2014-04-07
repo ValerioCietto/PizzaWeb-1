@@ -2,6 +2,7 @@ package mypackage;
 
 import java.util.ArrayList;
 import javax.servlet.http.*;
+import java.lang.*;
 
 public class Model {
     public static void login(HttpServletRequest req){
@@ -52,11 +53,14 @@ public class Model {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     static void addPren(HttpServletRequest req) {
-        //HttpSession s=req.getSession();
-        String[] p={req.getParameter("pizza")};
-        String clName=req.getParameter("login");
-        int []i={2};
-        DBManager.addPrenotazione(clName,"2038-01-19 03:14:07", p, i);
+        
+        //ALLORA, QUANDO SI CLICCA IL PRENOTA VIENE INVIATO SOLO LA PIZZA CORRISPONDENTE QUINDI NON BISOGNA USARE ARRAY PORCA TROTA!!!!!!
+       
+        String p=req.getParameter("pizza");
+        String clName=(String)req.getSession().getAttribute("username");
+        int q= (Integer.parseInt(req.getParameter("quant"))); //questo gli riempie solo un numero
+        String d= req.getParameter("data");
+        DBManager.addPrenotazioneanna(clName,d, p, q);
    
     }
     static void remPren(HttpServletRequest req){

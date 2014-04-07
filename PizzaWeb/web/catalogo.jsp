@@ -10,6 +10,21 @@
     </head>
     <body>
         <%String ruolo=(String)(request.getSession()).getAttribute("ruolo");%>
+        <%--
+        da mettere per agg. pren
+         <td>
+                                <form action="/PizzaWeb/Servlet" method="get">
+                                    <input type="hidden" name="action" value="addPren">
+                                    <input type ="hidden" name="nomecliente" value="<%= ris.get(i)[0]%>">
+                                    <input type ="hidden" name="nomepizza" value="<%= ris.get(i)[1]%>">
+                                    <input type ="text" name="data" default="data">
+                                    <input type ="text" name="quant">
+                                    <input type="submit" name="name"   value="add">
+                                </form>
+                            </td>
+        --%>
+        
+        
         <article>
             <% ArrayList<String[]> ris=(ArrayList<String[]>)(request.getSession()).getAttribute("dati");%>
             <table>
@@ -20,7 +35,9 @@
                         <th>modifica</th>
                         <th>cancella</th>
                     <%}if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>
+                        
                         <th>add</th>
+                        
                         <th>ordinate</th>
                     <%}%>
                 </tr> 
@@ -28,7 +45,8 @@
                     <tr>
                         <%for(int j=0;j<ris.get(i).length;j++){%>
                             <td><%=ris.get(i)[j]%></td>
-                        <%}if(ruolo!=null && ruolo.equals("admin")){%>
+                        <%}
+                        if(ruolo!=null && ruolo.equals("admin")){%>
                             <td>mod</td>
                             <td>
                                 <form action="/PizzaWeb/Servlet" method="get">
@@ -36,21 +54,35 @@
                                     <input type="hidden" name="action" value="remPizza">
                                     <input type="submit" name="name"   value="remove">
                                 </form>
+           
                             </td>
-                        <%}if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>
-                            <td>add</td>
+                        <%}
+                        
+                        if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>
+                        <td>  
+                            <form action="/PizzaWeb/Servlet" method="get">
+                                    <input type="hidden" name="action" value="addPrenotaz">
+                                    <input type ="hidden" name="pizza" value="<%= ris.get(i)[0]%>">
+                                    <input type ="text" name="data" default="data"> data
+                                    <input type ="text" name="quant"> quant
+                                    <input type="submit" name="name"   value="add">
+                            </form>
+ 
+                        </td>
+                            
                             <td>att</td>
                         <%}%>
-                    </tr>
-                <%}if(ruolo!=null && ruolo.equals("admin")){%>
-                    <form action="/PizzaWeb/Servlet" method="post">
-                        <tr>
-                            <td><input type="text" name= "pizza"        value="nome"></td>
-                            <td><input type="text" name= "ingredienti"  value="ingredienti"></td>
-                            <td><input type="text" name= "prezzo"       value="prezzo"></td>
-                            <td colspan=4><input type="submit" name= "action" value="addPizza"></td>
                         </tr>
-                    </form>
+                <%}
+                    if(ruolo!=null && ruolo.equals("admin")){%>
+                        <form action="/PizzaWeb/Servlet" method="post">
+                            <tr>
+                                <td><input type="text" name= "pizza"        value="nome"></td>
+                                <td><input type="text" name= "ingredienti"  value="ingredienti"></td>
+                                <td><input type="text" name= "prezzo"       value="prezzo"></td>
+                                <td colspan=4><input type="submit" name= "action" value="addPizza"></td>
+                            </tr>
+                        </form>
                 <%}%>
             </table>
         </article>   

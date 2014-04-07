@@ -37,7 +37,7 @@
                     <tr>
                         <%for(int j=0;j<ris.get(i).length;j++){%>
                             <td><%=ris.get(i)[j]%></td>
-                        <%}if(ruolo!=null && ruolo.equals("admin")){%>
+                        <%}if(ruolo!=null && ruolo.equals("admin") || ruolo.equals("user")){%>
                             <td>mod</td>
                             <td>
                                 <form action="/PizzaWeb/Servlet" method="get">
@@ -48,6 +48,7 @@
                                     <input type="submit" name="name"   value="rimuovi">
                                 </form>
                             </td>
+                           
                         <%} if(ruolo!=null && (ruolo.equals("admin")||ruolo.equals("user"))){%>
                             <td>add</td>
                             <td>att</td>

@@ -90,6 +90,17 @@ public class DBManager {
         else
             return temp.get(0);
     }
+    
+    public static void addPrenotazioneanna(String cliente,String data, String pizza, int quantita){
+
+         String sql="INSERT INTO PRENOTAZ (CLIENTE,PIZZA,QUANTITA,DATA,STATO) VALUES ";
+        
+            sql+="('"+cliente+"', '"+pizza+"',"+quantita+", '"+data+"', 'Ordinato')";
+            
+        esegui(sql);
+        
+        
+    }
     public static void addPrenotazione(String cliente,String data, String pizza, int quantita){
         String[]pi={pizza};
         int[]qu={quantita};

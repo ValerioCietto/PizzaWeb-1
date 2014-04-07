@@ -2,6 +2,7 @@ package mypackage;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 
 import javax.servlet.ServletException;
@@ -37,7 +38,9 @@ public class Controller extends HttpServlet {
                     Model.addUser(request);
                     break;
                 case "addPrenotaz":
+                     Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
                     Model.addPren(request);
+                    Logger.getGlobal().info("sono nel controller in addprenotaz");
                     break;
                     
                 case "remPrenotaz":
