@@ -27,12 +27,15 @@ public class Controller extends HttpServlet {
                     break;
                 case "addPizza":
                     Model.addPizza(request);
+                    aggPage(request);
                     break;
                 case "remPizza":
                     Model.remPizza(request);
+                    aggPage(request);
                     break;
                 case "modPizza":
                     Model.modPizza(request);
+                    aggPage(request);
                     break;
                 case "registration":
                     Model.addUser(request);
@@ -41,10 +44,12 @@ public class Controller extends HttpServlet {
                      Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
                     Model.addPren(request);
                     Logger.getGlobal().info("sono nel controller in addprenotaz");
+                    aggPage(request);
                     break;
                     
                 case "remPrenotaz":
                     Model.remPren(request);
+                    aggPage(request);
                     break;
                 /*
                 case "modPizza":
@@ -69,15 +74,16 @@ public class Controller extends HttpServlet {
     
     public void switchPage(HttpServletRequest req){
         String page= req.getParameter("name");
-        //
-        String ruolo=(String)(req.getSession()).getAttribute("ruolo");
-        String login=(String)(req.getSession()).getAttribute("username");
-        //
         if(page!=null)
             req.getSession().setAttribute("view",page);
         else
             req.getSession().setAttribute("view","");
-        page=(String)(req.getSession()).getAttribute("view");
+        aggPage(req);
+    }
+    public void aggPage(HttpServletRequest req){
+        String ruolo=(String)(req.getSession()).getAttribute("ruolo");
+        String login=(String)(req.getSession()).getAttribute("username");
+        String page=(String)(req.getSession()).getAttribute("view");
         if(page.equals("catalogo"))
             req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PIZZE",true));
         else if(page.equals("loginManager"))

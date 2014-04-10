@@ -10,19 +10,6 @@
     </head>
     <body>
         <%String ruolo=(String)(request.getSession()).getAttribute("ruolo");%>
-        <%--
-        da mettere per agg. pren
-         <td>
-                                <form action="/PizzaWeb/Servlet" method="get">
-                                    <input type="hidden" name="action" value="addPren">
-                                    <input type ="hidden" name="nomecliente" value="<%= ris.get(i)[0]%>">
-                                    <input type ="hidden" name="nomepizza" value="<%= ris.get(i)[1]%>">
-                                    <input type ="text" name="data" default="data">
-                                    <input type ="text" name="quant">
-                                    <input type="submit" name="name"   value="add">
-                                </form>
-                            </td>
-        --%>
         
         
         <article>
@@ -63,8 +50,8 @@
                             <form action="/PizzaWeb/Servlet" method="get">
                                     <input type="hidden" name="action" value="addPrenotaz">
                                     <input type ="hidden" name="pizza" value="<%= ris.get(i)[0]%>">
-                                    <input type ="text" name="data" default="data"> data
-                                    <input type ="text" name="quant"> quant
+                                    <input type ="text" name="data" value="data"> 
+                                    <input type="number" name="quant"> <%-- gestire l'eccezione che da' in firefox--%>
                                     <input type="submit" name="name"   value="add">
                             </form>
  
@@ -77,9 +64,9 @@
                     if(ruolo!=null && ruolo.equals("admin")){%>
                         <form action="/PizzaWeb/Servlet" method="post">
                             <tr>
-                                <td><input type="text" name= "pizza"        value="nome"></td>
-                                <td><input type="text" name= "ingredienti"  value="ingredienti"></td>
-                                <td><input type="text" name= "prezzo"       value="prezzo"></td>
+                                <td><input type="text" name= "pizza"        value="nome" required></td>
+                                <td><input type="text" name= "ingredienti"  value="ingredienti" required></td>
+                                <td><input type="text" name= "prezzo"       value="prezzo" required></td>
                                 <td colspan=4><input type="submit" name= "action" value="addPizza"></td>
                             </tr>
                         </form>
