@@ -25,7 +25,8 @@
                     </tr>
                     <tr>
                         <td>
-                            <p><a href="index.jsp?action=registration">registrati!</a></p>
+                            <p><a href="registrati.html">registrati!</a></p>
+                            
                         </td>
                     </tr>
                 <%}else{%>

@@ -46,11 +46,15 @@ public class Model {
             s.setAttribute("message","inserisci un nome, gli ingredienti e il prezzo.");
     } 
 
-    static void modPizza(HttpServletRequest request) {
+    static void modPizza(HttpServletRequest req) {
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    static void addUser(HttpServletRequest request) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    static void addUser(HttpServletRequest req) {
+        String n=req.getParameter("login");
+        String p=req.getParameter("password");
+        String ruolo= "user";
+        DBManager.addLogin(n,p, ruolo); //To change body of generated methods, choose Tools | Templates.
     }
     static void addPren(HttpServletRequest req) {
         

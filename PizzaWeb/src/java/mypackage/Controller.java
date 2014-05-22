@@ -51,13 +51,16 @@ public class Controller extends HttpServlet {
                     Model.remPren(request);
                     aggPage(request);
                     break;
+                    
+                
                 /*
                 case "modPizza":
                     aggiungi(req);
                     break;
-                case "aggLogin":
-                    aggiungi(req);
+                    case "aggLogin":
+                    Model.addLogin(request);
                     break;
+                
                 case "remLogin":
                     remove(req);
                     break;

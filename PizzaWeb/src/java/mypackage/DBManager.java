@@ -100,7 +100,7 @@ public class DBManager {
         esegui(sql);
         
         
-    }
+    }/*
     public static void addPrenotazione(String cliente,String data, String pizza, int quantita){
         String[]pi={pizza};
         int[]qu={quantita};
@@ -109,12 +109,13 @@ public class DBManager {
     public static void addPrenotazione(String cliente,String data, String[] pizza, int[] quantita){
         String sql="INSERT INTO PRENOTAZ (CLIENTE,PIZZA,QUANTITA,DATA,STATO) VALUES ";
         for(int i=0;i<pizza.length && i<quantita.length;i++){
-            sql+="('"+cliente+"', '"+pizza[i]+"',"+quantita[i]+", '"+data+"', 'Ordinato')";
+            sql+="('"+cliente+"', '"+pizza[i]+""
+                    + "',"+quantita[i]+", '"+data+"', 'Ordinato')";
             if(i+1<pizza.length)
                 sql+=",";
         }
         esegui(sql);
-    }
+    }*/
     //la prenotazione deve essere rimossa tramite id
     public static void remPrenotazione(String cliente){
         remPrenotazione(cliente,null,null);
@@ -153,10 +154,10 @@ public class DBManager {
         addLogin("b","b","user");
         addPizza("Margherita","pomodoro e mozzarella", 15);
         addPizza("Funghi","pomodoro e funghi", 6);
-        addPrenotazione("user","210491", "Margherita",3);
-        addPrenotazione("user","220591", "funghi",4);
-        addPrenotazione("mario","100291", "bianca",2);
-        addPrenotazione("mario","100291", "rossa",2);
+       // addPrenotazione("user","210491", "Margherita",3);
+       // addPrenotazione("user","220591", "funghi",4);
+       // addPrenotazione("mario","100291", "bianca",2);
+       // addPrenotazione("mario","100291", "rossa",2);
     }
     public static ArrayList<String[]> query(String query,boolean h) {
         ArrayList<String[]> out=new ArrayList<String[]>();
