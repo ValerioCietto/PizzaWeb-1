@@ -5,23 +5,130 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
+    
     <head>
-        <title>TODO supply a title</title>
+        <link rel="stylesheet" type="text/css" href="pizzacss.css"> 
+        <title>Registration</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-    </head>
-    <body>
-        <div>
+    </head> 
+    <body> <!--
+         <script type="text/javascript"> function checkForm(form) {
+            /* alert("alertq1");
+             if(form.username.value == "") { 
+                 alert("Error: Username cannot be blank!"); 
+                 form.username.focus(); 
+                 return false; 
+             }
+             
+             if(form.pwd1.value !== "" && form.pwd1.value == form.pwd2.value) {
+                 if(form.pwd1.value == form.username.value) { 
+                     alert("Error: Password must be different from Username!");
+                 } 
+                 form.pwd1.focus(); 
+                 return false; 
+             } else { 
+                 alert("Error: Please check that you've entered and confirmed your password!"); 
+                 form.pwd1.focus(); 
+                 return false; 
+             }
+             
+             return true;
+      */
+         }
+        </script>
+        
             <form action="/PizzaWeb/Servlet" method="get" >
-                                <p>Name</p>
-                                <input type ="text" name="login" required>
-                                <p>Password</p>
-                                <input type ="password" name="password" required>
-                                <p>Ripeti password</p>
-                                <input type ="password" name="password2" required>
-                                <input type= "submit"   name="action" value= "registration">
+                <p>Name: <input type ="text" name="login" required> </p>
+                <p>Password: <input type ="password" name="pwd1" required> </p>
+                <p>Ripeti password: <input type ="password" name="pwd2" onchange=" this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : ''); "> </p>
+                <input type= "submit"   name="action" value= "registration">
                                 
                             </form>
-        </div>
+        -->
+        <form id="myForm" action="/PizzaWeb/Servlet" method="get">  
+        <p>Username: <input id="field_username" type="text" required pattern="\w+" name="username"></p>
+        <p>Password: <input id="field_pwd1" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="pwd1"></p>
+        <p>Confirm Password: <input id="field_pwd2" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="pwd2"></p>
+        <p><input type="submit" value="Submit"></p>
+        </form>
+        
+        <script type="text/javascript"> 
+            document.addEventListener("DOMContentLoaded", function() {
+                var checkPassword = function(str) {
+                    var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/; return re.test(str);
+                };
+                var checkForm = function(e) {
+                     if(this.username.value == "") { 
+                         alert("Error: Username cannot be blank!");
+                         this.username.focus(); 
+                         e.preventDefault();
+                         return;
+                     }
+                 re = /^\w+$/; 
+                 if(!re.test(this.username.value)) {
+                     alert("Error: Username must contain only letters, numbers and underscores!"); 
+                     this.username.focus(); 
+                     e.preventDefault(); 
+                     return; 
+                 }
+                 if(this.pwd1.value != "" && this.pwd1.value == this.pwd2.value) {
+                     if(!checkPassword(this.pwd1.value)) {
+                         alert("The password you have entered is not valid!"); 
+                         this.pwd1.focus(); 
+                         e.preventDefault(); 
+                         return;
+                     }
+                 } else {
+                     alert("Error: Please check that you've entered and confirmed your password!"); 
+                     this.pwd1.focus(); 
+                     e.preventDefault(); 
+                     return; 
+                 }
+                 alert("Username and password are both VALID!"); 
+             };
+             var myForm = document.getElementById("myForm"); 
+             myForm.addEventListener("submit", checkForm, true);
+             
+             var supports_input_validity = function() {
+                 var i = document.createElement("input"); 
+                 return "setCustomValidity" in i;
+                 }
+                  if(supports_input_validity()) {
+                      var usernameInput = document.getElementById("field_username"); 
+                      var usernameRule = "Username must not be blank and contain only letters, numbers and understores."; 
+                      usernameInput.setCustomValidity(usernameRule);
+                      
+                      var pwd1Input = document.getElementById("field_pwd1"); 
+                      var pwd1Rule = "Password must contain at least 6 characters, including UPPER/lowercase and numbers."; 
+                      pwd1Input.setCustomValidity(pwd1Rule);
+                      
+                      var pwd2Input = document.getElementById("field_pwd2"); 
+                      var pwd2Rule = "Please enter the same Password as above."; 
+                      
+                      usernameInput.addEventListener("change", function() { 
+                          usernameInput.setCustomValidity(this.validity.patternMismatch ? usernameRule : ""); 
+                      }, false);
+                      
+                      pwd1Input.addEventListener("change", function() { 
+                          this.setCustomValidity(this.validity.patternMismatch ? pwd1Rule : ""); 
+                          if(this.checkValidity()) {
+                              pwd2Input.pattern = this.value; 
+                              pwd2Input.setCustomValidity(pwd2Rule);
+                           } else { 
+                               pwd2Input.pattern = this.pattern; 
+                               pwd2Input.setCustomValidity(""); 
+                           } 
+                       }, false);
+                       
+                       pwd2Input.addEventListener("change", function() { 
+                           this.setCustomValidity(this.validity.patternMismatch ? pwd2Rule : ""); 
+                       }, false); 
+                       
+                      }
+                 }, false);
+                
+            </script>
+        
     </body>
 </html>

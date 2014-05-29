@@ -51,8 +51,8 @@ public class Model {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     static void addUser(HttpServletRequest req) {
-        String n=req.getParameter("login");
-        String p=req.getParameter("password");
+        String n=req.getParameter("username");
+        String p=req.getParameter("pwd1");
         String ruolo= "user";
         DBManager.addLogin(n,p, ruolo); //To change body of generated methods, choose Tools | Templates.
     }
@@ -123,6 +123,7 @@ class Pizza{
         DBManager.modPizza(oNome, nIngredienti, nPrezzo);
 
     }
+   
 }
 class Utente{
     String nome="";

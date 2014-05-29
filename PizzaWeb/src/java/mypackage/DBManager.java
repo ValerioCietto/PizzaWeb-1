@@ -65,6 +65,9 @@ public class DBManager {
     public static boolean addPizza(String nome, String ingr, double prezzo){
         return esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
     }
+    //DA VERIFICARE vvvvvv
+   
+    
     public static boolean remPizza(String nome){
         return esegui("DELETE FROM PIZZE WHERE (NOME='"+nome+"')");
     }   

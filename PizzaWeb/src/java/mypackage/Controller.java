@@ -41,9 +41,9 @@ public class Controller extends HttpServlet {
                     Model.addUser(request);
                     break;
                 case "addPrenotaz":
-                     Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
+                     //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
                     Model.addPren(request);
-                    Logger.getGlobal().info("sono nel controller in addprenotaz");
+                   // Logger.getGlobal().info("sono nel controller in addprenotaz");
                     aggPage(request);
                     break;
                     
@@ -53,10 +53,9 @@ public class Controller extends HttpServlet {
                     break;
                     
                 
+                
                 /*
-                case "modPizza":
-                    aggiungi(req);
-                    break;
+                
                     case "aggLogin":
                     Model.addLogin(request);
                     break;

@@ -34,7 +34,12 @@
                             <td><%=ris.get(i)[j]%></td>
                         <%}
                         if(ruolo!=null && ruolo.equals("admin")){%>
-                            <td>mod</td>
+                            
+                            <td><form action="/PizzaWeb/Servlet" method="get">
+                                    <input type="hidden" name="pizza"  value=<%=ris.get(i)[0]%>>
+                                    <input type="hidden" name="action" value="modPizza">
+                                    <input type="submit" name="name"   value="modifica">
+                                </form></td>
                             <td>
                                 <form action="/PizzaWeb/Servlet" method="get">
                                     <input type="hidden" name="pizza"  value=<%=ris.get(i)[0]%>>
