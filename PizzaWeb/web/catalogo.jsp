@@ -36,13 +36,13 @@
                         if(ruolo!=null && ruolo.equals("admin")){%>
                             
                             <td><form action="/PizzaWeb/Servlet" method="get">
-                                    <input type="hidden" name="pizza"  value=<%=ris.get(i)[0]%>>
+                                    <input type="hidden" name="pizza"  value="<%=ris.get(i)[0]%>" >
                                     <input type="hidden" name="action" value="modPizza">
                                     <input type="submit" name="name"   value="modifica">
                                 </form></td>
                             <td>
                                 <form action="/PizzaWeb/Servlet" method="get">
-                                    <input type="hidden" name="pizza"  value=<%=ris.get(i)[0]%>>
+                                    <input type="hidden" name="pizza"  value="<%=ris.get(i)[0]%>" >
                                     <input type="hidden" name="action" value="remPizza">
                                     <input type="submit" name="name"   value="remove">
                                 </form>
@@ -66,15 +66,16 @@
                         <%}%>
                         </tr>
                 <%}
-                    if(ruolo!=null && ruolo.equals("admin")){%>
+                if(ruolo!=null && ruolo.equals("admin")){%>
+                    <tr><th colspan="7">AGGIUNGI</th></tr>
+                    <tr>
                         <form action="/PizzaWeb/Servlet" method="post">
-                            <tr>
-                                <td><input type="text" name= "pizza"        value="nome" required></td>
-                                <td><input type="text" name= "ingredienti"  value="ingredienti" required></td>
-                                <td><input type="text" name= "prezzo"       value="prezzo" required></td>
-                                <td colspan=4><input type="submit" name= "action" value="addPizza"></td>
-                            </tr>
+                            <td><input type="text" name= "pizza"        value="nome" required></td>
+                            <td><input type="text" name= "ingredienti"  value="ingredienti" required></td>
+                            <td><input type="text" name= "prezzo"       value="prezzo" required></td>
+                            <td colspan=4><input type="submit" name= "action" value="addPizza"></td>
                         </form>
+                    </tr>                        
                 <%}%>
             </table>
         </article>   

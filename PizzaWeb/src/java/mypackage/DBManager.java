@@ -20,20 +20,16 @@ public class DBManager {
     public static void inizializza(){
        try { // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            //creaTabella();
-            //startDati();
+            ///se la tabella non esiste o ha i metadata diversi{
+            creaTabella();
+            startDati();
+            ///}
        } catch (SQLException e) {System.out.println(e.getMessage());}
     }
     public static void creaTabella(){
         try {
         Connection conn = DriverManager.getConnection(ur,us,p);
         Statement st = conn.createStatement();
-            //////////////////////////////////////////////////////////
-
-                //st.execute("DROP TABLE PRENOTAZ");
-                //st.execute("DROP TABLE UTENTI");
-                //st.execute("DROP TABLE PIZZE");
-        /*
             try {   
                 st.executeUpdate("CREATE TABLE UTENTI" +
                         "(NOME VARCHAR(30)PRIMARY KEY, " +
@@ -45,7 +41,7 @@ public class DBManager {
                         "NOME VARCHAR(30) PRIMARY KEY, " +
                         "INGREDIENTI VARCHAR(40) NOT NULL, " +
                         "PREZZO DOUBLE)" );
-            } catch (SQLException e){System.out.println(e.getMessage());}*/
+            } catch (SQLException e){System.out.println(e.getMessage());}
             try {
                 st.executeUpdate("CREATE TABLE PRENOTAZ(" +
                         "CLIENTE VARCHAR(30) NOT NULL, " +

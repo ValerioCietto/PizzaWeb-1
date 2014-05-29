@@ -25,7 +25,7 @@ public class Model {
             if(login.getNome()!=null && !login.getNome().equals("")){
                 s.setAttribute("username",login.getNome());
                 s.setAttribute("ruolo", login.getRuolo());
-                s.setAttribute("message","login effettuato, benvenuto!");
+                s.setAttribute("message","login effettuato, benvenuto "+login.getNome()+"!");
             }else
                 s.setAttribute("message","login errato, sicuro di esserti registrato?");
         }else
