@@ -26,7 +26,7 @@ public class DBManager {
             // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
             ///se la tabella non esiste o ha i metadata diversi{
-            creaTabella();
+            creaTabelle();
             startDati();
             ///}
        } catch (SQLException e) {System.out.println(e.getMessage());}
@@ -38,39 +38,41 @@ public class DBManager {
      * Genera il database creando tre tabelle:
      * UTENTI, PIZZE e PRENOTAZIONI
      */
-    public static void creaTabella(){
+    public static void creaTabelle(){
         try {
         Connection conn = DriverManager.getConnection(ur,us,p);
         Statement st = conn.createStatement();
             try {   
-                st.executeUpdate(   "CREATE TABLE UTENTI" +
+                st.executeUpdate(   "CREATE TABLE UTENTE(" +
                         
-                                    "(NOME VARCHAR(30) PRIMARY KEY, " +
-                                    "PASSWORD VARCHAR(30) NOT NULL, " +
-                                    "RUOLO VARCHAR(30) NOT NULL)");
+                                    "IDUSER         INT AUTO_INCREMENT      PRIMARY KEY ," +
+                                    "USERNAME       VARCHAR(30)             PRIMARY KEY ," +
+                                    "PASSWORD       VARCHAR(30)             NOT NULL    ," +
+                                    "PERMISSION     VARCHAR(30)             NOT NULL    )");
+                
             } catch (SQLException e){System.out.println(e.getMessage());}
             try {
-                st.executeUpdate(   "CREATE TABLE PIZZE(" +
+                st.executeUpdate(   "CREATE TABLE PIZZA(" +
                         
-                                    "NOME VARCHAR(30) PRIMARY KEY, " +
-                                    "INGREDIENTI LONGTEXT NOT NULL, " +
-                                    "PREZZO DOUBLE NOT NULL)" );
+                                    "IDPIZZA        INT AUTO_INCREMENT      PRIMARY KEY ," +
+                                    "NOME           VARCHAR(30)             PRIMARY KEY ," +
+                                    "INGREDIENTI    LONGTEXT                NOT NULL    ," +
+                                    "PREZZO         DOUBLE                  NOT NULL    )");
+                
             } catch (SQLException e){System.out.println(e.getMessage());}
             try {
                 st.executeUpdate(   "CREATE TABLE PRENOTAZIONI(" +
                         
-                                    "IDPRENOTAZIONE INT AUTO_INCREMENT PRIMARY KEY," +
+                                    "IDPRENOTAZIONE INT AUTO_INCREMENT      PRIMARY KEY ," +
+                                    "IDUTENTE       INT                     NOT NULL    ," +
+                                    "IDPIZZA        INT                     NOT NULL    ," +
+                                    "QUANTITA       INT UNSIGNED            NOT NULL    ," +
+                                    "DATA           VARCHAR(30)             NOT NULL    ," +
+                                    "STATO          VARCHAR(30)             NOT NULL    ," +
                         
-                                    "CLIENTE VARCHAR(30) NOT NULL, " +
-                                    "PIZZA VARCHAR(30) NOT NULL, " +
-                        
-                                    "QUANTITA INT UNSIGNED NOT NULL," +
-                                    "DATA VARCHAR(30) NOT NULL,"+
-                                    "STATO VARCHAR(30) NOT NULL" +
-                        
-                                    "FOREIGN KEY(CLIENTE) REFERENCES UTENTI(NOME),"+
-                                    "FOREIGN KEY(PIZZA) REFERENCES PIZZE(NOME),"+
-                                    ")" );
+                                    "FOREIGN KEY(IDUTENTE) REFERENCES UTENTE(IDUTENTE)  ," +
+                                    "FOREIGN KEY(IDPIZZA) REFERENCES PIZZA(IDPIZZA)     )");
+                
             } catch (SQLException e){System.out.println(e.getMessage());}
             st.close();
          } catch (SQLException e){

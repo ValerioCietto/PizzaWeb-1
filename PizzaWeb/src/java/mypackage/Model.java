@@ -20,13 +20,13 @@ public class Model {
     
     public static void login(HttpServletRequest req){
         HttpSession s = req.getSession();
-        String name = req.getParameter("login");
+        String username = req.getParameter("username");
         String password = req.getParameter("password");
-        if(name != null && password != null && !name.equals("") && !password.equals("")){
-            Utente login = new Utente( DBManager.getLogin(name,password) );
+        if(username != null && password != null && !username.equals("") && !password.equals("")){
+            Utente login = new Utente( DBManager.getLogin(username,password) );
             if(login.getNome() != null && !login.getNome().equals("")){
                 s.setAttribute("username",login.getNome());
-                s.setAttribute("ruolo", login.getRuolo());
+                s.setAttribute("permission", login.getPermission());
                 s.setAttribute("message","login effettuato, benvenuto "+login.getNome()+"!");
             }else
                 s.setAttribute("message","login errato, sicuro di esserti registrato?");
@@ -162,7 +162,9 @@ class Pizza{
         this.nome = iNome;
         this.prezzo = iPrezzo;
     }
-     
+
+    // METODI DI GET
+    
     /**Restituisce l'ID della pizza
      * @return <String> nome pizza
      */
@@ -195,22 +197,24 @@ class Pizza{
         return this.prezzo;
     }
 
+    //METODI DI SET
     
-    /**
-     * Controlla che la pizza su cui stai lavorando esista
-     * Controlla che i dati di input siano accettabili
-     * Aggiorna i dati della pizza nel DB
-     * @param nIngredienti
-     * @param nPrezzo 
-     */
+    //Modifica il nome della pizza
     
-                                    //MODIFICARE//
+    public void setNome(String newNome){
+        this.nome = newNome;
+    }
+ 
+    //Modifica gli ingredienti della pizza
     
-    public void setPizza(String nIngredienti, double nPrezzo){
-        String oNome = this.nome;
-        if(oNome != null && !oNome.equals(""))
-            if(nIngredienti != null && !nIngredienti.equals("") && nPrezzo>0)
-                DBManager.modPizza(oNome, nIngredienti, nPrezzo);
+    public void setIngredinti( String newIngredienti){
+        this.ingredienti = newIngredienti;
+    }
+    
+    //Modifica il prezzo della pizza
+    
+    public void setPrezzo( double newPrezzo){
+        this.prezzo = newPrezzo;
     }
    
 }
@@ -221,9 +225,9 @@ class Pizza{
 
 class Utente{
     private int idUtente;
-    private String nome;
+    private String username;
     private String pwd;
-    private String ruolo;
+    private String permission;
     
     /**
      * Crea l'utente
@@ -236,10 +240,12 @@ class Utente{
     
     public Utente(int id, String iNome, String iPwd, String iRuolo){
         this.idUtente = id;
-        this.nome = iNome;
+        this.username = iNome;
         this.pwd = iPwd;
-        this.ruolo = iRuolo;
+        this.permission = iRuolo;
     }
+ 
+    //METODI DI GET    
     
     /**
      * Restituisce l'ID dell'utente
@@ -256,7 +262,7 @@ class Utente{
      */
     
     public String getNome(){
-        return nome;
+        return username;
     }
     
     /**
@@ -273,8 +279,22 @@ class Utente{
      * @return <String>
      */
     
-    public String getRuolo(){
-        return ruolo;
+    public String getPermission(){
+        return permission;
+    }
+   
+    //METODI DI SET
+    
+    //Modifica la password dell'utente
+    
+    public void setPwd( String newPwd){
+        this.pwd = newPwd;
+    }
+    
+    //Modifica il ruolo dell'utente
+    
+    public void setPermission(String newRuolo){
+        this.permission = newRuolo;
     }
 }
 
@@ -284,12 +304,8 @@ class Utente{
 ////////////////////////////////////////////////////////////////////////////////
                             //INIZIO CLASSE PRENOTAZIONE//
 
-/**
- * da finire e adeguare
- * @author mirko
- */
-
 class Prenotazione{
+    private int idPrenotazione;
     private int idUtente;
     private int idPizza;
     private int quantita;
@@ -309,7 +325,8 @@ class Prenotazione{
      */ 
     
     
-    public Prenotazione(int idU, int idP, int iQuantita, String iData){
+    public Prenotazione(int id, int idU, int idP, int iQuantita, String iData){
+        this.idPrenotazione = id;
         this.idUtente = idU;
         this.idPizza = idP;
         this.quantita = iQuantita;
@@ -317,10 +334,18 @@ class Prenotazione{
         this.stato = "Ordinata";
     }
 
-   
+/**
+     * Restituisce l'ID della prenotazione
+     * @return int idPrenotazione
+     */
+    
+    public int getIdPrenotazione(){
+        return idPrenotazione;
+    }
+    
     /**
      * Restituisce l'ID dell'utente che ha effettuato la prenotazione
-     * @return int nome Pizza
+     * @return <int> idUtente
      */
     
     public int getIdUtente(){
@@ -329,7 +354,7 @@ class Prenotazione{
     
     /**
      * Restituisce l'ID della pizza prenotata
-     * @return <String> nome Pizza
+     * @return <int> idPizza
      */
     
     public int getIdPizza(){
@@ -338,7 +363,7 @@ class Prenotazione{
     
     /**
      * Restituisce la quantità di pizze prenotate
-     * @return <String>
+     * @return <int> quantita
      */
     
     public int getQuantita(){
@@ -347,7 +372,7 @@ class Prenotazione{
     
     /**
      * Restituisce la data della prenotazione
-     * @return <String>
+     * @return <String> data
      */
     
     public String getData(){
@@ -356,7 +381,7 @@ class Prenotazione{
 
     /**
      * Restituisce lo stato della prenotazione
-     * @return <String>
+     * @return <String> stato
      */    
     
     public String getStato(){
