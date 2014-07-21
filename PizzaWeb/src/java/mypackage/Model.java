@@ -133,56 +133,58 @@ public class Model {
         
     
 }
+                                //FINE CLASSE MODEL//
+////////////////////////////////////////////////////////////////////////////////
+                                //INIZIO CLASSE PIZZA//
+
 class Pizza{
-    String nome = "";
-    String ingredienti = "";
-    double prezzo = 0;
+    private int idPizza;
+    private String nome;
+    private String ingredienti;
+    private double prezzo;
     
     /**
      * Controlla che gli input non siano nulli o non accettabili
      * In caso di non riuscita i parametri sono nulli
      * Altrimenti carica i dati nell'oggetto
      * 
+     * @param id
      * @param iNome
      * @param iIngredienti
-     * @param iPrezzo 
+     * @param iPrezzo
+     * 
+     * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
     
-    public Pizza(String iNome,String iIngredienti,double iPrezzo){
-        if(iNome!=null && !iNome.equals("")){
-            if(iIngredienti!=null && !iIngredienti.equals("")){
-                if (iPrezzo>0){
-                    ingredienti=iIngredienti;
-                    nome=iNome;
-                    prezzo=iPrezzo;
-                }}}
+    public Pizza(int id, String iNome,String iIngredienti, double iPrezzo){
+        this.idPizza = id;
+        this.ingredienti = iIngredienti;
+        this.nome = iNome;
+        this.prezzo = iPrezzo;
     }
-    
-    /**
-     * Parsifica la stringa del testo
-     * Controlla che gli input non siano nulli o non accettabili
-     * In caso di non riuscita i parametri sono nulli
-     * Altrimenti carica i dati nell'oggetto
-     * 
-     * @param iNome
-     * @param iIngredienti
-     * @param iPrezzo 
+     
+    /**Restituisce l'ID della pizza
+     * @return <String> nome pizza
      */
     
-    public Pizza(String iNome,String iIngredienti,String iPrezzo){
-        try{
-            double tempPrezzo = Double.parseDouble(iPrezzo);
-            if(iNome != null && !iNome.equals("")){
-                if(iIngredienti != null && !iIngredienti.equals("")){
-                    if (tempPrezzo > 0){
-                        ingredienti = iIngredienti;
-                        nome = iNome;
-                        prezzo = tempPrezzo;
-                    }}}
-                  
-        }catch(NumberFormatException e){
-            System.out.println(e);
-        }
+    public int getId(){
+        return this.idPizza;
+    }   
+    
+    /**Restituisce il nome della pizza
+     * @return <String> nome pizza
+     */
+    
+    public String getNome(){
+        return this.nome;
+    }
+ 
+    /**Restituisce gli ingredienti della pizza
+     * @return <String> nome pizza
+     */
+    
+    public String getIngredinti(){
+        return this.ingredienti;
     }
     
     /**Restituisce il prezzo della pizza
@@ -190,16 +192,9 @@ class Pizza{
      */
     
     public double getPrezzo(){
-        return prezzo;
+        return this.prezzo;
     }
-    
-    /**Restituisce il nome della pizza
-     * @return <String> nome pizza
-     */
-    
-    public String getNome(){
-    return nome;
-    }
+
     
     /**
      * Controlla che la pizza su cui stai lavorando esista
@@ -209,6 +204,8 @@ class Pizza{
      * @param nPrezzo 
      */
     
+                                    //MODIFICARE//
+    
     public void setPizza(String nIngredienti, double nPrezzo){
         String oNome = this.nome;
         if(oNome != null && !oNome.equals(""))
@@ -217,33 +214,40 @@ class Pizza{
     }
    
 }
+
+                                //FINE CLASSE PIZZA//
+////////////////////////////////////////////////////////////////////////////////
+                                //INIZIO CLASSE UTENTE//
+
 class Utente{
-    String nome = "";
-    String pwd = "";
-    String ruolo = "";
+    private int idUtente;
+    private String nome;
+    private String pwd;
+    private String ruolo;
     
-    /**
-     * NON USATO
-     * @param iNome
-     * @param iPwd
-     * @param iRuolo 
-     */
-    /*public Utente(String iNome,String iPwd, String iRuolo){
-        nome=iNome;
-        pwd=iPwd;
-        ruolo=iRuolo;
-    }*/
     /**
      * Crea l'utente
-     * @param input array con nome,pwd e ruolo 
+     * @param iNome
+     * @param iPwd
+     * @param iRuolo
+     * 
+     * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
     
-    public Utente(String []input){
-        if(input == null)
-            return;
-        nome = input[0];
-        pwd = input[1];
-        ruolo = input[2];
+    public Utente(int id, String iNome, String iPwd, String iRuolo){
+        this.idUtente = id;
+        this.nome = iNome;
+        this.pwd = iPwd;
+        this.ruolo = iRuolo;
+    }
+    
+    /**
+     * Restituisce l'ID dell'utente
+     * @return int nome Pizza
+     */
+    
+    public int getId(){
+        return idUtente;
     }
     
     /**
@@ -274,59 +278,89 @@ class Utente{
     }
 }
 
+
+
+                                //FINE CLASSE UTENTE//
+////////////////////////////////////////////////////////////////////////////////
+                            //INIZIO CLASSE PRENOTAZIONE//
+
 /**
  * da finire e adeguare
  * @author mirko
  */
 
 class Prenotazione{
-    String cliente = "";
-    String data = "";
-    String pizza = "";
-    int quantita = 0;
-    String stato = "";
-    public Prenotazione(String iCliente,String iData, String iPizza, int iQuantita){
-        if(iCliente != null && !iCliente.equals("") && iData != null && !iData.equals("") && iPizza != null && !iPizza.equals("") && iQuantita>0){
-            cliente = iCliente;
-            data = iData;
-            pizza = iPizza;
-            quantita = iQuantita;
-            stato = "Ordinata";
-        }
+    private int idUtente;
+    private int idPizza;
+    private int quantita;
+    private String data;
+    private String stato;
+    
+    
+    /**
+     * Crea la prenotazione
+     * 
+     * @param idUtente
+     * @param iPizza
+     * @param quantita
+     * @param data
+     * 
+     * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
+     */ 
+    
+    
+    public Prenotazione(int idU, int idP, int iQuantita, String iData){
+        this.idUtente = idU;
+        this.idPizza = idP;
+        this.quantita = iQuantita;
+        this.data = iData;
+        this.stato = "Ordinata";
     }
-}
 
-/*class Ordine extends Pizza{
-    int quantita=1;   
-    public Ordine(String iNome,String iIngredienti, double iPrezzo){
-        super(iNome, iIngredienti, iPrezzo);
+   
+    /**
+     * Restituisce l'ID dell'utente che ha effettuato la prenotazione
+     * @return int nome Pizza
+     */
+    
+    public int getIdUtente(){
+        return idUtente;
     }
-    public void setQuantita(int iQuantita){
-        quantita=iQuantita;
+    
+    /**
+     * Restituisce l'ID della pizza prenotata
+     * @return <String> nome Pizza
+     */
+    
+    public int getIdPizza(){
+        return idPizza;
     }
+    
+    /**
+     * Restituisce la quantità di pizze prenotate
+     * @return <String>
+     */
+    
     public int getQuantita(){
         return quantita;
     }
-}
-class Prenotazione{
-    Utente cliente;
-    String data;
-    Ordine [] prenotaz;
-    String stato;
-    public Prenotazione(Utente iCliente,String iData, Ordine[] iPrenotaz, String iStato){
-        data=iData;
-        cliente=iCliente;
-        for(int i=0;i<iPrenotaz.length;i++)
-            prenotaz[i]=iPrenotaz[i];
-        stato=iStato;
+    
+    /**
+     * Restituisce la data della prenotazione
+     * @return <String>
+     */
+    
+    public String getData(){
+        return data;
     }
-    public Utente getUtente(){
-        return cliente;
-    }
+
+    /**
+     * Restituisce lo stato della prenotazione
+     * @return <String>
+     */    
+    
     public String getStato(){
         return stato;
-    }
-    public Ordine getOrdine(int i){
-        return prenotaz[i];
-    }
-}*/
+    }      
+    
+}
