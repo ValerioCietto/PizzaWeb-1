@@ -10,15 +10,20 @@ public class DBManager {
     static String p= "app";
     static int idordine=0;
 
+////////////////////////////////////////////////////////////////////////////////
+    
     /**
      * @param args the command line arguments
      */
-    /*public static void main(String[]args)
-    {
+    
+    /*
+    public static void main(String[]args){
         inizializza();
     }*/
+    
     public static void inizializza(){
-       try { // registrazione driver JDBC da utilizzare
+       try {
+            // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
             ///se la tabella non esiste o ha i metadata diversi{
             creaTabella();
@@ -26,31 +31,46 @@ public class DBManager {
             ///}
        } catch (SQLException e) {System.out.println(e.getMessage());}
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Genera il database creando tre tabelle:
+     * UTENTI, PIZZE e PRENOTAZIONI
+     */
     public static void creaTabella(){
         try {
         Connection conn = DriverManager.getConnection(ur,us,p);
         Statement st = conn.createStatement();
             try {   
-                st.executeUpdate("CREATE TABLE UTENTI" +
-                        "(NOME VARCHAR(30)PRIMARY KEY, " +
-                        "PASSWORD VARCHAR(30) NOT NULL, " + 
-                        "RUOLO VARCHAR(30) NOT NULL)");
+                st.executeUpdate(   "CREATE TABLE UTENTI" +
+                        
+                                    "(NOME VARCHAR(30) PRIMARY KEY, " +
+                                    "PASSWORD VARCHAR(30) NOT NULL, " +
+                                    "RUOLO VARCHAR(30) NOT NULL)");
             } catch (SQLException e){System.out.println(e.getMessage());}
             try {
-                st.executeUpdate("CREATE TABLE PIZZE(" +
-                        "NOME VARCHAR(30) PRIMARY KEY, " +
-                        "INGREDIENTI VARCHAR(40) NOT NULL, " +
-                        "PREZZO DOUBLE)" );
+                st.executeUpdate(   "CREATE TABLE PIZZE(" +
+                        
+                                    "NOME VARCHAR(30) PRIMARY KEY, " +
+                                    "INGREDIENTI LONGTEXT NOT NULL, " +
+                                    "PREZZO DOUBLE NOT NULL)" );
             } catch (SQLException e){System.out.println(e.getMessage());}
             try {
-                st.executeUpdate("CREATE TABLE PRENOTAZ(" +
-                        "CLIENTE VARCHAR(30) NOT NULL, " +
-                        "PIZZA VARCHAR(30) NOT NULL, " +
-                        "QUANTITA INT NOT NULL," +
-                        "DATA VARCHAR(30) NOT NULL,"+
-                        "STATO VARCHAR(30) NOT NULL" +
-                        //"CONSTRAINT prk PRIMARY KEY(CLIENTE,DATA,PIZZA)"+ non funziona
-                        ")" );
+                st.executeUpdate(   "CREATE TABLE PRENOTAZIONI(" +
+                        
+                                    "IDPRENOTAZIONE INT AUTO_INCREMENT PRIMARY KEY," +
+                        
+                                    "CLIENTE VARCHAR(30) NOT NULL, " +
+                                    "PIZZA VARCHAR(30) NOT NULL, " +
+                        
+                                    "QUANTITA INT UNSIGNED NOT NULL," +
+                                    "DATA VARCHAR(30) NOT NULL,"+
+                                    "STATO VARCHAR(30) NOT NULL" +
+                        
+                                    "FOREIGN KEY(CLIENTE) REFERENCES UTENTI(NOME),"+
+                                    "FOREIGN KEY(PIZZA) REFERENCES PIZZE(NOME),"+
+                                    ")" );
             } catch (SQLException e){System.out.println(e.getMessage());}
             st.close();
          } catch (SQLException e){
@@ -58,30 +78,122 @@ public class DBManager {
         }
         //chiudo statement (non serve più)        
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param nome = nome della pizza
+     * @param ingr = ingredienti della pizza
+     * @param prezzo = prezzo della pizza
+     * @return true oppure false
+     * 
+     * Aggiunge una pizza nella tabella PIZZE del database
+     */
+    
     public static boolean addPizza(String nome, String ingr, double prezzo){
         return esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
     }
-    //DA VERIFICARE vvvvvv
+
+////////////////////////////////////////////////////////////////////////////////
    
+    /**
+     * @param nome = nome della pizza
+     * @return true oppure false
+     * 
+     * Rimuove una pizza dalla tabella PIZZE
+     */
     
     public static boolean remPizza(String nome){
         return esegui("DELETE FROM PIZZE WHERE (NOME='"+nome+"')");
-    }   
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param nome = nome della pizza
+     * @param nIngr = nuovi ingredienti della pizza
+     * @param nPrezzo = nuovo prezzo della pizza
+     * @return true oppure false
+     * 
+     * Modifica una pizza nella tabella PIZZE
+     */
+    
     public static boolean modPizza(String nome, String nIngr, double nPrezzo){
         return esegui("UPDATE PIZZE SET INGREDIENTI='" + nIngr+ "', PREZZO=" +nPrezzo+" WHERE NOME ='" +nome+"'");
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param nome = nome dell'utente
+     * @param password = password dell'utente
+     * @param ruolo = permessi dell'utente
+     * @return true oppure false
+     * 
+     * Inserisce un utente nella tabella UTENTI
+     */
+    
     public static boolean addLogin(String nome, String password, String ruolo){
         return esegui("INSERT INTO UTENTI (NOME, PASSWORD, RUOLO) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param nome = nome dell'utente
+     * @return true oppure false
+     * 
+     * Rimuove un utente dalla tabella UTENTI
+     */
+    
     public static boolean remLogin(String nome){
         return esegui("DELETE FROM UTENTI WHERE (NOME='"+nome+"')");
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param nome = nome attuale dell'utente
+     * @param nNome = nuovo nome dell'utente
+     * @param nPassword = nuova password dell'utente
+     * @param nRuolo = nuovi permessi dell'utente;
+     * @return true oppure false
+     * 
+     * Modifica un utente nella tabella UTENTI
+     */
+    
     public static boolean modLogin(String nome, String nNome, String nPassword, String nRuolo){
         return esegui("UPDATE FROM SET NOME='" + nNome+ "', PASSWORD=" +nPassword+" RUOLO ='" +nRuolo+"'");
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WTF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //da sostituire con una query "select count"
+    
+    /**
+     * @return ArrayList<String[]>
+     * 
+     * Recupera la lista degli utenti e genera un array di Stringhe con tutti i dati
+     */
+    
     public static ArrayList<String[]> getAllLogin(){
         return query("SELECT * FROM UTENTI",false);
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WTF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // vedi sopra
+    
+    /**
+     * @param usr = nome dell'utente
+     * @param pwd = password dell'utente
+     * @return String[]
+     * 
+     * Ritorna un array di Stringhe
+     */
+    
     public static String[] getLogin(String usr,String pwd){
         ArrayList<String[]> temp= query("SELECT * FROM UTENTI WHERE NOME='"+usr+"' AND PASSWORD ='"+pwd+"'",false);
         if(temp.isEmpty())
@@ -89,6 +201,17 @@ public class DBManager {
         else
             return temp.get(0);
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param cliente = cliente che effettua la prenotazione
+     * @param data = data della prenotazione
+     * @param pizza = tipo di pizza prenotata
+     * @param quantita = quantità di pizze prenotate
+     * 
+     * Aggiunge una prenotazione ad un cliente
+     */
     
     public static void addPrenotazioneanna(String cliente,String data, String pizza, int quantita){
 
@@ -99,7 +222,9 @@ public class DBManager {
         esegui(sql);
         
         
-    }/*
+    }
+    
+    /*
     public static void addPrenotazione(String cliente,String data, String pizza, int quantita){
         String[]pi={pizza};
         int[]qu={quantita};
@@ -116,12 +241,42 @@ public class DBManager {
         esegui(sql);
     }*/
     //la prenotazione deve essere rimossa tramite id
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param cliente = cliente dal quale rimuovere la prenotazione 
+     * 
+     * Rimuove una prenotazione
+     */
+    
     public static void remPrenotazione(String cliente){
         remPrenotazione(cliente,null,null);
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param cliente = cliente dal quale rimuovere la prenotazione 
+     * @param data = data della prenotazione da rimuovere
+     * 
+     * Rimuove una prenotazione
+     */
+    
     public static void remPrenotazione(String cliente, String data){
         remPrenotazione(cliente,data,null);
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param cliente = cliente dal quale rimuovere la prenotazione
+     * @param data = data della prenotazione da rimuovere
+     * @param pizza = pizza da rimuovere
+     * 
+     * Rimuove una prenotazione
+     */
+    
     public static void remPrenotazione(String cliente, String data,String pizza){
         String sql="DELETE FROM PRENOTAZ WHERE (CLIENTE= '"+cliente+ "'";
         if(data!=null){
@@ -132,6 +287,16 @@ public class DBManager {
         sql+=")";
         esegui(sql);
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param sql = query sql da eseguire
+     * @return true oppure false
+     * 
+     * Esegue una query SQL
+     */
+    
     public static boolean esegui(String sql) {
         try{
             Connection conn = DriverManager.getConnection(ur, us, p);
@@ -146,6 +311,13 @@ public class DBManager {
         }
         return true;
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Popola il database
+     */
+    
     public static void startDati() { //startDati(String tab, String nome, String mezzo, String fine)
         addLogin("admin","admin","admin");
         addLogin("user","user","user");
@@ -158,6 +330,11 @@ public class DBManager {
        // addPrenotazione("mario","100291", "bianca",2);
        // addPrenotazione("mario","100291", "rossa",2);
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WTF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
     public static ArrayList<String[]> query(String query,boolean h) {
         ArrayList<String[]> out=new ArrayList<String[]>();
         try{
@@ -188,6 +365,11 @@ public class DBManager {
        }
        return out;
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WTF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
     public static int numRighe(String query) { //static boolean?
         int i=0;
         try {
@@ -203,9 +385,11 @@ public class DBManager {
         }catch(SQLException e){
             System.out.println(e.getMessage() + ": errore query : "+query);
             return -1;
-        }
-        
+        }  
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
 }
     
 

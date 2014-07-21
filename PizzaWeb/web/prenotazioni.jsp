@@ -18,7 +18,7 @@
                     ris=;
                 else
                     ris=DBManager.query("SELECT * FROM PRENOT WHERE CLIENTE='"+login+"'", true);
-                        */
+                */
             %>
             <table>
                 <tr>
