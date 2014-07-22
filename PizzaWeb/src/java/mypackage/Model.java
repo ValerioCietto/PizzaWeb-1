@@ -23,13 +23,15 @@ public class Model {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         if(username != null && password != null && !username.equals("") && !password.equals("")){
-            Utente login = new Utente( DBManager.getLogin(username,password) );
-            if(login.getNome() != null && !login.getNome().equals("")){
-                s.setAttribute("username",login.getNome());
-                s.setAttribute("permission", login.getPermission());
-                s.setAttribute("message","login effettuato, benvenuto "+login.getNome()+"!");
-            }else
-                s.setAttribute("message","login errato, sicuro di esserti registrato?");
+            if(DBManager.controllaLogin(username,password)){
+                Utente login = new Utente( DBManager.getLogin(username) );
+                if(login.getNome() != null && !login.getNome().equals("")){
+                    s.setAttribute("username",login.getNome());
+                    s.setAttribute("permission", login.getPermission());
+                    s.setAttribute("message","login effettuato, benvenuto "+login.getNome()+"!");
+                }else
+                    s.setAttribute("message","login errato, sicuro di esserti registrato?");
+            }
         }else
             s.setAttribute("message","inserisci il tuo nome utente e la tua password.");
     }

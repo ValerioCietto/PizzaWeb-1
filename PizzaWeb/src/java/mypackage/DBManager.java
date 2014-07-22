@@ -7,10 +7,9 @@ import java.util.logging.Logger;
 
 public class DBManager {
     
-    static String ur = "jdbc:derby://localhost:1527/sample";
-    static String us= "app";
-    static String p= "app";
-    static int idordine=0;
+    static String ur = "jdbc:derby://localhost:1527/PizzaWeb";
+    static String us= "pizzeria";
+    static String p= "pizzeria";
 
 ////////////////////////////////////////////////////////////////////////////////
     
@@ -18,18 +17,13 @@ public class DBManager {
      * @param args the command line arguments
      */
     
-    /*
-    public static void main(String[]args){
-        inizializza();
-    }*/
-    
     public static void inizializza(){
        try {
             // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
             ///se la tabella non esiste o ha i metadata diversi{
             creaTabelle();
-            startDati();
+            //startDati();
             ///}
        } catch (SQLException e) {System.out.println(e.getMessage());}
     }
@@ -46,41 +40,42 @@ public class DBManager {
         Statement st = conn.createStatement();
             try {   
                 st.executeUpdate(   "CREATE TABLE UTENTI(" +
-                        
-                                    "IDUSER         INT AUTO_INCREMENT      PRIMARY KEY ," +
-                                    "USERNAME       VARCHAR(30)             PRIMARY KEY ," +
-                                    "PASSWORD       VARCHAR(30)             NOT NULL    ," +
-                                    "PERMISSION     VARCHAR(30)             NOT NULL    )");
+                                    "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                                    "USERNAME       VARCHAR(30) NOT NULL," +
+                                    "PASSWORD       VARCHAR(30) NOT NULL," +
+                                    "PERMISSION     VARCHAR(30) NOT NULL," +
+                                    "PRIMARY KEY(IDUSER))");
                 
             } catch (SQLException e){System.out.println(e.getMessage());}
             try {
                 st.executeUpdate(   "CREATE TABLE PIZZE(" +
                         
-                                    "IDPIZZA        INT AUTO_INCREMENT      PRIMARY KEY ," +
-                                    "NOME           VARCHAR(30)             PRIMARY KEY ," +
-                                    "INGREDIENTI    LONGTEXT                NOT NULL    ," +
-                                    "PREZZO         DOUBLE                  NOT NULL    )");
+                                    "IDPIZZA        INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                                    "NOME           VARCHAR(30) NOT NULL," +
+                                    "INGREDIENTI    VARCHAR(65) NOT NULL," +
+                                    "PREZZO         DOUBLE      NOT NULL," +
+                                    "PRIMARY KEY(IDPIZZA))");
                 
             } catch (SQLException e){System.out.println(e.getMessage());}
             try {
                 st.executeUpdate(   "CREATE TABLE PRENOTAZIONI(" +
                         
-                                    "IDPRENOTAZIONE INT AUTO_INCREMENT      PRIMARY KEY ," +
-                                    "IDUTENTE       INT                     NOT NULL    ," +
-                                    "IDPIZZA        INT                     NOT NULL    ," +
-                                    "QUANTITA       INT UNSIGNED            NOT NULL    ," +
-                                    "DATA           VARCHAR(30)             NOT NULL    ," +
-                                    "STATO          VARCHAR(30)             NOT NULL    ," +
-                        
-                                    "FOREIGN KEY(IDUTENTE) REFERENCES UTENTE(IDUTENTE)  ," +
-                                    "FOREIGN KEY(IDPIZZA) REFERENCES PIZZA(IDPIZZA)     )");
+                                    "IDPRENOTAZIONE INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                                    "IDUTENTE       INT         NOT NULL    ," +
+                                    "IDPIZZA        INT         NOT NULL    ," +
+                                    "QUANTITA       INT         NOT NULL    ," +
+                                    "DATA           VARCHAR(30) NOT NULL    ," +
+                                    "STATO          VARCHAR(30) NOT NULL    ," +
+                                    "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
+                                    "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER),"+
+                                    "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA))");
                 
             } catch (SQLException e){System.out.println(e.getMessage());}
+         
             st.close();
          } catch (SQLException e){
             System.out.println(e.getMessage());
-        }
-        //chiudo statement (non serve più)        
+        }    
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +162,7 @@ public class DBManager {
      */
     
     public static boolean modLogin(String nome, String nNome, String nPassword, String nRuolo){
-        return esegui("UPDATE FROM UTENTI SET USERNAME='" + nNome+ "', PASSWORD=" +nPassword+" PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'");
+        return esegui("UPDATE UTENTI SET USERNAME='" + nNome+ "', PASSWORD='" +nPassword+"', PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -179,18 +174,7 @@ public class DBManager {
      */
     
     public static ArrayList<String> getAllLogin(){
-        ArrayList<String> output = null;
-        String tmp;
-        ResultSet results = query("SELECT * FROM UTENTI");
-        try {
-            while(results.next()){
-                tmp = "" + results.getString("IDUSER") + ";" + results.getString("USERNAME") + ";" + results.getString("PASSWORD") + ";" + results.getString("PERMISSION")+ ";";
-                output.add(tmp);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return output;
+        return query("SELECT * FROM UTENTI");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -203,15 +187,11 @@ public class DBManager {
      * Ritorna una Stringa contenente l'utente
      */
     
-    public static String getLogin(String usr,String pwd){
-        String output = null;
-        ResultSet results = query("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'");
-        try {
-            output += "" + results.getString("IDUSER") + ";" + results.getString("USERNAME") + ";" + results.getString("PASSWORD") + ";" + results.getString("PERMISSION")+ ";";
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return output;
+    public static String getLogin(String usr){
+        return query("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"'").get(0);
+    }
+    public static boolean controllaLogin(String usr,String pwd){
+        return !((query("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'").get(0)).equals(""));
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -224,15 +204,11 @@ public class DBManager {
      */
     
     public static int getIdPizza(String nome){
-        String output;
-        ResultSet results = query("SELECT ID FROM PIZZE WHERE NOME='"+nome+"'");
-        try {
-            output = results.getString("ID");
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-            output = "-1";
+        try{
+            return Integer.parseInt(query("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'").get(0));
+        }catch(NumberFormatException e){
+            return -1;
         }
-        return Integer.parseInt(output);
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -246,15 +222,11 @@ public class DBManager {
      */
     
     public static int getIdUser(String username){
-        String output;
-        ResultSet results = query("SELECT ID FROM UTENTI WHERE USERNAME='"+username+"'");
-        try {
-            output = results.getString("ID");
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-            output = "-1";
+        try{
+            return Integer.parseInt(query("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+username+"'").get(0));
+        }catch(NumberFormatException e){
+            return -1;
         }
-        return Integer.parseInt(output);
     }
     
 ////////////////////////////////////////////////////////////////////////////////    
@@ -268,15 +240,11 @@ public class DBManager {
      */
     
     public static int getIdPrenotazione(int username, int pizza, String  data){
-        String output;
-        ResultSet results = query("SELECT ID FROM PRENOTAZIONI WHERE IDUTENTE='"+username+"' AND IDPIZZA ='"+ pizza+"' AND DATA='"+data+"'");
-        try {
-            output = results.getString("ID");
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-            output = "-1";
+        try{
+            return Integer.parseInt(query("SELECT IDPRENOTAZIONE FROM PRENOTAZIONI WHERE IDUTENTE="+username+" AND IDPIZZA ="+ pizza+" AND DATA='"+data+"'").get(0));
+        }catch(NumberFormatException e){
+            return -1;
         }
-        return Integer.parseInt(output);
     }
     
 ////////////////////////////////////////////////////////////////////////////////       
@@ -290,15 +258,11 @@ public class DBManager {
      * Aggiunge una prenotazione ad un cliente
      */
     
-    public static void addPrenotazione(int cliente, int pizza, int quantita, String data){
+    public static boolean addPrenotazione(int cliente, int pizza, int quantita, String data){
         
-        String sql="INSERT INTO PRENOTAZIONI(IDUSER,IDPIZZA,QUANTITA,DATA,STATO) VALUES ";
-        
-            sql+="('"+cliente+"', '"+pizza+"',"+quantita+", '"+data+"', 'Ordinato')";
-            
-        esegui(sql);
-        
-        
+        String sql="INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ";
+        sql+="("+cliente+", "+pizza+","+quantita+", '"+data+"', 'Ordinato')";
+        return esegui(sql);
     }
 
 ////////////////////////////////////////////////////////////////////////////////    
@@ -311,8 +275,8 @@ public class DBManager {
      * Rimuove una prenotazione
      */
     
-    public static void remPrenotazione(int cliente, int pizza, String data){
-        esegui("DELETE FROM PRENOTAZ WHERE (IDUSER= '"+cliente+ "' AND DATA= '"+data+ "' AND IDPIZZA= '"+pizza+ "')");
+    public static boolean remPrenotazione(int cliente, int pizza, String data){
+        return esegui("DELETE FROM PRENOTAZIONI WHERE (IDUTENTE= "+cliente+ "AND IDPIZZA= "+pizza+ " AND DATA= '"+data+ "')");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -360,22 +324,74 @@ public class DBManager {
     
 ////////////////////////////////////////////////////////////////////////////////
 
-    public static ResultSet query(String query){
-        Connection conn;
-        Statement st;
+    public static ArrayList<String> query(String query){
+        Connection conn=null;
+        Statement st=null;
         ResultSet rs = null;
+        ResultSetMetaData rsmd=null;
+        ArrayList<String> output=null;
         try{
             conn = DriverManager.getConnection(ur, us, p);
             st = conn.createStatement();
             rs = st.executeQuery(query);
-            rs.close(); 
-            st.close(); 
-            conn.close();
+            rsmd = rs.getMetaData();
+            int n = rsmd.getColumnCount()+1;
+            output = new ArrayList<String>();
+            while(rs.next()){
+                String temp = "";
+                for(int i = 1; i < n; i++){
+                    if(i != 1)
+                        temp += "-";
+                    temp += rs.getString(i);
+                }
+                output.add(temp);
+            }
+            if(output.size() == 0)
+                output.add("");
+            
         }catch(SQLException e){
                 System.out.println(e.getMessage() + ": errore query : "+query);
+        } finally {
+            try{
+                if(rs!=null)    rs.close();
+                if(st!=null)    st.close(); 
+                if(conn!=null)  conn.close();
+            }catch(SQLException e){
+                System.out.println(e.getMessage() + ": errore close");
             }
+        }
         
-        return rs;
+        return output;
+    }
+    public static void drop(){
+        
+        System.out.println(esegui("DROP TABLE PRENOTAZIONI"));
+        System.out.println(esegui("DROP TABLE UTENTI"));
+        System.out.println(esegui("DROP TABLE PIZZE"));
+    
     }
 ////////////////////////////////////////////////////////////////////////////////
+//TEST
+    //Utente OK
+    //modifica di una pizza,prenot,user inesistente ritorna true... errore!... da gestire in model
+    //effettuare controlli per non ppermettere nomi duplicati nel model
+    //gestire da model get login che richieda permessi
+    
+    public static void main(String[] args){
+        drop();
+        inizializza();
+        System.out.println("Create login: " + addLogin("puppa", "Puppafava1", "user"));
+        System.out.println("Create login: " + addPizza("pezza", "Puppafava1", 1.0));
+        System.out.println("Create pren1: " + addPrenotazione(getIdUser("puppa"), getIdPizza("pezza"),3, "oggi"));
+        System.out.println("Create pren2: " + addPrenotazione(getIdUser("puppe"), getIdPizza("pezza"),3, "oggi"));
+        System.out.println("Create pren3: " + addPrenotazione(getIdUser("puppa"), getIdPizza("paullo"),3, "oggi"));
+        System.out.println("id="+getIdPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
+        System.out.println("id="+getIdPrenotazione(getIdUser("puppa2"), getIdPizza("pezza"), "oggi"));
+        System.out.println("id="+getIdPrenotazione(getIdUser("puppa"), getIdPizza("pezza2"), "oggi"));
+        System.out.println("id="+getIdPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi2"));
+        System.out.println("rem: "+remPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
+        System.out.println("rem: "+remPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
+    }
+        
+
 }
