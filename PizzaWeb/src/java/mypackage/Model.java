@@ -79,7 +79,7 @@ public class Model {
             
             if(DBManager.addPizza(n, i, p)){
                s.setAttribute("message","aggiunta pizza "+n);
-               Pizza temp = new Pizza(Integer.parseInt(DBManager.getIdPizza(n)), n, i, p);
+               Pizza temp = new Pizza(DBManager.getIdPizza(n), n, i, p);
             }
             else
                s.setAttribute("message","Problema sql");
@@ -100,7 +100,7 @@ public class Model {
     }
     
     static boolean checkLogin(String username){
-        if(DBManager.getIdUser(username) != null){
+        if(DBManager.getIdUser(username)>0){
             return false;
         }
         return true;
@@ -123,8 +123,8 @@ public class Model {
         int quantità = (Integer.parseInt(req.getParameter("quantita"))); //questo gli riempie solo un numero
         String data = req.getParameter("data");
         
-        int idUser = Integer.parseInt(DBManager.getIdUser(user));
-        int idPizza = Integer.parseInt(DBManager.getIdPizza(pizza));
+        int idUser = DBManager.getIdUser(user);
+        int idPizza = DBManager.getIdPizza(pizza);
         
         DBManager.addPrenotazione(idUser, idPizza, quantità, data);
     }
@@ -135,10 +135,10 @@ public class Model {
         String pizza = req.getParameter("nomepizza");
         String data = req.getParameter("data");
 
-        int idUser = Integer.parseInt(DBManager.getIdUser(user));
-        int idPizza = Integer.parseInt(DBManager.getIdPizza(pizza));
-        
-        DBManager.remPrenotazione(idUser, idPizza, data);
+        int idUser = DBManager.getIdUser(user);
+        int idPizza = DBManager.getIdPizza(pizza);
+        if(DBManager.getIdPrenotazione(idUser, idPizza, data) > 0)
+            DBManager.remPrenotazione(idUser, idPizza, data);
     }
         
     

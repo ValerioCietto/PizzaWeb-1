@@ -223,15 +223,16 @@ public class DBManager {
      * Prende in input il nome della pizza e restituisce l'ID della pizza
      */
     
-    public static String getIdPizza(String nome){
-        String output = null;
+    public static int getIdPizza(String nome){
+        String output;
         ResultSet results = query("SELECT ID FROM PIZZE WHERE NOME='"+nome+"'");
         try {
-            output += "" + results.getString("ID");
+            output = results.getString("ID");
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            output = "-1";
         }
-        return output;
+        return Integer.parseInt(output);
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -244,18 +245,42 @@ public class DBManager {
      * Prende in input il nome utente e password e restituisce l'ID dell'utente
      */
     
-    public static String getIdUser(String username){
-        String output = null;
+    public static int getIdUser(String username){
+        String output;
         ResultSet results = query("SELECT ID FROM UTENTI WHERE USERNAME='"+username+"'");
         try {
-            output += "" + results.getString("ID");
+            output = results.getString("ID");
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            output = "-1";
         }
-        return output;
+        return Integer.parseInt(output);
     }
     
 ////////////////////////////////////////////////////////////////////////////////    
+    
+    /**
+     * @param username = nome utente
+     * @param password = password utente
+     * @return String;
+     * 
+     * Prende in input il nome utente e password e restituisce l'ID dell'utente
+     */
+    
+    public static int getIdPrenotazione(int username, int pizza, String  data){
+        String output;
+        ResultSet results = query("SELECT ID FROM PRENOTAZIONI WHERE IDUTENTE='"+username+"' AND IDPIZZA ='"+ pizza+"' AND DATA='"+data+"'");
+        try {
+            output = results.getString("ID");
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            output = "-1";
+        }
+        return Integer.parseInt(output);
+    }
+    
+////////////////////////////////////////////////////////////////////////////////       
+    
     /**
      * @param cliente = cliente che effettua la prenotazione
      * @param data = data della prenotazione
