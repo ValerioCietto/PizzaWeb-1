@@ -376,7 +376,7 @@ public class DBManager {
     //modifica di una pizza,prenot,user inesistente ritorna true... errore!... da gestire in model
     //effettuare controlli per non ppermettere nomi duplicati nel model
     //gestire da model get login che richieda permessi
-    
+/*    
     public static void main(String[] args){
         drop();
         inizializza();
@@ -392,6 +392,6 @@ public class DBManager {
         System.out.println("rem: "+remPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
         System.out.println("rem: "+remPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
     }
-        
+ */       
 
 }
