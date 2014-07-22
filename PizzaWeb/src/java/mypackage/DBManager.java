@@ -2,6 +2,8 @@ package mypackage;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DBManager {
     
@@ -43,7 +45,7 @@ public class DBManager {
         Connection conn = DriverManager.getConnection(ur,us,p);
         Statement st = conn.createStatement();
             try {   
-                st.executeUpdate(   "CREATE TABLE UTENTE(" +
+                st.executeUpdate(   "CREATE TABLE UTENTI(" +
                         
                                     "IDUSER         INT AUTO_INCREMENT      PRIMARY KEY ," +
                                     "USERNAME       VARCHAR(30)             PRIMARY KEY ," +
@@ -52,7 +54,7 @@ public class DBManager {
                 
             } catch (SQLException e){System.out.println(e.getMessage());}
             try {
-                st.executeUpdate(   "CREATE TABLE PIZZA(" +
+                st.executeUpdate(   "CREATE TABLE PIZZE(" +
                         
                                     "IDPIZZA        INT AUTO_INCREMENT      PRIMARY KEY ," +
                                     "NOME           VARCHAR(30)             PRIMARY KEY ," +
@@ -136,7 +138,7 @@ public class DBManager {
      */
     
     public static boolean addLogin(String nome, String password, String ruolo){
-        return esegui("INSERT INTO UTENTI (NOME, PASSWORD, RUOLO) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
+        return esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +151,7 @@ public class DBManager {
      */
     
     public static boolean remLogin(String nome){
-        return esegui("DELETE FROM UTENTI WHERE (NOME='"+nome+"')");
+        return esegui("DELETE FROM UTENTI WHERE (USERNAME='"+nome+"')");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -165,47 +167,95 @@ public class DBManager {
      */
     
     public static boolean modLogin(String nome, String nNome, String nPassword, String nRuolo){
-        return esegui("UPDATE FROM SET NOME='" + nNome+ "', PASSWORD=" +nPassword+" RUOLO ='" +nRuolo+"'");
+        return esegui("UPDATE FROM UTENTI SET USERNAME='" + nNome+ "', PASSWORD=" +nPassword+" PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WTF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //da sostituire con una query "select count"
-    
     /**
-     * @return ArrayList<String[]>
+     * @return ArrayList<String>
      * 
      * Recupera la lista degli utenti e genera un array di Stringhe con tutti i dati
      */
     
-    public static ArrayList<String[]> getAllLogin(){
-        return query("SELECT * FROM UTENTI",false);
+    public static ArrayList<String> getAllLogin(){
+        ArrayList<String> output = null;
+        String tmp;
+        ResultSet results = query("SELECT * FROM UTENTI");
+        try {
+            while(results.next()){
+                tmp = "" + results.getString("IDUSER") + ";" + results.getString("USERNAME") + ";" + results.getString("PASSWORD") + ";" + results.getString("PERMISSION")+ ";";
+                output.add(tmp);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
-    
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WTF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // vedi sopra
     
     /**
      * @param usr = nome dell'utente
      * @param pwd = password dell'utente
-     * @return String[]
+     * @return String
      * 
-     * Ritorna un array di Stringhe
+     * Ritorna una Stringa contenente l'utente
      */
     
-    public static String[] getLogin(String usr,String pwd){
-        ArrayList<String[]> temp= query("SELECT * FROM UTENTI WHERE NOME='"+usr+"' AND PASSWORD ='"+pwd+"'",false);
-        if(temp.isEmpty())
-            return null;
-        else
-            return temp.get(0);
+    public static String getLogin(String usr,String pwd){
+        String output = null;
+        ResultSet results = query("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'");
+        try {
+            output += "" + results.getString("IDUSER") + ";" + results.getString("USERNAME") + ";" + results.getString("PASSWORD") + ";" + results.getString("PERMISSION")+ ";";
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * @param nome = nome della pizza
+     * @return String;
+     * 
+     * Prende in input il nome della pizza e restituisce l'ID della pizza
+     */
+    
+    public static String getIdPizza(String nome){
+        String output = null;
+        ResultSet results = query("SELECT ID FROM PIZZE WHERE NOME='"+nome+"'");
+        try {
+            output += "" + results.getString("ID");
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * @param username = nome utente
+     * @param password = password utente
+     * @return String;
+     * 
+     * Prende in input il nome utente e password e restituisce l'ID dell'utente
+     */
+    
+    public static String getIdUser(String username){
+        String output = null;
+        ResultSet results = query("SELECT ID FROM UTENTI WHERE USERNAME='"+username+"'");
+        try {
+            output += "" + results.getString("ID");
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return output;
+    }
+    
+////////////////////////////////////////////////////////////////////////////////    
     /**
      * @param cliente = cliente che effettua la prenotazione
      * @param data = data della prenotazione
@@ -215,9 +265,9 @@ public class DBManager {
      * Aggiunge una prenotazione ad un cliente
      */
     
-    public static void addPrenotazioneanna(String cliente,String data, String pizza, int quantita){
-
-         String sql="INSERT INTO PRENOTAZ (CLIENTE,PIZZA,QUANTITA,DATA,STATO) VALUES ";
+    public static void addPrenotazione(int cliente, int pizza, int quantita, String data){
+        
+        String sql="INSERT INTO PRENOTAZIONI(IDUSER,IDPIZZA,QUANTITA,DATA,STATO) VALUES ";
         
             sql+="('"+cliente+"', '"+pizza+"',"+quantita+", '"+data+"', 'Ordinato')";
             
@@ -225,51 +275,8 @@ public class DBManager {
         
         
     }
-    
-    /*
-    public static void addPrenotazione(String cliente,String data, String pizza, int quantita){
-        String[]pi={pizza};
-        int[]qu={quantita};
-        addPrenotazione(cliente,data,pi,qu);
-    }
-    public static void addPrenotazione(String cliente,String data, String[] pizza, int[] quantita){
-        String sql="INSERT INTO PRENOTAZ (CLIENTE,PIZZA,QUANTITA,DATA,STATO) VALUES ";
-        for(int i=0;i<pizza.length && i<quantita.length;i++){
-            sql+="('"+cliente+"', '"+pizza[i]+""
-                    + "',"+quantita[i]+", '"+data+"', 'Ordinato')";
-            if(i+1<pizza.length)
-                sql+=",";
-        }
-        esegui(sql);
-    }*/
-    //la prenotazione deve essere rimossa tramite id
-    
-////////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * @param cliente = cliente dal quale rimuovere la prenotazione 
-     * 
-     * Rimuove una prenotazione
-     */
-    
-    public static void remPrenotazione(String cliente){
-        remPrenotazione(cliente,null,null);
-    }
-    
-////////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * @param cliente = cliente dal quale rimuovere la prenotazione 
-     * @param data = data della prenotazione da rimuovere
-     * 
-     * Rimuove una prenotazione
-     */
-    
-    public static void remPrenotazione(String cliente, String data){
-        remPrenotazione(cliente,data,null);
-    }
-    
-////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////    
     
     /**
      * @param cliente = cliente dal quale rimuovere la prenotazione
@@ -279,15 +286,8 @@ public class DBManager {
      * Rimuove una prenotazione
      */
     
-    public static void remPrenotazione(String cliente, String data,String pizza){
-        String sql="DELETE FROM PRENOTAZ WHERE (CLIENTE= '"+cliente+ "'";
-        if(data!=null){
-            sql+=" AND DATA= '"+data+ "'";
-            if(pizza!=null)
-                sql+=" AND PIZZA= '"+pizza+ "'";
-        }
-        sql+=")";
-        esegui(sql);
+    public static void remPrenotazione(int cliente, int pizza, String data){
+        esegui("DELETE FROM PRENOTAZ WHERE (IDUSER= '"+cliente+ "' AND DATA= '"+data+ "' AND IDPIZZA= '"+pizza+ "')");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -335,63 +335,22 @@ public class DBManager {
     
 ////////////////////////////////////////////////////////////////////////////////
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WTF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
-    public static ArrayList<String[]> query(String query,boolean h) {
-        ArrayList<String[]> out=new ArrayList<String[]>();
+    public static ResultSet query(String query){
+        Connection conn;
+        Statement st;
+        ResultSet rs = null;
         try{
-            Connection conn = DriverManager.getConnection(ur, us, p);
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
-            ResultSetMetaData md = rs.getMetaData();
-            int num = md.getColumnCount();
-            String [] temp = new String[num];
-            //carica i metadata in riga 0
-            if(h){
-                for(int i=0;i<num;i++)
-                    temp[i]=md.getColumnName(i+1);
-                out.add(temp);
-            }
-            //carica i risultati della query da 1 in poi
-            while(rs.next()){
-                temp = new String[num];
-                for (int i=0; i<num; i++)
-                   temp[i]=rs.getString(md.getColumnName(i+1));
-                out.add(temp);
-            }
+            conn = DriverManager.getConnection(ur, us, p);
+            st = conn.createStatement();
+            rs = st.executeQuery(query);
             rs.close(); 
             st.close(); 
             conn.close();
-       } catch (SQLException e){
-            System.out.println(e.getMessage() + ": errore query : "+query);
-       }
-       return out;
-    }
-    
-////////////////////////////////////////////////////////////////////////////////
-    
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! WTF !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    
-    public static int numRighe(String query) { //static boolean?
-        int i=0;
-        try {
-            Connection conn = DriverManager.getConnection(ur, us, p);
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
-            while(rs.next())
-                i++;
-            rs.close(); 
-            st.close(); 
-            conn.close();
-            return i;
         }catch(SQLException e){
-            System.out.println(e.getMessage() + ": errore query : "+query);
-            return -1;
-        }  
+                System.out.println(e.getMessage() + ": errore query : "+query);
+            }
+        
+        return rs;
     }
-    
 ////////////////////////////////////////////////////////////////////////////////
-    
 }
-    
-

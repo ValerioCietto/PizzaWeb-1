@@ -72,13 +72,15 @@ public class Model {
     
     public static void addPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
-        Pizza temp = new Pizza(req.getParameter("pizza"), req.getParameter("ingredienti"), req.getParameter("prezzo"));
-        if (temp.getNome() != null && !temp.getNome().equals("")){
-            String n = temp.getNome();
+        if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("")){
+            String n = req.getParameter("pizza");
             String i = req.getParameter("ingredienti");
-            Double p = temp.getPrezzo();
-            if(DBManager.addPizza(n, i, p))
+            Double p = Double.parseDouble(req.getParameter("prezzo"));
+            
+            if(DBManager.addPizza(n, i, p)){
                s.setAttribute("message","aggiunta pizza "+n);
+               Pizza temp = new Pizza(Integer.parseInt(DBManager.getIdPizza(n)), n, i, p);
+            }
             else
                s.setAttribute("message","Problema sql");
         }else
@@ -88,11 +90,20 @@ public class Model {
     static void modPizza(HttpServletRequest req){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
     static void addUser(HttpServletRequest req){
         String n = req.getParameter("username");
         String p = req.getParameter("pwd1");
         String ruolo = "user";
         DBManager.addLogin(n, p, ruolo); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    static boolean checkLogin(String username){
+        if(DBManager.getIdUser(username) != null){
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -103,32 +114,31 @@ public class Model {
      * Manca creazione oggetto Prenotazione
      * Manca controllo dei dati
      * 
-     * NOTA ANNA: ALLORA, QUANDO SI CLICCA IL PRENOTA VIENE INVIATO SOLO LA PIZZA CORRISPONDENTE QUINDI NON BISOGNA USARE ARRAYact
      * @param req 
      */
     
     static void addPren(HttpServletRequest req){
-        String p = req.getParameter("pizza");
-        String clName =(String)req.getSession().getAttribute("username");
-        int q = (Integer.parseInt(req.getParameter("quant"))); //questo gli riempie solo un numero
-        String d = req.getParameter("data");
+        String pizza = req.getParameter("pizza");
+        String user =(String)req.getSession().getAttribute("username");
+        int quantità = (Integer.parseInt(req.getParameter("quantita"))); //questo gli riempie solo un numero
+        String data = req.getParameter("data");
         
-        DBManager.addPrenotazioneanna(clName, d, p, q);
+        int idUser = Integer.parseInt(DBManager.getIdUser(user));
+        int idPizza = Integer.parseInt(DBManager.getIdPizza(pizza));
+        
+        DBManager.addPrenotazione(idUser, idPizza, quantità, data);
     }
     
     static void remPren(HttpServletRequest req){
         
-        //in teoria name non dovrebbe mai essere nullo se lo facciamo vedere dalla pagina prenot, accessibile solo dall'utente registrato
-        
-        String name=req.getParameter("nomecliente");
-        String pizza= req.getParameter("nomepizza");
-        String data= req.getParameter("data");
+        String user = req.getParameter("nomecliente");
+        String pizza = req.getParameter("nomepizza");
+        String data = req.getParameter("data");
 
+        int idUser = Integer.parseInt(DBManager.getIdUser(user));
+        int idPizza = Integer.parseInt(DBManager.getIdPizza(pizza));
         
-        if (name != null)
-            DBManager.remPrenotazione(name, data, pizza);
-        
-        else System.out.println("specificare parametri");
+        DBManager.remPrenotazione(idUser, idPizza, data);
     }
         
     
@@ -243,6 +253,14 @@ class Utente{
         this.username = iNome;
         this.pwd = iPwd;
         this.permission = iRuolo;
+    }
+    
+    public Utente(String query){
+        String[] tmp = query.split(";");
+        this.idUtente = Integer.parseInt(tmp[0]);
+        this.username = tmp[1];
+        this.pwd = tmp[2];
+        this.permission = tmp[3];
     }
  
     //METODI DI GET    

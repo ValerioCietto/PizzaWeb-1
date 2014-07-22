@@ -87,15 +87,15 @@ public class Controller extends HttpServlet {
         String login=(String)(req.getSession()).getAttribute("username");
         String page=(String)(req.getSession()).getAttribute("view");
         if(page.equals("catalogo"))
-            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PIZZE",true));
+            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PIZZE"));
         else if(page.equals("loginManager"))
-            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM UTENTI",true));
+            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM UTENTI"));
         else if(page.equals("prenotazioni")){
             //
             if (ruolo.equals("user"))
-                req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ WHERE CLIENTE= '"+login+ "'", true));
+                req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ WHERE CLIENTE= '"+login+ "'"));
             //
-            else req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ", true));
+            else req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ"));
         }
     }
     /*public static void remove(HttpServletRequest req){

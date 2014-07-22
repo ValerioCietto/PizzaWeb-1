@@ -52,6 +52,12 @@ and open the template in the editor.
                      e.preventDefault(); 
                      return; 
                  }
+                 if(Model.checkLogin(this.username.value) == false){
+                     alert("Username already in use;");
+                     this.username.focus();
+                     e.preventDefault();
+                     return;                     
+                 }
                  alert("Username and password are both VALID!"); 
              };
              var myForm = document.getElementById("myForm"); 
