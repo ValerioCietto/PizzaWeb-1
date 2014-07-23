@@ -175,6 +175,11 @@ class Pizza{
         this.prezzo = iPrezzo;
     }
 
+    @Override
+    public String toString(){
+        return ""+this.idPizza+"-"+this.ingredienti+"-"+this.nome+"-"+this.prezzo;
+    }
+    
     // METODI DI GET
     
     /**
@@ -288,7 +293,12 @@ class Utente{
         this.pwd = tmp[2];
         this.permission = tmp[3];
     }
- 
+    
+    @Override
+    public String toString(){
+        return ""+this.idUtente+"-"+this.username+"-"+this.pwd+"-"+this.permission;
+    }
+    
     //METODI DI GET    
     
     /**
@@ -389,7 +399,11 @@ class Prenotazione{
         this.data = iData;
         this.stato = "Ordinata";
     }
-
+    
+    @Override
+    public String toString(){
+        return ""+this.idPrenotazione +"-"+this.idUtente+"-"+this.idPizza+"-"+this.quantita+"-"+this.data+"-"+this.stato;
+    }
 //METODI DI GET    
     
     /**
@@ -475,4 +489,22 @@ class Prenotazione{
     }
                         //FINE CLASSE PRENOTAZIONE//
 ////////////////////////////////////////////////////////////////////////////////
+//TEST
+    
+    public static void main(String[] args){
+        Utente user;
+        Pizza pizza;
+        Prenotazione ordine;
+        
+        pizza = new Pizza(1, "margherita" , "tanta cacca al formaggio" , 4.67);
+        user = new Utente(7, "gigimarzullo", "Puccicucci9", "utente");
+        ordine = new Prenotazione(pizza.getId(), user.getId(), 5, 71, "34/14/2034");
+        
+        System.out.println(pizza.toString());
+        System.out.println(user.toString());
+        System.out.println(ordine.toString());
+        
+    }
+    
+    
 }
