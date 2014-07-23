@@ -145,9 +145,9 @@ public class Model {
         
     
 }
-                                //FINE CLASSE MODEL//
+                        //FINE CLASSE MODEL//
 ////////////////////////////////////////////////////////////////////////////////
-                                //INIZIO CLASSE PIZZA//
+                        //INIZIO CLASSE PIZZA//
 
 class Pizza{
     private int idPizza;
@@ -177,7 +177,9 @@ class Pizza{
 
     // METODI DI GET
     
-    /**Restituisce l'ID della pizza
+    /**
+     * Restituisce l'ID della pizza
+     * 
      * @return <String> nome pizza
      */
     
@@ -185,7 +187,9 @@ class Pizza{
         return this.idPizza;
     }   
     
-    /**Restituisce il nome della pizza
+    /**
+     * Restituisce il nome della pizza
+     * 
      * @return <String> nome pizza
      */
     
@@ -193,7 +197,9 @@ class Pizza{
         return this.nome;
     }
  
-    /**Restituisce gli ingredienti della pizza
+    /**
+     * Restituisce gli ingredienti della pizza
+     * 
      * @return <String> nome pizza
      */
     
@@ -202,6 +208,7 @@ class Pizza{
     }
     
     /**Restituisce il prezzo della pizza
+     * 
      * @return <double> prezzo
      */
     
@@ -211,19 +218,31 @@ class Pizza{
 
     //METODI DI SET
     
-    //Modifica il nome della pizza
+    /**
+     * Modifica il nome della pizza
+     * 
+     * @param newNome 
+     */
     
     public void setNome(String newNome){
         this.nome = newNome;
     }
  
-    //Modifica gli ingredienti della pizza
+    /**
+     * Modifica gli ingredienti della pizza
+     * 
+     * @param newIngredienti 
+     */
     
     public void setIngredinti( String newIngredienti){
         this.ingredienti = newIngredienti;
     }
     
-    //Modifica il prezzo della pizza
+    /**
+     * Modifica il prezzo della pizza
+     * 
+     * @param newPrezzo 
+     */
     
     public void setPrezzo( double newPrezzo){
         this.prezzo = newPrezzo;
@@ -231,9 +250,9 @@ class Pizza{
    
 }
 
-                                //FINE CLASSE PIZZA//
+                        //FINE CLASSE PIZZA//
 ////////////////////////////////////////////////////////////////////////////////
-                                //INIZIO CLASSE UTENTE//
+                        //INIZIO CLASSE UTENTE//
 
 class Utente{
     private int idUtente;
@@ -257,6 +276,11 @@ class Utente{
         this.permission = iRuolo;
     }
     
+    /**
+     * 
+     * @param query 
+     */
+    
     public Utente(String query){
         String[] tmp = query.split(";");
         this.idUtente = Integer.parseInt(tmp[0]);
@@ -269,6 +293,7 @@ class Utente{
     
     /**
      * Restituisce l'ID dell'utente
+     * 
      * @return int nome Pizza
      */
     
@@ -278,6 +303,7 @@ class Utente{
     
     /**
      * Restituisce il nome dell'utente
+     * 
      * @return <String> nome Pizza
      */
     
@@ -287,6 +313,7 @@ class Utente{
     
     /**
      * Restituisce la password dell'utente
+     * 
      * @return <String>
      */
     
@@ -296,6 +323,7 @@ class Utente{
     
     /**
      * Restituisce il ruolo dell'utente
+     * 
      * @return <String>
      */
     
@@ -305,13 +333,21 @@ class Utente{
    
     //METODI DI SET
     
-    //Modifica la password dell'utente
+    /**
+     * Modifica la password dell'utente
+     * 
+     * @param newPwd 
+     */
     
     public void setPwd( String newPwd){
         this.pwd = newPwd;
     }
     
-    //Modifica il ruolo dell'utente
+    /**
+     * Modifica il ruolo dell'utente
+     * 
+     * @param newRuolo 
+     */
     
     public void setPermission(String newRuolo){
         this.permission = newRuolo;
@@ -320,9 +356,9 @@ class Utente{
 
 
 
-                                //FINE CLASSE UTENTE//
+                        //FINE CLASSE UTENTE//
 ////////////////////////////////////////////////////////////////////////////////
-                            //INIZIO CLASSE PRENOTAZIONE//
+                        //INIZIO CLASSE PRENOTAZIONE//
 
 class Prenotazione{
     private int idPrenotazione;
@@ -356,6 +392,7 @@ class Prenotazione{
 
 /**
      * Restituisce l'ID della prenotazione
+     * 
      * @return int idPrenotazione
      */
     
@@ -365,6 +402,7 @@ class Prenotazione{
     
     /**
      * Restituisce l'ID dell'utente che ha effettuato la prenotazione
+     * 
      * @return <int> idUtente
      */
     
@@ -374,6 +412,7 @@ class Prenotazione{
     
     /**
      * Restituisce l'ID della pizza prenotata
+     * 
      * @return <int> idPizza
      */
     
@@ -383,6 +422,7 @@ class Prenotazione{
     
     /**
      * Restituisce la quantità di pizze prenotate
+     * 
      * @return <int> quantita
      */
     
@@ -392,6 +432,7 @@ class Prenotazione{
     
     /**
      * Restituisce la data della prenotazione
+     * 
      * @return <String> data
      */
     
@@ -401,11 +442,13 @@ class Prenotazione{
 
     /**
      * Restituisce lo stato della prenotazione
+     * 
      * @return <String> stato
      */    
     
     public String getStato(){
         return stato;
     }      
-    
+                        //FINE CLASSE PRENOTAZIONE//
+////////////////////////////////////////////////////////////////////////////////
 }

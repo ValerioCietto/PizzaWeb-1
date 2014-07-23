@@ -2,8 +2,6 @@ package mypackage;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DBManager {
     
@@ -36,43 +34,42 @@ public class DBManager {
     public static void creaTabelle(){
         try {
         Connection conn = DriverManager.getConnection(ur,us,p);
-        Statement st = conn.createStatement();
-            try {   
-                st.executeUpdate(   "CREATE TABLE UTENTI(" +
-                                    "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                                    "USERNAME       VARCHAR(30) NOT NULL," +
-                                    "PASSWORD       VARCHAR(30) NOT NULL," +
-                                    "PERMISSION     VARCHAR(30) NOT NULL," +
-                                    "PRIMARY KEY(IDUSER))");
+            try (Statement st = conn.createStatement()) {   
+                try {
+                    st.executeUpdate(   "CREATE TABLE UTENTI(" +
+                            "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                            "USERNAME       VARCHAR(30) NOT NULL," +
+                            "PASSWORD       VARCHAR(30) NOT NULL," +
+                            "PERMISSION     VARCHAR(30) NOT NULL," +
+                            "PRIMARY KEY(IDUSER))");
+                    
+                } catch (SQLException e){System.out.println(e.getMessage());}
+                try {
+                    st.executeUpdate(   "CREATE TABLE PIZZE(" +
+                            
+                            "IDPIZZA        INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                            "NOME           VARCHAR(30) NOT NULL," +
+                            "INGREDIENTI    VARCHAR(65) NOT NULL," +
+                            "PREZZO         DOUBLE      NOT NULL," +
+                            "PRIMARY KEY(IDPIZZA))");
+                    
+                } catch (SQLException e){System.out.println(e.getMessage());}
+                try {
+                    st.executeUpdate(   "CREATE TABLE PRENOTAZIONI(" +
+                            
+                            "IDPRENOTAZIONE INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                            "IDUTENTE       INT         NOT NULL    ," +
+                            "IDPIZZA        INT         NOT NULL    ," +
+                            "QUANTITA       INT         NOT NULL    ," +
+                            "DATA           VARCHAR(30) NOT NULL    ," +
+                            "STATO          VARCHAR(30) NOT NULL    ," +
+                            "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
+                            "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER),"+
+                            "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA))");
+                    
+                } catch (SQLException e){System.out.println(e.getMessage());}
                 
-            } catch (SQLException e){System.out.println(e.getMessage());}
-            try {
-                st.executeUpdate(   "CREATE TABLE PIZZE(" +
-                        
-                                    "IDPIZZA        INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                                    "NOME           VARCHAR(30) NOT NULL," +
-                                    "INGREDIENTI    VARCHAR(65) NOT NULL," +
-                                    "PREZZO         DOUBLE      NOT NULL," +
-                                    "PRIMARY KEY(IDPIZZA))");
-                
-            } catch (SQLException e){System.out.println(e.getMessage());}
-            try {
-                st.executeUpdate(   "CREATE TABLE PRENOTAZIONI(" +
-                        
-                                    "IDPRENOTAZIONE INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                                    "IDUTENTE       INT         NOT NULL    ," +
-                                    "IDPIZZA        INT         NOT NULL    ," +
-                                    "QUANTITA       INT         NOT NULL    ," +
-                                    "DATA           VARCHAR(30) NOT NULL    ," +
-                                    "STATO          VARCHAR(30) NOT NULL    ," +
-                                    "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
-                                    "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER),"+
-                                    "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA))");
-                
-            } catch (SQLException e){System.out.println(e.getMessage());}
-         
-            st.close();
-         } catch (SQLException e){
+            }         } catch (SQLException e){
             System.out.println(e.getMessage());
         }    
     }
@@ -315,11 +312,9 @@ public class DBManager {
     
     public static boolean esegui(String sql) {
         try{
-            Connection conn = DriverManager.getConnection(ur, us, p);
-            Statement st = conn.createStatement();
-            st.executeUpdate(sql);
-            st.close();
-            conn.close();
+            try (Connection conn = DriverManager.getConnection(ur, us, p); Statement st = conn.createStatement()) {
+                st.executeUpdate(sql);
+            }
             System.out.println("Ho eseguito: "+sql);
         } catch (SQLException e){
             System.out.println(e.getMessage() + ": errore carica : "+sql);
@@ -360,7 +355,8 @@ public class DBManager {
         Connection conn=null;
         Statement st=null;
         ResultSet rs = null;
-        ResultSetMetaData rsmd=null;
+        @SuppressWarnings("UnusedAssignment")
+        ResultSetMetaData rsmd = null;
         ArrayList<String> output=null;
         try{
             conn = DriverManager.getConnection(ur, us, p);
@@ -368,7 +364,7 @@ public class DBManager {
             rs = st.executeQuery(query);
             rsmd = rs.getMetaData();
             int n = rsmd.getColumnCount()+1;
-            output = new ArrayList<String>();
+            output = new ArrayList<>();
             while(rs.next()){
                 String temp = "";
                 for(int i = 1; i < n; i++){
@@ -378,7 +374,7 @@ public class DBManager {
                 }
                 output.add(temp);
             }
-            if(output.size() == 0)
+            if(output.isEmpty())
                 output.add("");
             
         }catch(SQLException e){
@@ -418,7 +414,7 @@ public class DBManager {
     //effettuare controlli per non ppermettere nomi duplicati nel model
     //gestire da model get login che richieda permessi
     
-/*    
+/*
     public static void main(String[] args){
         drop();
         inizializza();
@@ -434,6 +430,6 @@ public class DBManager {
         System.out.println("rem: "+remPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
         System.out.println("rem: "+remPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
     }
- */       
+*/
 
 }
