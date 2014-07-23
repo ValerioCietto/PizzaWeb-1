@@ -390,7 +390,9 @@ class Prenotazione{
         this.stato = "Ordinata";
     }
 
-/**
+//METODI DI GET    
+    
+    /**
      * Restituisce l'ID della prenotazione
      * 
      * @return int idPrenotazione
@@ -449,6 +451,28 @@ class Prenotazione{
     public String getStato(){
         return stato;
     }      
+    
+//METODI DI SET
+    
+    /**
+     * Imposta la quantità di pizze nell'ordine
+     * 
+     * @param  int  quantità di pizze
+     */    
+    
+    public void setQuantita(int q){
+        this.quantita = q;
+    }
+    
+    /**
+     * Imposta la data dell'ordine
+     * 
+     * @param String    data della consegna
+     */      
+    
+    public void setData(String d){
+        this.data = d;
+    }
                         //FINE CLASSE PRENOTAZIONE//
 ////////////////////////////////////////////////////////////////////////////////
 }
