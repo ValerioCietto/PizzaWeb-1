@@ -32,9 +32,12 @@ public final class DBManager {
     
     public void creaTabelle(){
         try {
-        Connection conn = DriverManager.getConnection(ur,us,p);
-        drop();
-            try (Statement st = conn.createStatement()) {   
+        conn = DriverManager.getConnection(ur,us,p);
+            try{ 
+                st = conn.createStatement();
+                try{
+                    drop();
+                }catch(SQLException e){System.out.println(e.getMessage());}
                 try {
                     st.executeUpdate(   "CREATE TABLE UTENTI(" +
                             "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
@@ -69,7 +72,8 @@ public final class DBManager {
                     
                 } catch (SQLException e){System.out.println(e.getMessage());}
                 
-            }         } catch (SQLException e){
+            } catch (SQLException e){System.out.println(e.getMessage());}
+        } catch (SQLException e){
             System.out.println(e.getMessage());
         }    
     }
@@ -145,7 +149,8 @@ public final class DBManager {
         int id = -1;
         esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
         try(ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+nome+"'")){
-            id = rs.getInt("IDUSER");
+            rs.next();
+            id = rs.getInt(1);
         }
         return id;
     }
@@ -203,7 +208,7 @@ public final class DBManager {
     
     public ResultSet getUser(int id) throws SQLException{
         ResultSet rs = null;
-        rs = st.executeQuery("SELECT * FROM UTENTI WHERE IDUSER='"+ id +"'");
+        rs = st.executeQuery("SELECT * FROM UTENTI WHERE IDUSER="+ id);
         return rs;
     }
     
@@ -256,6 +261,7 @@ public final class DBManager {
     public int getIdUser(String username) throws SQLException{
         int id = -1;
         try(ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+username+"'")){
+            rs.next();
             id = rs.getInt("IDUSER");
         }
         return id;
