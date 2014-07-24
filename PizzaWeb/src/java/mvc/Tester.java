@@ -117,7 +117,7 @@ public class Tester {
     public static String stampaUtente(ResultSet rs) throws SQLException{
         String out="";
         while(rs.next())
-            out+="//"+rs.getInt("IDUSER")+rs.getString("USERNAME")+rs.getString("PASSWORD")+rs.getString("PERMISSION");
+            out+="//"+rs.getInt("IDUSER")+" "+rs.getString("USERNAME")+" "+rs.getString("PASSWORD")+" "+rs.getString("PERMISSION");
         return out;
     }
     public static String genString(int length){
