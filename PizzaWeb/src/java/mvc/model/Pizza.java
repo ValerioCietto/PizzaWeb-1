@@ -11,7 +11,7 @@ package mvc.model;
  */
 public class Pizza {
 
-    private int idPizza;
+    private int idPizza = -1;
     private String nome;
     private String ingredienti;
     private double prezzo;
@@ -27,23 +27,24 @@ public class Pizza {
      *
      * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
-    public Pizza(int id, String iNome, String iIngredienti, double iPrezzo) {
+    protected Pizza(int id, String iNome, String iIngredienti, double iPrezzo) {
         this.idPizza = id;
         this.ingredienti = iIngredienti;
         this.nome = iNome;
         this.prezzo = iPrezzo;
     }
-
-    @Override
-    public String toString() {
-        return "" + this.idPizza + "-" + this.ingredienti + "-" + this.nome + "-" + this.prezzo;
+    
+    public Pizza(String iNome, String iIngredienti, double iPrezzo) {
+        this.ingredienti = iIngredienti;
+        this.nome = iNome;
+        this.prezzo = iPrezzo;
     }
 
     // METODI DI GET
     /**
      * Restituisce l'ID della pizza
      *
-     * @return <String> nome pizza
+     * @return \<String\> nome pizza
      */
     public int getId() {
         return this.idPizza;
@@ -52,7 +53,7 @@ public class Pizza {
     /**
      * Restituisce il nome della pizza
      *
-     * @return <String> nome pizza
+     * @return \<String\> nome pizza
      */
     public String getNome() {
         return this.nome;
@@ -61,7 +62,7 @@ public class Pizza {
     /**
      * Restituisce gli ingredienti della pizza
      *
-     * @return <String> nome pizza
+     * @return \<String\> nome pizza
      */
     public String getIngredinti() {
         return this.ingredienti;
@@ -70,13 +71,24 @@ public class Pizza {
     /**
      * Restituisce il prezzo della pizza
      *
-     * @return <double> prezzo
+     * @return \<double\> prezzo
      */
     public double getPrezzo() {
         return this.prezzo;
     }
 
     //METODI DI SET
+    
+    /**
+     * Modifica l'id della pizza
+     *
+     * @param newId
+     */
+    
+    protected void setId(int newId) {
+        this.idPizza = newId;
+    }
+    
     /**
      * Modifica il nome della pizza
      *

@@ -4,10 +4,11 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DBManager {
-    
-    static String ur = "jdbc:derby://localhost:1527/PizzaWeb";
-    static String us= "pizzeria";
-    static String p= "pizzeria";
+    static final String ur = "jdbc:derby://localhost:1527/PizzaWeb";
+    static final String us= "pizzeria";
+    static final String p= "pizzeria";
+    Connection conn;
+    Statement st;
 
 ////////////////////////////////////////////////////////////////////////////////
     
@@ -20,7 +21,7 @@ public class DBManager {
             // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
             creaTabelle();
-            startDati();
+            //startDati();
        } catch (SQLException e) {System.out.println(e.getMessage());}
     }
     
@@ -38,7 +39,7 @@ public class DBManager {
                 try {
                     st.executeUpdate(   "CREATE TABLE UTENTI(" +
                             "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                            "USERNAME       VARCHAR(30) NOT NULL," +
+                            "USERNAME       VARCHAR(30) NOT NULL UNIQUE," +
                             "PASSWORD       VARCHAR(30) NOT NULL," +
                             "PERMISSION     VARCHAR(30) NOT NULL," +
                             "PRIMARY KEY(IDUSER))");
@@ -48,7 +49,7 @@ public class DBManager {
                     st.executeUpdate(   "CREATE TABLE PIZZE(" +
                             
                             "IDPIZZA        INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                            "NOME           VARCHAR(30) NOT NULL," +
+                            "NOME           VARCHAR(30) NOT NULL UNIQUE," +
                             "INGREDIENTI    VARCHAR(65) NOT NULL," +
                             "PREZZO         DOUBLE      NOT NULL," +
                             "PRIMARY KEY(IDPIZZA))");
@@ -84,10 +85,16 @@ public class DBManager {
      * @param prezzo    prezzo della pizza
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean addPizza(String nome, String ingr, double prezzo){
-        return esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
+    public int addPizza(String nome, String ingr, double prezzo) throws SQLException{
+        int id = -1;
+        esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'");
+        id = rs.getInt("IDPIZZA");
+        return id;
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -95,13 +102,14 @@ public class DBManager {
     /**
      * Rimuove una pizza dalla tabella PIZZE
      * 
-     * @param nome      nome della pizza
+     * @param id
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean remPizza(String nome){
-        return esegui("DELETE FROM PIZZE WHERE (NOME='"+nome+"')");
+    public boolean remPizza(int id) throws SQLException{
+        return esegui("DELETE FROM PIZZE WHERE (ID='"+id+"')");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -114,9 +122,10 @@ public class DBManager {
      * @param nPrezzo   nuovo prezzo della pizza
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean modPizza(String nome, String nIngr, double nPrezzo){
+    public boolean modPizza(String nome, String nIngr, double nPrezzo) throws SQLException{
         return esegui("UPDATE PIZZE SET INGREDIENTI='" + nIngr+ "', PREZZO=" +nPrezzo+" WHERE NOME ='" +nome+"'");
     }
     
@@ -130,9 +139,10 @@ public class DBManager {
      * @param ruolo     permessi dell'utente
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean addLogin(String nome, String password, String ruolo){
+    public boolean addLogin(String nome, String password, String ruolo) throws SQLException{
         return esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
     }
     
@@ -144,9 +154,10 @@ public class DBManager {
      * @param nome      nome dell'utente
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean remLogin(String nome){
+    public boolean remLogin(String nome) throws SQLException{
         return esegui("DELETE FROM UTENTI WHERE (USERNAME='"+nome+"')");
     }
     
@@ -161,9 +172,10 @@ public class DBManager {
      * @param nRuolo    nuovi permessi dell'utente;
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean modLogin(String nome, String nNome, String nPassword, String nRuolo){
+    public boolean modLogin(String nome, String nNome, String nPassword, String nRuolo) throws SQLException{
         return esegui("UPDATE UTENTI SET USERNAME='" + nNome+ "', PASSWORD='" +nPassword+"', PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'");
     }
     
@@ -275,9 +287,10 @@ public class DBManager {
      * @param quantita  quantità di pizze prenotate
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean addPrenotazione(int cliente, int pizza, int quantita, String data){
+    public boolean addPrenotazione(int cliente, int pizza, int quantita, String data) throws SQLException{
         
         String sql="INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ";
         sql+="("+cliente+", "+pizza+","+quantita+", '"+data+"', 'Ordinato')";
@@ -294,9 +307,10 @@ public class DBManager {
      * @param pizza     pizza da rimuovere
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean remPrenotazione(int cliente, int pizza, String data){
+    public boolean remPrenotazione(int cliente, int pizza, String data) throws SQLException{
         return esegui("DELETE FROM PRENOTAZIONI WHERE (IDUTENTE= "+cliente+ "AND IDPIZZA= "+pizza+ " AND DATA= '"+data+ "')");
     }
     
@@ -308,28 +322,25 @@ public class DBManager {
      * @param sql       query sql da eseguire
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean esegui(String sql) {
-        try{
-            try (Connection conn = DriverManager.getConnection(ur, us, p); Statement st = conn.createStatement()) {
-                st.executeUpdate(sql);
-            }
-            System.out.println("Ho eseguito: "+sql);
-        } catch (SQLException e){
-            System.out.println(e.getMessage() + ": errore carica : "+sql);
-            return false;
-        }
-        return true;
+    public boolean esegui(String sql) throws SQLException {
+        boolean tmp;
+        st = conn.createStatement();
+        tmp = st.execute(sql);
+        st.close();
+        return tmp;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Popola il database
+     * @throws java.sql.SQLException
      */
     
-    public static void startDati() { //startDati(String tab, String nome, String mezzo, String fine)
+    public void startDati() throws SQLException { //startDati(String tab, String nome, String mezzo, String fine)
         addLogin("admin","admin","admin");
         addLogin("user","user","user");
         addLogin("mario","mario","user");
@@ -343,68 +354,29 @@ public class DBManager {
     }
     
 ////////////////////////////////////////////////////////////////////////////////
-
-     /**
-      * Salva i dati ottenuti da una query in un \<ArrayList\> di Stringhe
-      * @param query    Stringa di una query SQL
-      * 
-      * @return ArrayList \<String\>
-      */
-    
-    public static ArrayList<String> query(String query){
-        Connection conn=null;
-        Statement st=null;
-        ResultSet rs = null;
-        @SuppressWarnings("UnusedAssignment")
-        ResultSetMetaData rsmd = null;
-        ArrayList<String> output=null;
-        try{
-            conn = DriverManager.getConnection(ur, us, p);
-            st = conn.createStatement();
-            rs = st.executeQuery(query);
-            rsmd = rs.getMetaData();
-            int n = rsmd.getColumnCount()+1;
-            output = new ArrayList<>();
-            while(rs.next()){
-                String temp = "";
-                for(int i = 1; i < n; i++){
-                    if(i != 1)
-                        temp += "-";
-                    temp += rs.getString(i);
-                }
-                output.add(temp);
-            }
-            if(output.isEmpty())
-                output.add("");
-            
-        }catch(SQLException e){
-                System.out.println(e.getMessage() + ": errore query : "+query);
-        } finally {
-            try{
-                if(rs!=null)    rs.close();
-                if(st!=null)    st.close(); 
-                if(conn!=null)  conn.close();
-            }catch(SQLException e){
-                System.out.println(e.getMessage() + ": errore close");
-            }
-        }
-        
-        return output;
-    }
-    
-////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Elimina le tabelle del Database
+     * @throws java.sql.SQLException
      */
     
-    public static void drop(){
+    public void drop() throws SQLException{
         
         System.out.println(esegui("DROP TABLE PRENOTAZIONI"));
         System.out.println(esegui("DROP TABLE UTENTI"));
         System.out.println(esegui("DROP TABLE PIZZE"));
     
     }
+
+    public void openConnection() throws SQLException{
+        conn = DriverManager.getConnection(ur, us, p);
+        
+    }
+    
+    public void closeConnection() throws SQLException{
+        conn.close();
+    }
+    
 ////////////////////////////////////////////////////////////////////////////////
                                     //TEST//
     
@@ -418,17 +390,6 @@ public class DBManager {
     public static void main(String[] args){
         drop();
         inizializza();
-        System.out.println("Create login: " + addLogin("puppa", "Puppafava1", "user"));
-        System.out.println("Create login: " + addPizza("pezza", "Puppafava1", 1.0));
-        System.out.println("Create pren1: " + addPrenotazione(getIdUser("puppa"), getIdPizza("pezza"),3, "oggi"));
-        System.out.println("Create pren2: " + addPrenotazione(getIdUser("puppe"), getIdPizza("pezza"),3, "oggi"));
-        System.out.println("Create pren3: " + addPrenotazione(getIdUser("puppa"), getIdPizza("paullo"),3, "oggi"));
-        System.out.println("id="+getIdPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
-        System.out.println("id="+getIdPrenotazione(getIdUser("puppa2"), getIdPizza("pezza"), "oggi"));
-        System.out.println("id="+getIdPrenotazione(getIdUser("puppa"), getIdPizza("pezza2"), "oggi"));
-        System.out.println("id="+getIdPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi2"));
-        System.out.println("rem: "+remPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
-        System.out.println("rem: "+remPrenotazione(getIdUser("puppa"), getIdPizza("pezza"), "oggi"));
     }
 */
 

@@ -11,7 +11,7 @@ package mvc.model;
  */
 public class Utente {
 
-    private int idUtente;
+    private int idUtente = -1;
     private String username;
     private String pwd;
     private String permission;
@@ -19,35 +19,26 @@ public class Utente {
     /**
      * Crea l'utente
      *
+     * @param id
      * @param iNome
      * @param iPwd
      * @param iRuolo
      *
      * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
-    public Utente(int id, String iNome, String iPwd, String iRuolo) {
+    protected Utente(int id, String iNome, String iPwd, String iRuolo) {
         this.idUtente = id;
         this.username = iNome;
         this.pwd = iPwd;
         this.permission = iRuolo;
     }
-
-    /**
-     *
-     * @param query
-     */
-    public Utente(String query) {
-        String[] tmp = query.split(";");
-        this.idUtente = Integer.parseInt(tmp[0]);
-        this.username = tmp[1];
-        this.pwd = tmp[2];
-        this.permission = tmp[3];
+    
+    public Utente(String iNome, String iPwd, String iRuolo) {
+        this.username = iNome;
+        this.pwd = iPwd;
+        this.permission = iRuolo;
     }
 
-    @Override
-    public String toString() {
-        return "" + this.idUtente + "-" + this.username + "-" + this.pwd + "-" + this.permission;
-    }
 
         //METODI DI GET    
     /**
@@ -80,13 +71,22 @@ public class Utente {
     /**
      * Restituisce il ruolo dell'utente
      *
-     * @return <String>
+     * @return \<String\>
      */
     public String getPermission() {
         return permission;
     }
 
         //METODI DI SET
+    /**
+     * Modifica l'id dell'utente
+     *
+     * @param id
+     */
+    protected void setId(int id) {
+        this.idUtente = id;
+    }
+    
     /**
      * Modifica la password dell'utente
      *
