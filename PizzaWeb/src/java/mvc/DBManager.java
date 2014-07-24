@@ -1,4 +1,4 @@
-package mypackage;
+package mvc;
 
 import java.sql.*;
 import java.util.ArrayList;

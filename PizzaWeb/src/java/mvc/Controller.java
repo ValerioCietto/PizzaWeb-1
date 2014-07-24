@@ -1,4 +1,4 @@
-package mypackage;
+package mvc;
 
 import java.io.*;
 import java.util.ArrayList;
