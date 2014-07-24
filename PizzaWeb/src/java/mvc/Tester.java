@@ -20,9 +20,9 @@ public class Tester {
         testUser(dbman,true,true,true,false);
     }
     public static void testUser(DBManager dbman,boolean add,boolean get,boolean mod, boolean rem){
-        String user=genString(8);
-        String pwd=genString(8);
-        String ruolo=genString(8);
+        String user="user";
+        String pwd="pwd";
+        String ruolo="ruolo";
         int outI;
         String outS;
         boolean outB;
@@ -38,21 +38,21 @@ public class Tester {
             
             try{//test addUser con user esistente
                 dbman.openConnection();
-                outI=dbman.addUser(user,genString(8),genString(8));
+                outI=dbman.addUser(user,pwd+"1",ruolo+"1"));
                 System.out.println("test addUser con user esistente(-1) = "+outI);
             }catch(SQLException e){System.out.println(e.getMessage()+" addUser2");}
             finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
             
             try{//test addUser con pwd esistente
                 dbman.openConnection();
-                outI=dbman.addUser(genString(8),pwd,genString(8));
+                outI=dbman.addUser(user+"2",pwd,ruolo+"2");
                 System.out.println("test addUser con pwd esistente(>0) = "+outI);
             }catch(SQLException e){System.out.println(e.getMessage()+" addUser3");}
             finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
             
             try{//test addUser con ruolo esistente
                 dbman.openConnection();
-                outI=dbman.addUser(genString(8),genString(8),ruolo);
+                outI=dbman.addUser(user+"3",pwd+"3",ruolo);
                 System.out.println("test addUser con ruolo esistente(>0) = "+outI);
             }catch(SQLException e){System.out.println(e.getMessage()+" addUser4");}
             finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
