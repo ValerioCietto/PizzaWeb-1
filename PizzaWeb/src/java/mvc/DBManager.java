@@ -141,7 +141,7 @@ public final class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public int addLogin(String nome, String password, String ruolo) throws SQLException{
+    public int addUser(String nome, String password, String ruolo) throws SQLException{
         int id = -1;
         esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
         try(ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+nome+"'")){
@@ -161,7 +161,7 @@ public final class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public boolean remLogin(int id) throws SQLException{
+    public boolean remUser(int id) throws SQLException{
         return esegui("DELETE FROM UTENTI WHERE (ID='"+id+"')");
     }
     
@@ -179,7 +179,7 @@ public final class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public boolean modLogin(String nome, String nPassword, String nRuolo) throws SQLException{
+    public boolean modUser(String nome, String nPassword, String nRuolo) throws SQLException{
         return esegui("UPDATE UTENTI SET PASSWORD='" +nPassword+"', PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'");
     }
     
@@ -195,13 +195,13 @@ public final class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public ResultSet getLogin(String usr) throws SQLException{
+    public ResultSet getUser(String usr) throws SQLException{
         ResultSet rs = null;
         rs = st.executeQuery("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"'");
         return rs;
     }
     
-    public ResultSet getLogin(int id) throws SQLException{
+    public ResultSet getUser(int id) throws SQLException{
         ResultSet rs = null;
         rs = st.executeQuery("SELECT * FROM UTENTI WHERE IDUSER='"+ id +"'");
         return rs;
@@ -216,10 +216,11 @@ public final class DBManager {
      * @param pwd       password dell'utente
      * 
      * @return          ritorna un booleano
+     * @throws java.sql.SQLException
      */
     
-    public static boolean controllaLogin(String usr,String pwd){
-        return !((query("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'").get(0)).equals(""));
+    public boolean checkLogin(String usr,String pwd) throws SQLException{
+        return esegui("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'");
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -230,14 +231,15 @@ public final class DBManager {
      * @param nome      nome della pizza
      * 
      * @return          ritorna un valore intero che indica l'ID
+     * @throws java.sql.SQLException
      */
     
-    public static int getIdPizza(String nome){
-        try{
-            return Integer.parseInt(query("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'").get(0));
-        }catch(NumberFormatException e){
-            return -1;
+    public int getIdPizza(String nome) throws SQLException{
+        int id = -1;
+        try(ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'")){
+            id = rs.getInt("IDPIZZA");
         }
+        return id;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -248,14 +250,15 @@ public final class DBManager {
      * @param username  nome utente
      * 
      * @return          ritorna un valore intero che indica l'ID
+     * @throws java.sql.SQLException
      */
     
-    public static int getIdUser(String username){
-        try{
-            return Integer.parseInt(query("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+username+"'").get(0));
-        }catch(NumberFormatException e){
-            return -1;
+    public int getIdUser(String username) throws SQLException{
+        int id = -1;
+        try(ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+username+"'")){
+            id = rs.getInt("IDUSER");
         }
+        return id;
     }
     
 ////////////////////////////////////////////////////////////////////////////////    
@@ -268,14 +271,15 @@ public final class DBManager {
      * @param data      Data della prenotazione
      * 
      * @return          ritorna un valore intero che indica l'ID
+     * @throws java.sql.SQLException
      */
     
-    public static int getIdPrenotazione(int username, int pizza, String  data){
-        try{
-            return Integer.parseInt(query("SELECT IDPRENOTAZIONE FROM PRENOTAZIONI WHERE IDUTENTE="+username+" AND IDPIZZA ="+ pizza+" AND DATA='"+data+"'").get(0));
-        }catch(NumberFormatException e){
-            return -1;
+    public int getIdPrenotazione(int username, int pizza, String  data) throws SQLException{
+        int id = -1;
+        try(ResultSet rs = st.executeQuery("SELECT IDPRENOTAZIONE FROM PRENOTAZIONI WHERE IDUTENTE="+username+" AND IDPIZZA ="+ pizza+" AND DATA='"+data+"'")){
+            id = rs.getInt("IDPRENOTAZIONE");
         }
+        return id;
     }
     
 ////////////////////////////////////////////////////////////////////////////////       
@@ -292,11 +296,13 @@ public final class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public boolean addPrenotazione(int cliente, int pizza, int quantita, String data) throws SQLException{
-        
-        String sql="INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ";
-        sql+="("+cliente+", "+pizza+","+quantita+", '"+data+"', 'Ordinato')";
-        return esegui(sql);
+    public int addPrenotazione(int cliente, int pizza, int quantita, String data) throws SQLException{
+        int id = -1;
+        esegui("INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ('"+cliente+"', '"+pizza+"', '"+quantita+"', '"+data+"', 'ordinato')");
+        try(ResultSet rs = st.executeQuery("SELECT IDPRENOTAZIONE FROM PRENOTAZIONE WHERE IDUTENTE='"+cliente+"' AND IDPIZZA='"+pizza+"' AND DATA ='"+data+"'")){
+            id = rs.getInt("IDPRENOTAZIONE");
+        }
+        return id;
     }
 
 ////////////////////////////////////////////////////////////////////////////////    
@@ -304,17 +310,33 @@ public final class DBManager {
     /**
      * Rimuove una prenotazione
      * 
-     * @param cliente   cliente dal quale rimuovere la prenotazione
-     * @param data      data della prenotazione da rimuovere
-     * @param pizza     pizza da rimuovere
+     * @param idP
      * 
      * @return          ritorna un booleano
      * @throws java.sql.SQLException
      */
     
-    public boolean remPrenotazione(int cliente, int pizza, String data) throws SQLException{
-        return esegui("DELETE FROM PRENOTAZIONI WHERE (IDUTENTE= "+cliente+ "AND IDPIZZA= "+pizza+ " AND DATA= '"+data+ "')");
+    public boolean remPrenotazione(int idP) throws SQLException{
+        return esegui("DELETE FROM PRENOTAZIONE WHERE (IDPRENOTAZIONE='"+idP+"')");
     }
+
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Modifica una pizza nella tabella PIZZE
+     * 
+     * 
+     * @param idPrenotazione
+     * @param quantita
+     * @param data
+     * @return          ritorna un booleano
+     * @throws java.sql.SQLException
+     */
+    
+    public boolean modPrenotazione(int idPrenotazione,int quantita, String data) throws SQLException{
+        return esegui("UPDATE PRENOTAZIONE SET QUANTITA='" + quantita+ "', DATA=" +data+" WHERE IDPRENOTAZIONE ='" +idPrenotazione+"'");
+    }
+    
     
 ////////////////////////////////////////////////////////////////////////////////
     
@@ -341,10 +363,10 @@ public final class DBManager {
      */
     
     public void startDati() throws SQLException { //startDati(String tab, String nome, String mezzo, String fine)
-        addLogin("admin","admin","admin");
-        addLogin("user","user","user");
-        addLogin("mario","mario","user");
-        addLogin("b","b","user");
+        addUser("admin","admin","admin");
+        addUser("user","user","user");
+        addUser("mario","mario","user");
+        addUser("b","b","user");
         addPizza("Margherita","pomodoro e mozzarella", 15);
         addPizza("Funghi","pomodoro e funghi", 6);
        // addPrenotazione("user","210491", "Margherita",3);

@@ -55,7 +55,7 @@ public class Prenotazione {
     /**
      * Restituisce l'ID dell'utente che ha effettuato la prenotazione
      *
-     * @return <int> idUtente
+     * @return \<int\> idUtente
      */
     public int getIdUtente() {
         return idUtente;
@@ -64,7 +64,7 @@ public class Prenotazione {
     /**
      * Restituisce l'ID della pizza prenotata
      *
-     * @return <int> idPizza
+     * @return \<int\> idPizza
      */
     public int getIdPizza() {
         return idPizza;
@@ -73,7 +73,7 @@ public class Prenotazione {
     /**
      * Restituisce la quantità di pizze prenotate
      *
-     * @return <int> quantita
+     * @return \<int\> quantita
      */
     public int getQuantita() {
         return quantita;
@@ -82,7 +82,7 @@ public class Prenotazione {
     /**
      * Restituisce la data della prenotazione
      *
-     * @return <String> data
+     * @return \<String\> data
      */
     public String getData() {
         return data;
@@ -91,17 +91,45 @@ public class Prenotazione {
     /**
      * Restituisce lo stato della prenotazione
      *
-     * @return <String> stato
+     * @return \<String\> stato
      */
     public String getStato() {
         return stato;
     }
 
     //METODI DI SET
+    
+    /**
+     * Imposta l'id prenotazione
+     *
+     * @param q
+     */
+    public void setIdPrenotazione(int q) {
+        this.idPrenotazione = q;
+    }
+    
+    /**
+     * Imposta l'id utente
+     *
+     * @param q
+     */
+    public void setIdUtente(int q) {
+        this.idUtente = q;
+    }
+    
+    /**
+     * Imposta l'id pizza
+     *
+     * @param q
+     */
+    public void setIdPizza(int q) {
+        this.idPizza = q;
+    }
+    
     /**
      * Imposta la quantità di pizze nell'ordine
      *
-     * @param int quantità di pizze
+     * @param q
      */
     public void setQuantita(int q) {
         this.quantita = q;
@@ -110,7 +138,7 @@ public class Prenotazione {
     /**
      * Imposta la data dell'ordine
      *
-     * @param String data della consegna
+     * @param d
      */
     public void setData(String d) {
         this.data = d;
