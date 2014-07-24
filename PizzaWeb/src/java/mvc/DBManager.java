@@ -1,9 +1,8 @@
 package mvc;
 
 import java.sql.*;
-import java.util.ArrayList;
 
-public class DBManager {
+public final class DBManager {
     static final String ur = "jdbc:derby://localhost:1527/PizzaWeb";
     static final String us= "pizzeria";
     static final String p= "pizzeria";
@@ -16,12 +15,11 @@ public class DBManager {
      * Inizializza il Database
      */
     
-    public static void inizializza(){
+    public DBManager(){
        try {
             // registrazione driver JDBC da utilizzare
             DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
             creaTabelle();
-            //startDati();
        } catch (SQLException e) {System.out.println(e.getMessage());}
     }
     
@@ -32,9 +30,10 @@ public class DBManager {
      * UTENTI, PIZZE e PRENOTAZIONI
      */
     
-    public static void creaTabelle(){
+    public void creaTabelle(){
         try {
         Connection conn = DriverManager.getConnection(ur,us,p);
+        drop();
             try (Statement st = conn.createStatement()) {   
                 try {
                     st.executeUpdate(   "CREATE TABLE UTENTI(" +
@@ -91,9 +90,9 @@ public class DBManager {
     public int addPizza(String nome, String ingr, double prezzo) throws SQLException{
         int id = -1;
         esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
-        Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'");
-        id = rs.getInt("IDPIZZA");
+        try(ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'")) {
+            id = rs.getInt("IDPIZZA");
+        }
         return id;
     }
 
@@ -142,24 +141,30 @@ public class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public boolean addLogin(String nome, String password, String ruolo) throws SQLException{
-        return esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
+    public int addLogin(String nome, String password, String ruolo) throws SQLException{
+        int id = -1;
+        esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
+        try(ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+nome+"'")){
+            id = rs.getInt("IDUSER");
+        }
+        return id;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
     
     /**
-     * Rimuove un utente dalla tabella UTENTI
+     * Elimina un utente nella tabella UTENTI
      * 
-     * @param nome      nome dell'utente
+     * @param id
      * 
      * @return          ritorna un booleano
      * @throws java.sql.SQLException
      */
     
-    public boolean remLogin(String nome) throws SQLException{
-        return esegui("DELETE FROM UTENTI WHERE (USERNAME='"+nome+"')");
+    public boolean remLogin(int id) throws SQLException{
+        return esegui("DELETE FROM UTENTI WHERE (ID='"+id+"')");
     }
+    
     
 ////////////////////////////////////////////////////////////////////////////////
     
@@ -167,7 +172,6 @@ public class DBManager {
      * Modifica un utente nella tabella UTENTI
      * 
      * @param nome      nome attuale dell'utente
-     * @param nNome     nuovo nome dell'utente
      * @param nPassword nuova password dell'utente
      * @param nRuolo    nuovi permessi dell'utente;
      * 
@@ -175,22 +179,11 @@ public class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public boolean modLogin(String nome, String nNome, String nPassword, String nRuolo) throws SQLException{
-        return esegui("UPDATE UTENTI SET USERNAME='" + nNome+ "', PASSWORD='" +nPassword+"', PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'");
+    public boolean modLogin(String nome, String nPassword, String nRuolo) throws SQLException{
+        return esegui("UPDATE UTENTI SET PASSWORD='" +nPassword+"', PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'");
     }
     
-////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * Recupera la lista degli utenti e genera un array di Stringhe con tutti i dati
-     * 
-     * @return          ritorna un ArrayList \<String\> contenente i risultati della query
-     */
-    
-    public static ArrayList<String> getAllLogin(){
-        return query("SELECT * FROM UTENTI");
-    }
-    
 ////////////////////////////////////////////////////////////////////////////////
     
     /**
@@ -199,10 +192,19 @@ public class DBManager {
      * @param usr       nome dell'utente
      * 
      * @return          ritorna una Stringa contenente il risultato della query
+     * @throws java.sql.SQLException
      */
     
-    public static String getLogin(String usr){
-        return query("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"'").get(0);
+    public ResultSet getLogin(String usr) throws SQLException{
+        ResultSet rs = null;
+        rs = st.executeQuery("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"'");
+        return rs;
+    }
+    
+    public ResultSet getLogin(int id) throws SQLException{
+        ResultSet rs = null;
+        rs = st.executeQuery("SELECT * FROM UTENTI WHERE IDUSER='"+ id +"'");
+        return rs;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -327,9 +329,7 @@ public class DBManager {
     
     public boolean esegui(String sql) throws SQLException {
         boolean tmp;
-        st = conn.createStatement();
         tmp = st.execute(sql);
-        st.close();
         return tmp;
     }
     
@@ -370,10 +370,12 @@ public class DBManager {
 
     public void openConnection() throws SQLException{
         conn = DriverManager.getConnection(ur, us, p);
+        st = conn.createStatement();
         
     }
     
     public void closeConnection() throws SQLException{
+        st.close();
         conn.close();
     }
     

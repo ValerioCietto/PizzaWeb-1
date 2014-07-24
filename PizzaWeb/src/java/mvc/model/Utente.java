@@ -53,9 +53,9 @@ public class Utente {
     /**
      * Restituisce il nome dell'utente
      *
-     * @return <String> nome Pizza
+     * @return \<String\> nome Pizza
      */
-    public String getNome() {
+    public String getUsername() {
         return username;
     }
 
@@ -64,7 +64,7 @@ public class Utente {
      *
      * @return <String>
      */
-    public String getPwd() {
+    public String getPassword() {
         return pwd;
     }
 
@@ -85,6 +85,15 @@ public class Utente {
      */
     protected void setId(int id) {
         this.idUtente = id;
+    }
+    
+    /**
+     * Modifica l'id dell'utente
+     *
+     * @param name
+     */
+    protected void setUsername(String name) {
+        this.username = name;
     }
     
     /**

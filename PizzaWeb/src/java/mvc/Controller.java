@@ -1,19 +1,28 @@
 package mvc;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
+import mvc.model.Database;
+
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
+
 public class Controller extends HttpServlet {
+    
+    Database db;
+    public Controller() {
+        super();
+        db = new Database();
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
+        
         String action= request.getParameter("action");
+        
         if(action!=null){
             switch (action) {
                 case "switch":
@@ -51,21 +60,7 @@ public class Controller extends HttpServlet {
                     Model.remPren(request);
                     aggPage(request);
                     break;
-                    
-                
-                
-                /*
-                
-                    case "aggLogin":
-                    Model.addLogin(request);
-                    break;
-                
-                case "remLogin":
-                    remove(req);
-                    break;
-                case "modLogin":
-                    aggiungi(req);
-                    break;*/    
+   
             }
         }
         RequestDispatcher rd;
@@ -82,6 +77,7 @@ public class Controller extends HttpServlet {
             req.getSession().setAttribute("view","");
         aggPage(req);
     }
+    
     public void aggPage(HttpServletRequest req){
         String ruolo=(String)(req.getSession()).getAttribute("ruolo");
         String login=(String)(req.getSession()).getAttribute("username");
@@ -98,43 +94,10 @@ public class Controller extends HttpServlet {
             else req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ"));
         }
     }
-    /*public static void remove(HttpServletRequest req){
-        HttpSession s=req.getSession();
-        String name = req.getParameter("pizza");
-        if(name!=null && !name.equals("")){
-            DBManager.remPizza(name);
-            s.setAttribute("message","rimossa pizza "+name);
-            return;
-        }
-        name = req.getParameter("login");
-        if(name!=null && !name.equals("")){
-            DBManager.remLogin(name);
-            s.setAttribute("message","rimosso login "+name);
-            return;
-        }
-        s.setAttribute("message","errore di input");
-    }
-    public static void aggiungi(HttpServletRequest req){
-        HttpSession s=req.getSession();
-        String name = req.getParameter("pizza");
-        if(name!=null && !name.equals("")){
-            String ingredienti=req.getParameter("ingredienti");
-            if(ingredienti!=null){
-                try{
-                    int prezzo= Integer.parseInt(req.getParameter("prezzo"));
-                    DBManager.addPizza(name, ingredienti, prezzo);
-                    s.setAttribute("message","aggiunta pizza "+name);
-                }catch(NumberFormatException e){
-                    s.setAttribute("message","errore input prezzo");
-                }
-            }else
-                s.setAttribute("message","errore input ingredienti");
-            return;
-        }
-        s.setAttribute("message","parametro pizza non trovato");
-    }
+    
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+   /**
      * Handles the HTTP
      * <code>GET</code> method.
      *

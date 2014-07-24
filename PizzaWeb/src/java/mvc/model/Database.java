@@ -5,7 +5,7 @@
  */
 
 package mvc.model;
-import java.sql.SQLException;
+import java.sql.*;
 import mvc.*;
 
 /**
@@ -16,6 +16,7 @@ import mvc.*;
 public class Database {
     
     private final DBManager dbman;
+    
     
     public Database(){
         dbman = new DBManager();
@@ -56,6 +57,7 @@ public class Database {
             dbman.openConnection();
             //rimuovi pizza
             dbman.remPizza(p.getId());
+            p.setId(-1);
         }finally{
             dbman.closeConnection();
         }
@@ -85,15 +87,21 @@ public class Database {
     /**
      * Inserisce un utente nella tabella UTENTI
      * 
-     * @param nome      nome dell'utente
-     * @param password  password dell'utente
-     * @param ruolo     permessi dell'utente
-     * 
-     * @return          ritorna un booleano
+     * @param u
+     * @throws java.sql.SQLException
      */
     
-    public static boolean addLogin(String nome, String password, String ruolo){
-        return false;
+    public void addLogin(Utente u) throws SQLException{
+        try{
+            dbman.openConnection();
+            //aggiungi pizza
+            int tmp = dbman.addLogin(u.getUsername(), u.getPassword(), u.getPermission());
+            if(tmp >= 0){
+                u.setId(tmp);
+            }
+        }finally{
+            dbman.closeConnection();
+        }
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -101,13 +109,19 @@ public class Database {
     /**
      * Rimuove un utente dalla tabella UTENTI
      * 
-     * @param nome      nome dell'utente
-     * 
-     * @return          ritorna un booleano
+     * @param u
+     * @throws java.sql.SQLException
      */
     
-    public static boolean remLogin(String nome){
-        return false;
+    public void remLogin(Utente u) throws SQLException{
+        try{
+            dbman.openConnection();
+            //rimuovi utente
+            dbman.remLogin(u.getId());
+            u.setId(-1);
+        }finally{
+            dbman.closeConnection();
+        }
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -115,28 +129,18 @@ public class Database {
     /**
      * Modifica un utente nella tabella UTENTI
      * 
-     * @param nome      nome attuale dell'utente
-     * @param nNome     nuovo nome dell'utente
-     * @param nPassword nuova password dell'utente
-     * @param nRuolo    nuovi permessi dell'utente;
-     * 
-     * @return          ritorna un booleano
+     * @param u
+     * @throws java.sql.SQLException
      */
     
-    public static boolean modLogin(String nome, String nNome, String nPassword, String nRuolo){
-        return false;
-    }
-    
-////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Recupera la lista degli utenti e genera un array di Stringhe con tutti i dati
-     * 
-     * @return          ritorna un ArrayList \<String\> contenente i risultati della query
-     */
-    
-    public static boolean getAllLogin(){
-        return false;
+    public void modLogin(Utente u) throws SQLException{
+        try{
+            dbman.openConnection();
+            //aggiungi pizza
+            dbman.modLogin(u.getUsername(), u.getPassword(), u.getPermission());
+        }finally{
+            dbman.closeConnection();
+        }
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -144,13 +148,36 @@ public class Database {
     /**
      * Ritorna una Stringa contenente l'utente
      * 
-     * @param usr       nome dell'utente
+     * @param name
      * 
      * @return          ritorna una Stringa contenente il risultato della query
+     * @throws java.sql.SQLException
      */
     
-    public static boolean getLogin(String usr){
-        return false;
+    public Utente getLogin(String name) throws SQLException{
+        Utente tmp = null;
+        try{
+            dbman.openConnection();
+            ResultSet rs = dbman.getLogin(name);
+            if(rs.getRow()>0)
+                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
+        }finally{
+            dbman.closeConnection();
+        }
+        return tmp;
+    }
+    
+    public Utente getLogin(int id) throws SQLException{
+        Utente tmp = null;  
+        try{
+            dbman.openConnection();
+            ResultSet rs = dbman.getLogin(id);
+            if(rs.getRow()>0)
+                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
+        }finally{
+            dbman.closeConnection();
+        }
+        return tmp;
     }
     
 ////////////////////////////////////////////////////////////////////////////////
