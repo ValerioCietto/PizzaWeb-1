@@ -66,22 +66,22 @@ public class Tester {
             }catch(SQLException e){System.out.println(e.getMessage()+" getIdUser2");}
             try{//test getUser(int)
                 rs=db.getUser(1);
-                outS=resToString(rs);
+                outS=stampaUtente(rs);
                 System.out.println("test getUser(int) = "+outS);
             }catch(SQLException e){System.out.println(e.getMessage()+" getUser(int)1");}
             try{//test getUser(int) con id inesistente
                 rs=db.getUser(0);
-                outS=resToString(rs);
+                outS=stampaUtente(rs);
                 System.out.println("test getUser(int) con id inesistente = "+outS);
             }catch(SQLException e){System.out.println(e.getMessage()+" getUser(int)2");}
-            try{//test getUser(int)
+            try{//test getUser(String)
                 rs=db.getUser(user);
-                outS=resToString(rs);
+                outS=stampaUtente(rs);
                 System.out.println("test getUser(String) = "+outS);
             }catch(SQLException e){System.out.println(e.getMessage()+" getUser(String)1");}
-            try{//test getUser(int) con id inesistente
+            try{//test getUser(String) con id inesistente
                 rs=db.getUser(genString(8));
-                outS=resToString(rs);
+                outS=stampaUtente(rs);
                 System.out.println("test getUser(String) con user inesistente = "+outS);
             }catch(SQLException e){System.out.println(e.getMessage()+" getUser(String)2");}
             System.out.println("\n\n");
@@ -113,6 +113,12 @@ public class Tester {
             out="//NON CI SONO RISULTATI NEL RESULTSET";
         return out+"//";
     
+    }
+    public static String stampaUtente(ResultSet rs) throws SQLException{
+        String out="";
+        while(rs.next())
+            out+="//"+rs.getInt("IDUSER")+rs.getString("USERNAME")+rs.getString("PASSWORD")+rs.getString("PERMISSION");
+        return out;
     }
     public static String genString(int length){
         char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
