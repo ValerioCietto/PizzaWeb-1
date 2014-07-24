@@ -19,7 +19,7 @@ public class Tester {
         DBManager dbman=new DBManager();
         try{
             dbman.openConnection();
-            testUser(dbman,true,true,true,false);        
+            testUser(dbman,false,true,false,false);        
         }
         catch(SQLException e){System.out.println(e.getMessage()+" openConnection");}
         finally{
@@ -39,6 +39,11 @@ public class Tester {
             outI=db.addUser(user,pwd,ruolo);
             System.out.println("test addUser(>0) = "+outI);
         }catch(SQLException e){System.out.println(e.getMessage()+" addUser1");}
+        
+        try{//test addUser
+            outI=db.addUser("asdrubale","arbalesto",ruolo);
+            System.out.println("test addUser(>0) = "+outI);
+        }catch(SQLException e){System.out.println(e.getMessage()+" addUserPuppa");}
         System.out.println("\n\n");
         if(add){
             try{//test addUser con user esistente

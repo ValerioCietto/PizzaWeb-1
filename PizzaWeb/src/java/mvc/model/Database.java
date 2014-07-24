@@ -186,6 +186,7 @@ public class Database {
      * Effettua un controllo sul login dell'utente
      * 
      * @param usr       nome dell'utente
+     * @param pwd
      * 
      * @return          ritorna un booleano
      * @throws java.sql.SQLException
