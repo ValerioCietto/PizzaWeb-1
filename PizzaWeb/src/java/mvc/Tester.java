@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class Tester {
     public static void main(String[]args){
         DBManager dbman=new DBManager();
-        testUser(dbman,true,true,true,false);
+        testUser(dbman,false,false,false,false);
     }
     public static void testUser(DBManager dbman,boolean add,boolean get,boolean mod, boolean rem){
         String user="user";
@@ -36,12 +36,12 @@ public class Tester {
         System.out.println("\n\n");
         if(add){
             
-            /*try{//test addUser con user esistente
+            try{//test addUser con user esistente
                 dbman.openConnection();
                 outI=dbman.addUser(user,pwd+"1",ruolo+"1");
                 System.out.println("test addUser con user esistente(-1) = "+outI);
             }catch(SQLException e){System.out.println(e.getMessage()+" addUser2");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}*/
+            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
             
             try{//test addUser con pwd esistente
                 dbman.openConnection();
