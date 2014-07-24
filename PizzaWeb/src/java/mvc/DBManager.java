@@ -73,9 +73,9 @@ public final class DBManager {
                 } catch (SQLException e){System.out.println(e.getMessage());}
                 
             } catch (SQLException e){System.out.println(e.getMessage());}
-        } catch (SQLException e){
-            System.out.println(e.getMessage());
-        }    
+            finally{st.close();}
+        } catch (SQLException e){ System.out.println(e.getMessage());}
+        finally{ try{conn.close();}catch (SQLException e){ System.out.println(e.getMessage());}}
     }
     
 ////////////////////////////////////////////////////////////////////////////////
