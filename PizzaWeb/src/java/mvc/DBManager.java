@@ -20,6 +20,7 @@ public final class DBManager {
         // registrazione driver JDBC da utilizzare
         DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
         openConnection();
+        drop();
         creaTabelle();
         closeConnection();
     }
@@ -33,14 +34,14 @@ public final class DBManager {
      */
     
     public void creaTabelle() throws SQLException{
-        st.executeUpdate(   "CREATE TABLE UTENTI(" +
+        st.execute(   "CREATE TABLE UTENTI(" +
                 "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
                 "USERNAME       VARCHAR(30) NOT NULL UNIQUE," +
                 "PASSWORD       VARCHAR(30) NOT NULL," +
                 "PERMISSION     VARCHAR(30) NOT NULL," +
                 "PRIMARY KEY(IDUSER))");
 
-        st.executeUpdate(   "CREATE TABLE PIZZE(" +
+        st.execute(   "CREATE TABLE PIZZE(" +
 
                 "IDPIZZA        INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
                 "NOME           VARCHAR(30) NOT NULL UNIQUE," +
@@ -48,7 +49,7 @@ public final class DBManager {
                 "PREZZO         DOUBLE      NOT NULL," +
                 "PRIMARY KEY(IDPIZZA))");
 
-        st.executeUpdate(   "CREATE TABLE PRENOTAZIONI(" +
+        st.execute(   "CREATE TABLE PRENOTAZIONI(" +
                 "IDPRENOTAZIONE INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
                 "IDUTENTE       INT         NOT NULL    ," +
                 "IDPIZZA        INT         NOT NULL    ," +
@@ -77,9 +78,9 @@ public final class DBManager {
     public int addPizza(String nome, String ingr, double prezzo) throws SQLException{
         int id = -1;
         esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")");
-        try(ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'")) {
-            id = rs.getInt("IDPIZZA");
-        }
+        ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'");
+        rs.next();
+        id = rs.getInt("IDPIZZA");
         return id;
     }
 
@@ -131,10 +132,9 @@ public final class DBManager {
     public int addUser(String nome, String password, String ruolo) throws SQLException{
         int id = -1;
         esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
-        try(ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+nome+"'")){
-            rs.next();
-            id = rs.getInt(1);
-        }
+        ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+nome+"'");
+        rs.next();
+        id = rs.getInt(1);
         return id;
     }
     
@@ -211,8 +211,7 @@ public final class DBManager {
         return esegui("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'");
     }
 
-////////////////////////////////////////////////////////////////////////////////
-    
+//////////////////////////////////////////////////////////////////////////////// 
     /**
      * Prende in input il nome della pizza e restituisce l'ID della pizza
      * 
@@ -225,6 +224,7 @@ public final class DBManager {
     public int getIdPizza(String nome) throws SQLException{
         int id = -1;
         try(ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'")){
+            rs.next();
             id = rs.getInt("IDPIZZA");
         }
         return id;
@@ -238,16 +238,16 @@ public final class DBManager {
      * @param username  nome utente
      * 
      * @return          ritorna un valore intero che indica l'ID
-     * @throws java.sql.SQLException
      */
     
-    public int getIdUser(String username) throws SQLException{
-        int id = -1;
-        try(ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+username+"'")){
+    public int getIdUser(String username){
+        try{
+            ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+username+"'");
             rs.next();
-            id = rs.getInt("IDUSER");
-        }
-        return id;
+            int id = rs.getInt(1);
+            return id;
+        }catch(SQLException e){System.out.println(e.getMessage());return -1;}
+        
     }
     
 ////////////////////////////////////////////////////////////////////////////////    
@@ -264,11 +264,11 @@ public final class DBManager {
      */
     
     public int getIdPrenotazione(int username, int pizza, String  data) throws SQLException{
-        int id = -1;
         try(ResultSet rs = st.executeQuery("SELECT IDPRENOTAZIONE FROM PRENOTAZIONI WHERE IDUTENTE="+username+" AND IDPIZZA ="+ pizza+" AND DATA='"+data+"'")){
-            id = rs.getInt("IDPRENOTAZIONE");
-        }
-        return id;
+        rs.next();
+            int id = rs.getInt(1);
+            return id;
+        }catch(SQLException e){System.out.println(e.getMessage());return -1;}
     }
     
 ////////////////////////////////////////////////////////////////////////////////       
@@ -287,10 +287,10 @@ public final class DBManager {
     
     public int addPrenotazione(int cliente, int pizza, int quantita, String data) throws SQLException{
         int id = -1;
-        esegui("INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ('"+cliente+"', '"+pizza+"', '"+quantita+"', '"+data+"', 'ordinato')");
-        try(ResultSet rs = st.executeQuery("SELECT IDPRENOTAZIONE FROM PRENOTAZIONE WHERE IDUTENTE='"+cliente+"' AND IDPIZZA='"+pizza+"' AND DATA ='"+data+"'")){
-            id = rs.getInt("IDPRENOTAZIONE");
-        }
+        esegui("INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ("+cliente+", "+pizza+", "+quantita+", '"+data+"', 'ordinato')");
+        ResultSet rs = st.executeQuery("SELECT IDPRENOTAZIONE FROM PRENOTAZIONI WHERE IDUTENTE="+cliente+" AND IDPIZZA="+pizza+" AND DATA ='"+data+"'");
+        rs.next();
+        id = rs.getInt("IDPRENOTAZIONE");
         return id;
     }
 

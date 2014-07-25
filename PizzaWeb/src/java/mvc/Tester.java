@@ -7,7 +7,6 @@
 package mvc;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 /**
@@ -15,145 +14,224 @@ import java.sql.SQLException;
  * @author mirko
  */
 public class Tester {
-    public static void main(String[]args){
+    public static void main(String[]args) throws SQLException{
         DBManager dbman=new DBManager();
-        testUser(dbman,false,false,false,false);
+        testUser(dbman,true,true,true,true);
     }
-    public static void testUser(DBManager dbman,boolean add,boolean get,boolean mod, boolean rem){
+    public static void testUser(DBManager dbman,boolean add,boolean get,boolean mod, boolean rem) throws SQLException{
         String user="user";
         String pwd="pwd";
         String ruolo="ruolo";
+        
+        String pizza = "pizza";
+        String ingr = "ingredienti";
+        double prezzo = 0.0;
+        
+        int quantita = 1;
+        String data = "oggi";
+        
         int outI;
         String outS;
         boolean outB;
         ResultSet rs;
-        try{//test addUser
+        
+        
+        
+       
+        
+        if(add){
+            
+            //////////////////////////////////////////////////////////////////////////////
+            //UTENTI
+            
+
+            //test addUser
             dbman.openConnection();
             outI=dbman.addUser(user,pwd,ruolo);
             System.out.println("test addUser(>0) = "+outI);
-        }catch(SQLException e){System.out.println(e.getMessage()+" addUser1");}
-        finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
-        System.out.println("\n\n");
-        if(add){
+            dbman.closeConnection();
             
-            try{//test addUser con user esistente
+            try{
+                //test addUser con user esistente
+                outI = -1;
                 dbman.openConnection();
-                outI=dbman.addUser(user,pwd+"1",ruolo+"1");
+                if(dbman.getIdUser(user)<0)
+                    outI=dbman.addUser(user,pwd+"1",ruolo+"1");
                 System.out.println("test addUser con user esistente(-1) = "+outI);
-            }catch(SQLException e){System.out.println(e.getMessage()+" addUser2");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: Utente doppio!!!!!!!");}
             
-            try{//test addUser con pwd esistente
-                dbman.openConnection();
-                outI=dbman.addUser(user+"2",pwd,ruolo+"2");
-                System.out.println("test addUser con pwd esistente(>0) = "+outI);
-            }catch(SQLException e){System.out.println(e.getMessage()+" addUser3");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+            //test addUser con pwd esistente
+            dbman.openConnection();
+            outI=dbman.addUser(user+"2",pwd,ruolo+"2");
+            System.out.println("test addUser con pwd esistente(>0) = "+outI);
+            dbman.closeConnection();
             
-            try{//test addUser con ruolo esistente
+            //test addUser con ruolo esistente
+            dbman.openConnection();
+            outI=dbman.addUser(user+"3",pwd+"3",ruolo);
+            System.out.println("test addUser con ruolo esistente(>0) = "+outI);
+            dbman.closeConnection();
+            
+            System.out.println("\n\n");
+            
+            //PIZZE
+            
+            //test addPizza
+            dbman.openConnection();
+            outI=dbman.addPizza(pizza,ingr,prezzo);
+            System.out.println("test addPizza(>0) = "+outI);
+            dbman.closeConnection();
+            
+            try{
+                //test addPizza con nome esistente
+                outI = -1;
                 dbman.openConnection();
-                outI=dbman.addUser(user+"3",pwd+"3",ruolo);
-                System.out.println("test addUser con ruolo esistente(>0) = "+outI);
-            }catch(SQLException e){System.out.println(e.getMessage()+" addUser4");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+                if(dbman.getIdUser(user)<0)
+                    outI=dbman.addPizza(pizza,ingr+"1",prezzo+1);
+                System.out.println("test addPizza con nome esistente(-1) = "+outI);
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: Pizza doppia!!!!!!!");}
+            
+            //test addPizza con ingr esistente
+            dbman.openConnection();
+            outI=dbman.addPizza(pizza+"2",ingr,prezzo+2);
+            System.out.println("test addPizza con ingr esistente(>0) = "+outI);
+            dbman.closeConnection();
+            
+            //test addPizza con prezzo esistente
+            dbman.openConnection();
+            outI=dbman.addPizza(pizza+"3",ingr+"3",prezzo);
+            System.out.println("test addPizza con prezzo esistente(>0) = "+outI);
+            dbman.closeConnection();
+            
+            System.out.println("\n\n");
+            
+            //PRENOTAZIONI
+            
+            //test addPrenotazione
+            dbman.openConnection();
+            outI=dbman.addPrenotazione(dbman.getIdUser(user),dbman.getIdPizza(pizza),quantita,data);
+            System.out.println("test addPrenotazione(>0) = "+outI);
+            dbman.closeConnection();
+            
+            try{
+                //test addPrenotazione con utente e pizza esistenti
+                outI = -1;
+                dbman.openConnection();
+                if(dbman.getIdPrenotazione(dbman.getIdUser(user), dbman.getIdPizza(pizza), data) < 0)
+                    outI=dbman.addPrenotazione(dbman.getIdUser(user),dbman.getIdPizza(pizza),quantita,data);
+                System.out.println("test addPrenotazione con nome esistente(-1) = "+outI);
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: Prenotazione doppia!!!!!!!");}
+            
+            //test addPrenotazione con utente esistente
+            dbman.openConnection();
+            outI=dbman.addPrenotazione(dbman.getIdUser(user),dbman.getIdPizza(pizza)+1,quantita+1,data+"1");
+            System.out.println("test addPrenotazione con ingr esistente(>0) = "+outI);
+            dbman.closeConnection();
+            
+            //test addPizza con pizza esistente
+            dbman.openConnection();
+            outI=dbman.addPrenotazione(dbman.getIdUser(user)+1,dbman.getIdPizza(pizza),quantita+2,data+"2");
+            System.out.println("test addPrenotazione con prezzo esistente(>0) = "+outI);
+            dbman.closeConnection();
+            
+            //test addPrenotazione con utente e pizza esistente
+            dbman.openConnection();
+            outI=dbman.addPrenotazione(dbman.getIdUser(user)+2,dbman.getIdPizza(pizza)+2,quantita,data+"3");
+            System.out.println("test addPrenotazione con ingr esistente(>0) = "+outI);
+            dbman.closeConnection();
+            
+            //test addPrenotazione con data esistente
+            dbman.openConnection();
+            outI=dbman.addPrenotazione(dbman.getIdUser(user)+1,dbman.getIdPizza(pizza)+2,quantita,data);
+            System.out.println("test addPrenotazione con ingr esistente(>0) = "+outI);
+            dbman.closeConnection();
+            
+            //////////////////////////////////////////////////////////////////////////////
             
             System.out.println("\n\n");
         }
         if(get){
             
-            try{//test getIdUser
-                dbman.openConnection();
-                outI=dbman.getIdUser(user);
-                System.out.println("test getIdUser(>0) = "+outI);
-            }catch(SQLException e){System.out.println(e.getMessage()+" getIdUser1");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+            //////////////////////////////////////////////////////////////////////////////
             
-            try{//test getIdUser con user inesistente
+            //test getIdUser(String)
+            dbman.openConnection();
+            outI=dbman.getIdUser(user);
+            System.out.println("test getIdUser(>0) = "+outI);
+            dbman.closeConnection();
+            
+            //test getIdUser(String)  inesistente
+            try{
                 dbman.openConnection();
-                outI=dbman.getIdUser(genString(8));
+                outI=dbman.getIdUser(user+"k");
                 System.out.println("test getIdUser con user inesistente(-1) = "+outI);
-            }catch(SQLException e){System.out.println(e.getMessage()+" getIdUser2");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
             
-            try{//test getUser(int)
+            //////////////////////////////////////////////////////////////////////////////
+            
+            //test getUser(int)
+            dbman.openConnection();
+            rs=dbman.getUser(1);
+            outS=stampaUtente(rs);
+            System.out.println("test getIdUser(int) = "+outS);
+            dbman.closeConnection();
+            
+            //test getUser(int) con id inesistente
+            try{
                 dbman.openConnection();
-                rs=dbman.getUser(1);
+                rs=dbman.getUser(99999999);
                 outS=stampaUtente(rs);
-                System.out.println("test getUser(int) = "+outS);
-            }catch(SQLException e){System.out.println(e.getMessage()+" getUser(int)1");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+                System.out.println("test getIdUser(int) con id inesistente = "+outS);
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
             
-            try{//test getUser(int) con id inesistente
-                dbman.openConnection();
-                rs=dbman.getUser(0);
-                outS=stampaUtente(rs);
-                System.out.println("test getUser(int) con id inesistente = "+outS);
-            }catch(SQLException e){System.out.println(e.getMessage()+" getUser(int)2");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+            //test getUser(String)
+            dbman.openConnection();
+            rs=dbman.getUser(user);
+            outS=stampaUtente(rs);
+            System.out.println("test getUser(String) = "+outS);
+            dbman.closeConnection();
             
-            try{//test getUser(String)
+            //test getUser(String) con id inesistente
+            try{
                 dbman.openConnection();
-                rs=dbman.getUser(user);
-                outS=stampaUtente(rs);
-                System.out.println("test getUser(String) = "+outS);
-            }catch(SQLException e){System.out.println(e.getMessage()+" getUser(String)1");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
-            
-            try{//test getUser(String) con id inesistente
-                dbman.openConnection();
-                rs=dbman.getUser(genString(8));
+                rs=dbman.getUser(user+"gnagna");
                 outS=stampaUtente(rs);
                 System.out.println("test getUser(String) con user inesistente = "+outS);
-            }catch(SQLException e){System.out.println(e.getMessage()+" getUser(String)2");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
+            
+            //////////////////////////////////////////////////////////////////////////////
+            
             System.out.println("\n\n");
         }
+
         if(mod){
-            try{//test modUser
-                dbman.openConnection();
-                outB=dbman.modUser(user,genString(8),genString(8));
-                System.out.println("test modUser = "+outB);
-            }catch(SQLException e){System.out.println(e.getMessage()+" modUser1");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
-            try{//test modUser con user inesistente
-                dbman.openConnection();
-                outB=dbman.modUser(user,genString(8),genString(8));
-                System.out.println("test modUser con user inesistente= "+outB);
-            }catch(SQLException e){System.out.println(e.getMessage()+" modUser2");}
-            finally{try{ dbman.closeConnection(); }catch(SQLException e){System.out.println(e.getMessage()+" closeConnection");}}
+            
+            //test modUser
+            dbman.openConnection();
+            dbman.modUser(user,pwd+"mod"+user,ruolo+"mod"+user);
+            System.out.println("OK");
+            dbman.closeConnection();
+            
+            //test modUser con user inesistente
+            dbman.openConnection();
+            dbman.modUser(user+"papapa",pwd+"mod"+user,ruolo+"mod"+user);
+            dbman.closeConnection();
+            System.out.println("KO");
+
         }
-    }
-    public static String resToString(ResultSet rs) throws SQLException{
-        ResultSetMetaData md=rs.getMetaData();
-        int m= md.getColumnCount();
-        String out="";
-        while(rs.next()){
-             out+="//";
-             for(int i=1;i<=m;i++){
-                out+=rs.getString(i);
-                if(i!=m)
-                    out+="\t";
-             }
-        }
-        if(out.equals(""))
-            out="//NON CI SONO RISULTATI NEL RESULTSET";
-        return out+"//";
-    
+        
     }
     public static String stampaUtente(ResultSet rs) throws SQLException{
         String out="";
         while(rs.next())
-            out+="//"+rs.getInt("IDUSER")+" "+rs.getString("USERNAME")+" "+rs.getString("PASSWORD")+" "+rs.getString("PERMISSION");
+            out+="ID: "+rs.getInt("IDUSER")+";\t Username: "+rs.getString("USERNAME")+"\t Password: "+rs.getString("PASSWORD")+";\t Permission: "+rs.getString("PERMISSION")+";";
         return out;
-    }
-    public static String genString(int length){
-        char[] chars = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            char c = chars[(int)(Math.random()*chars.length)];
-            sb.append(c);
-        }
-        return sb.toString();
     }
 }
 
