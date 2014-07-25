@@ -6,13 +6,9 @@
 
 package mvc;
 
-import static java.lang.System.out;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import mvc.model.Database;
-import mvc.model.Pizza;
-import mvc.model.Utente;
-
+import mvc.model.*;
 /**
  *
  * @author mirko
@@ -355,16 +351,24 @@ public class Tester {
         Utente ut = db.getUser("username");
         System.out.println(ut);
         
-        ut = db.getUser("puppa");
-        System.out.println(ut);
+        //ut = db.getUser("puppa");
+        //System.out.println(ut);
         
         db.addPizza( new Pizza("margherita", "mozzarella, basilico, origano", 12.5d) );
         db.addPizza( new Pizza("margherita", "mozzarella, basilico, origano", 12.5d) );
         Pizza pz = db.getPizza("margherita");
         System.out.println(pz);
         
-        pz = db.getPizza("napoli");
-        System.out.println(pz);
+        //pz = db.getPizza("napoli");
+        //System.out.println(pz);
+        
+        db.addPrenotazione( new Prenotazione(ut.getId(),pz.getId(), 5 , "oggi") );
+        db.addPrenotazione( new Prenotazione(ut.getId(),pz.getId(), 5 , "oggi") );
+        Prenotazione pr = db.getPrenotazione(db.getIdPrenotazione(ut.getId(), pz.getId(), "oggi"));
+        System.out.println(pr);
+        
+        //pr = db.getPrenotazione(5);
+        //System.out.println(pr);
     }
     
     public static String stampaUtente(ResultSet rs) throws SQLException{

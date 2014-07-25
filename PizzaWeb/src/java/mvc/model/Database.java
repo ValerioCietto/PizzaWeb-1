@@ -34,7 +34,7 @@ public class Database {
         try{
             dbman.openConnection();
             if(dbman.getIdUser(u.getUsername()) < 0){
-                //aggiungi pizza
+                //aggiungi utente
                 int tmp = dbman.addUser(u.getUsername(), u.getPassword(), u.getPermission());
                 if(tmp >= 0){
                     u.setId(tmp);
@@ -71,7 +71,53 @@ public class Database {
             dbman.closeConnection();
         }
     }
-
+////////////////////////////////////////////////////////////////////////////////       
+    
+    /**
+     * Aggiunge una prenotazione ad un cliente
+     * 
+     * @param p
+     * @throws java.sql.SQLException
+     * 
+     */
+    
+    public void addPrenotazione(Prenotazione p) throws SQLException{
+        try{
+            dbman.openConnection();
+            if(dbman.getIdPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getData()) < 0){
+                //aggiungi prenotazione
+                int tmp = dbman.addPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getQuantita(), p.getData());
+                if(tmp >= 0){
+                    p.setIdPrenotazione(tmp);
+                }
+            }
+            else
+                System.out.println("Prenotazione non valida");
+        }finally{
+            dbman.closeConnection();
+        }
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Rimuove un utente dalla tabella UTENTI
+     * 
+     * @param u
+     * @throws java.sql.SQLException
+     */
+    
+    public void remUser(Utente u) throws SQLException{
+        try{
+            dbman.openConnection();
+            //rimuovi utente
+            dbman.remUser(u.getId());
+            u.setId(-1);
+        }finally{
+            dbman.closeConnection();
+        }
+    }
+    
 ////////////////////////////////////////////////////////////////////////////////
    
     /**
@@ -92,40 +138,21 @@ public class Database {
         }
     }
     
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////    
     
     /**
-     * Modifica una pizza nella tabella PIZZE
+     * Rimuove una prenotazione
      * 
      * @param p
      * @throws java.sql.SQLException
      */
     
-    public void modPizza(Pizza p) throws SQLException{
+    public void remPrenotazione(Prenotazione p) throws SQLException{
         try{
             dbman.openConnection();
-            //aggiungi pizza
-            dbman.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
-        }finally{
-            dbman.closeConnection();
-        }
-    }
-    
-////////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * Rimuove un utente dalla tabella UTENTI
-     * 
-     * @param u
-     * @throws java.sql.SQLException
-     */
-    
-    public void remUseer(Utente u) throws SQLException{
-        try{
-            dbman.openConnection();
-            //rimuovi utente
-            dbman.remUser(u.getId());
-            u.setId(-1);
+            
+            dbman.remPizza(p.getIdPrenotazione());
+            p.setIdPrenotazione(-1);
         }finally{
             dbman.closeConnection();
         }
@@ -149,111 +176,45 @@ public class Database {
             dbman.closeConnection();
         }
     }
+        
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Modifica una pizza nella tabella PIZZE
+     * 
+     * @param p
+     * @throws java.sql.SQLException
+     */
+    
+    public void modPizza(Pizza p) throws SQLException{
+        try{
+            dbman.openConnection();
+            //aggiungi pizza
+            dbman.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
+        }finally{
+            dbman.closeConnection();
+        }
+    }
     
 ////////////////////////////////////////////////////////////////////////////////
     
     /**
-     * Ritorna una Stringa contenente l'utente
+     * Rimuove una prenotazione
      * 
-     * @param name
-     * 
-     * @return          ritorna una Stringa contenente il risultato della query
+     * @param p
      * @throws java.sql.SQLException
      */
     
-    public Utente getUser(String name) throws SQLException{
-        Utente tmp = null;
+    public void modPrenotazione(Prenotazione p) throws SQLException{
         try{
             dbman.openConnection();
-            ResultSet rs = dbman.getUser(name);
-            if(rs.getRow()>0)
-                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
+
+            dbman.modPrenotazione(p.getIdPrenotazione(), p.getQuantita(), p.getData());
         }finally{
             dbman.closeConnection();
         }
-        return tmp;
-    }
-    
-    public Utente getUser(int id) throws SQLException{
-        Utente tmp = null;  
-        try{
-            dbman.openConnection();
-            ResultSet rs = dbman.getUser(id);
-            if(rs.getRow()>0)
-                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
-        }finally{
-            dbman.closeConnection();
-        }
-        return tmp;
-    }
-    
-    
-    public Pizza getPizza(String name) throws SQLException {
-        Pizza result = null;
-        try{
-            dbman.openConnection();
-            ResultSet rs = dbman.getPizza(name);
-            if(rs.next())
-                result = new Pizza( rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO"));
-        } catch( SQLException e ) {
-            System.err.println(e.getMessage());
-            throw e;
-        }finally{
-            dbman.closeConnection();
-        }
-          
-       
-        return result;
-    }
-////////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * Effettua un controllo sul login dell'utente
-     * 
-     * @param usr       nome dell'utente
-     * @param pwd
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
-     */
-    
-    public Utente checkLogin(String usr, String pwd) throws SQLException{
-        Utente tmp = null;  
-        try{
-            if(dbman.checkLogin(usr,pwd)){
-            dbman.openConnection();
-            ResultSet rs = dbman.getUser(usr);
-            if(rs.getRow()>0)
-                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
-            }
-        }finally{
-            dbman.closeConnection();
-        }
-        return tmp;
     }
 
-////////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * Prende in input il nome della pizza e restituisce l'ID della pizza
-     * 
-     * @param nome      nome della pizza
-     * 
-     * @return          ritorna un valore intero che indica l'ID
-     * @throws java.sql.SQLException
-     */
-    
-    public int getIdPizza(String nome) throws SQLException{
-        int tmp = -1;
-        try{
-            dbman.openConnection();
-            tmp = dbman.getIdPizza(nome);
-        }finally{
-            dbman.closeConnection();
-        }
-        return tmp;
-    }
-    
 ////////////////////////////////////////////////////////////////////////////////
     
     /**
@@ -270,6 +231,28 @@ public class Database {
         try{
             dbman.openConnection();
             tmp = dbman.getIdUser(username);
+        }finally{
+            dbman.closeConnection();
+        }
+        return tmp;
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Prende in input il nome della pizza e restituisce l'ID della pizza
+     * 
+     * @param nome      nome della pizza
+     * 
+     * @return          ritorna un valore intero che indica l'ID
+     * @throws java.sql.SQLException
+     */
+    
+    public int getIdPizza(String nome) throws SQLException{
+        int tmp = -1;
+        try{
+            dbman.openConnection();
+            tmp = dbman.getIdPizza(nome);
         }finally{
             dbman.closeConnection();
         }
@@ -299,68 +282,97 @@ public class Database {
         }
         return tmp;
     }
-    
-////////////////////////////////////////////////////////////////////////////////       
+
+
+////////////////////////////////////////////////////////////////////////////////      
     
     /**
-     * Aggiunge una prenotazione ad un cliente
+     * Ritorna una Stringa contenente l'utente
      * 
-     * @param p
+     * @param name
+     * 
+     * @return          ritorna una Stringa contenente il risultato della query
      * @throws java.sql.SQLException
-     * 
      */
     
-    public void addPrenotazione(Prenotazione p) throws SQLException{
+    public Utente getUser(String name) throws SQLException{
+        Utente tmp = null;
         try{
             dbman.openConnection();
-            //aggiungi pizza
-            int tmp = dbman.addPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getQuantita(), p.getData());
-            if(tmp >= 0){
-                p.setIdPrenotazione(tmp);
+            ResultSet rs = dbman.getUser(name);
+            if(rs.next())
+                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
+        }finally{
+            dbman.closeConnection();
+        }
+        return tmp;
+    }
+    
+    public Utente getUser(int id) throws SQLException{
+        Utente tmp = null;  
+        try{
+            dbman.openConnection();
+            ResultSet rs = dbman.getUser(id);
+            if(rs.next())
+                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
+        }finally{
+            dbman.closeConnection();
+        }
+        return tmp;
+    }
+    
+    
+    public Pizza getPizza(String name) throws SQLException {
+        Pizza result = null;
+        try{
+            dbman.openConnection();
+            ResultSet rs = dbman.getPizza(name);
+            if(rs.next())
+                result = new Pizza( rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO"));
+        }finally{
+            dbman.closeConnection();
+        }
+        return result;
+    }
+    
+    public Prenotazione getPrenotazione(int id) throws SQLException{
+        Prenotazione tmp = null;  
+        try{
+            dbman.openConnection();
+            ResultSet rs = dbman.getPrenotazione(id);
+            if(rs.next())
+                tmp= new Prenotazione(rs.getInt("IDPRENOTAZIONE"), rs.getInt("IDUTENTE"), rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA"));
+        }finally{
+            dbman.closeConnection();
+        }
+        return tmp;
+    }
+////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Effettua un controllo sul login dell'utente
+     * 
+     * @param usr       nome dell'utente
+     * @param pwd
+     * 
+     * @return          ritorna un booleano
+     * @throws java.sql.SQLException
+     */
+    
+    public Utente checkLogin(String usr, String pwd) throws SQLException{
+        Utente tmp = null;  
+        try{
+            if(dbman.checkLogin(usr,pwd)){
+            dbman.openConnection();
+            ResultSet rs = dbman.getUser(usr);
+            if(rs.getRow()>0)
+                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
             }
         }finally{
             dbman.closeConnection();
         }
+        return tmp;
     }
 
-////////////////////////////////////////////////////////////////////////////////    
-    
-    /**
-     * Rimuove una prenotazione
-     * 
-     * @param p
-     * @throws java.sql.SQLException
-     */
-    
-    public void remPrenotazione(Prenotazione p) throws SQLException{
-        try{
-            dbman.openConnection();
-            
-            dbman.remPizza(p.getIdPrenotazione());
-            p.setIdPrenotazione(-1);
-        }finally{
-            dbman.closeConnection();
-        }
-    }
-
-////////////////////////////////////////////////////////////////////////////////    
-    
-    /**
-     * Rimuove una prenotazione
-     * 
-     * @param p
-     * @throws java.sql.SQLException
-     */
-    
-    public void modPrenotazione(Prenotazione p) throws SQLException{
-        try{
-            dbman.openConnection();
-
-            dbman.modPrenotazione(p.getIdPrenotazione(), p.getQuantita(), p.getData());
-        }finally{
-            dbman.closeConnection();
-        }
-    }
-
-////////////////////////////////////////////////////////////////////////////////  
+////////////////////////////////////////////////////////////////////////////////
 }

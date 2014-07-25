@@ -11,7 +11,7 @@ package mvc.model;
  */
 public class Prenotazione {
 
-    private int idPrenotazione;
+    private int idPrenotazione = -1;
     private int idUtente;
     private int idPizza;
     private int quantita;
@@ -28,7 +28,7 @@ public class Prenotazione {
      * @param iData
      * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
-    public Prenotazione(int id, int idU, int idP, int iQuantita, String iData) {
+    protected Prenotazione(int id, int idU, int idP, int iQuantita, String iData) {
         this.idPrenotazione = id;
         this.idUtente = idU;
         this.idPizza = idP;
@@ -36,7 +36,14 @@ public class Prenotazione {
         this.data = iData;
         this.stato = "Ordinata";
     }
-
+    
+    public Prenotazione(int idU, int idP, int iQuantita, String iData) {
+            this.idUtente = idU;
+            this.idPizza = idP;
+            this.quantita = iQuantita;
+            this.data = iData;
+            this.stato = "Ordinata";
+        }   
     //METODI DI GET    
 
     /**
