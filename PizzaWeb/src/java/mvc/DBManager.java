@@ -65,8 +65,13 @@ public final class DBManager {
 ////////////////////////////////////////////////////////////////////////////////      
 //UTILITY DATABASE
     
-    public boolean checkLogin(String usr,String pwd) throws SQLException{
-        return esegui("SELECT * FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'");
+    public int checkLogin(String usr,String pwd){
+        try{
+        ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'");
+        rs.next();
+        int id = rs.getInt("IDUSER");
+        return id;
+        }catch(SQLException e){return -1;}
     }    
     
     public void startDati() throws SQLException { //startDati(String tab, String nome, String mezzo, String fine)

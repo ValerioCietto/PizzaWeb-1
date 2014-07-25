@@ -1,21 +1,22 @@
 package mvc;
 
 import java.io.*;
+import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import mvc.model.Database;
+import mvc.model.*;
 
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
 
 public class Controller extends HttpServlet {
-    
-    Database db;
-    public Controller() {
+    private final Model model;
+    public Controller() throws SQLException {
         super();
-        db = new Database();
+        model = new Model();       
+        
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
@@ -29,10 +30,10 @@ public class Controller extends HttpServlet {
                     switchPage(request);
                     break;
                 case "login":
-                    Model.login(request);
+                    login(request);
                     break;
                 case "logout":
-                    Model.logout(request);
+                    logout(request);
                     break;
                 case "addPizza":
                     Model.addPizza(request);
@@ -78,6 +79,9 @@ public class Controller extends HttpServlet {
         aggPage(req);
     }
     
+    //visualizza il catalogo pizze
+    
+    
     public void aggPage(HttpServletRequest req){
         String ruolo=(String)(req.getSession()).getAttribute("ruolo");
         String login=(String)(req.getSession()).getAttribute("username");
@@ -93,6 +97,26 @@ public class Controller extends HttpServlet {
             //
             else req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ"));
         }
+    }
+    
+    /////////////////////////INIZIO METODI DAL MODEL/////////////////////////////////////
+    
+    
+    
+      public void login(HttpServletRequest req) throws SQLException {
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        model.loginModel(username, password, s);
+    }
+    
+    
+    
+        public void logout(HttpServletRequest req) {
+        HttpSession s = req.getSession();
+        s.invalidate();
+        s = req.getSession();
+        s.setAttribute("message", "logout effettuato");
     }
     
     

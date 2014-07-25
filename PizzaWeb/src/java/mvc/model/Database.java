@@ -1,17 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mvc.model;
 import java.sql.*;
 import mvc.*;
-
-/**
- *
- * @author jorkut
- */
 
 public class Database {
     
@@ -21,7 +10,7 @@ public class Database {
     public Database() throws SQLException{
         dbman = new DBManager();
     }
-    ////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Inserisce un utente nella tabella UTENTI
@@ -361,10 +350,10 @@ public class Database {
     public Utente checkLogin(String usr, String pwd) throws SQLException{
         Utente tmp = null;  
         try{
-            if(dbman.checkLogin(usr,pwd)){
+            if(dbman.checkLogin(usr,pwd) > 0){
             dbman.openConnection();
             ResultSet rs = dbman.getUser(usr);
-            if(rs.getRow()>0)
+            if(rs.next())
                 tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
             }
         }finally{

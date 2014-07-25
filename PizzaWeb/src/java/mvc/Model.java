@@ -2,11 +2,18 @@ package mvc;
 
 import mvc.model.*;
 
-import java.util.ArrayList;
 import javax.servlet.http.*;
-import java.lang.*;
+import java.sql.SQLException;
 
 public class Model {
+    private Database db;
+    private Pizza pizza;
+    private Utente utente;
+    private Prenotazione prenotazione;
+    
+    public Model() throws SQLException{
+        db = new Database();
+    }
 
     /**
      * Estrapola dalla request gli input password e utente Controlla che non
@@ -18,17 +25,16 @@ public class Model {
      * @param req
      */
     // FACOLTATIVO : GESTIRE LOGIN CON POST
-    public static void login(HttpServletRequest req) {
-        HttpSession s = req.getSession();
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+  
+    
+    
+    public void loginModel(String username, String password, HttpSession s) throws SQLException{
         if (username != null && password != null && !username.equals("") && !password.equals("")) {
-            if (DBManager.controllaLogin(username, password)) {
-                Utente login = new Utente(DBManager.getLogin(username));
-                //if(login.getNome() != null && !login.getNome().equals("")){
-                s.setAttribute("username", login.getNome());
+            Utente login = db.checkLogin(username, password);
+            if (login!=null) {
+                s.setAttribute("username", login.getUsername());
                 s.setAttribute("permission", login.getPermission());
-                s.setAttribute("message", "login effettuato, benvenuto " + login.getNome() + "!");
+                s.setAttribute("message", "login effettuato, benvenuto " + login.getUsername() + "!");
             } else {
                 s.setAttribute("message", "login errato, sicuro di esserti registrato?");
             }
@@ -42,12 +48,7 @@ public class Model {
      *
      * @param req
      */
-    public static void logout(HttpServletRequest req) {
-        HttpSession s = req.getSession();
-        s.invalidate();
-        s = req.getSession();
-        s.setAttribute("message", "logout effettuato");
-    }
+
 
     /**
      * Estrapola il nome della pizza da eliminare Richiama il DB per rimuovare
@@ -55,9 +56,14 @@ public class Model {
      *
      * @param req
      */
-    public static void remPizza(HttpServletRequest req) {
+    public void remPizza(HttpServletRequest req) throws SQLException{
         String pizza = req.getParameter("pizza");
-        if (!DBManager.remPizza(pizza)) {
+        Pizza tmp = db.getPizza(pizza);
+        int idpizza= tmp.getId();
+        try {
+        db.remPizza(tmp);
+            
+        } catch (SQLException e) {
             (req.getSession()).setAttribute("message", "Problema sql");
         }
     }
@@ -70,25 +76,27 @@ public class Model {
      *
      * @param req
      */
-    public static void addPizza(HttpServletRequest req) {
+    public void addPizza(HttpServletRequest req) {
         HttpSession s = req.getSession();
         if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("")) {
             String n = req.getParameter("pizza");
             String i = req.getParameter("ingredienti");
             Double p = Double.parseDouble(req.getParameter("prezzo"));
-
-            if (DBManager.addPizza(n, i, p)) {
+            
+            pizza = new Pizza (n, i, p);
+            
+            try {
+                db.addPizza(pizza);
                 s.setAttribute("message", "aggiunta pizza " + n);
-                Pizza temp = new Pizza(DBManager.getIdPizza(n), n, i, p);
-            } else {
-                s.setAttribute("message", "Problema sql");
-            }
-        } else {
+            } catch (SQLException e){s.setAttribute("message", "Problema sql");}
+                
+        }
+        else {
             s.setAttribute("message", "inserisci un nome, gli ingredienti e il prezzo.");
         }
     }
 
-    static void modPizza(HttpServletRequest req) {
+    void modPizza(HttpServletRequest req) {
 
         HttpSession s = req.getSession();
         if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("")) {
@@ -96,31 +104,27 @@ public class Model {
             String i = req.getParameter("ingredienti");
             Double p = Double.parseDouble(req.getParameter("prezzo"));
 
-            if (DBManager.modPizza(n, i, p)) {
+            pizza = new Pizza (n, i, p);
+            try{
+            db.modPizza(pizza);
                 s.setAttribute("message", "Pizza modificata");
-                Pizza temp = new Pizza(DBManager.getIdPizza(n), n, i, p);
-            } else {
-                s.setAttribute("message", "Problema sql");
-            }
+               
+            } catch (SQLException e){s.setAttribute("message", "Problema sql");}
         } else {
             s.setAttribute("message", "inserisci un nome, gli ingredienti e il prezzo.");
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    static void addUser(HttpServletRequest req) {
+    void addUser(HttpServletRequest req) throws SQLException {
         String n = req.getParameter("username");
         String p = req.getParameter("pwd1");
         String ruolo = "user";
-        DBManager.addLogin(n, p, ruolo); //To change body of generated methods, choose Tools | Templates.
+        utente = new Utente(n, p, ruolo);
+        db.addUser(utente); 
     }
 
-    static boolean checkLogin(String username) {
-        if (DBManager.getIdUser(username) > 0) {
-            return false;
-        }
-        return true;
-    }
+   
 
     /**
      * Estrapola il nome della pizza e la quantità, il nome del cliente e l'ora
@@ -131,28 +135,34 @@ public class Model {
      *
      * @param req
      */
-    static void addPren(HttpServletRequest req) {
+    void addPren(HttpServletRequest req) throws SQLException {
         String pizza = req.getParameter("pizza");
         String user = (String) req.getSession().getAttribute("username");
-        int quantità = (Integer.parseInt(req.getParameter("quantita"))); //questo gli riempie solo un numero
+        int quantita = (Integer.parseInt(req.getParameter("quantita"))); //questo gli riempie solo un numero
         String data = req.getParameter("data");
+       
+        Pizza tmp = db.getPizza(pizza);
+        int idPizza= tmp.getId();
+        int idUser = db.getIdUser(user);
+        prenotazione= new Prenotazione(idUser, idPizza, quantita,  data);
 
-        int idUser = DBManager.getIdUser(user);
-        int idPizza = DBManager.getIdPizza(pizza);
-
-        DBManager.addPrenotazione(idUser, idPizza, quantità, data);
+        db.addPrenotazione(prenotazione);
     }
 
-    static void remPren(HttpServletRequest req) {
+    void remPren(HttpServletRequest req) throws SQLException {
 
         String user = req.getParameter("nomecliente");
         String pizza = req.getParameter("nomepizza");
         String data = req.getParameter("data");
+        
+        
 
-        int idUser = DBManager.getIdUser(user);
-        int idPizza = DBManager.getIdPizza(pizza);
-        if (DBManager.getIdPrenotazione(idUser, idPizza, data) > 0) {
-            DBManager.remPrenotazione(idUser, idPizza, data);
+        int idUser = db.getIdUser(user);
+        int idPizza = db.getIdPizza(pizza);
+        int idPren = db.getIdPrenotazione(idUser, idPizza, data);
+        if (idPren > 0) {
+            Prenotazione tmp = db.getPrenotazione(idPren);
+            db.remPrenotazione(tmp);
         }
     }
 
