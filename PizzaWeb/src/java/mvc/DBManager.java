@@ -13,14 +13,15 @@ public final class DBManager {
     
     /**
      * Inizializza il Database
+     * @throws java.sql.SQLException
      */
     
-    public DBManager(){
-       try {
-            // registrazione driver JDBC da utilizzare
-            DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
-            creaTabelle();
-       } catch (SQLException e) {System.out.println(e.getMessage());}
+    public DBManager() throws SQLException{
+        // registrazione driver JDBC da utilizzare
+        DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
+        openConnection();
+        creaTabelle();
+        closeConnection();
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -28,54 +29,36 @@ public final class DBManager {
     /**
      * Genera il database creando tre tabelle:
      * UTENTI, PIZZE e PRENOTAZIONI
+     * @throws java.sql.SQLException
      */
     
-    public void creaTabelle(){
-        try {
-        conn = DriverManager.getConnection(ur,us,p);
-            try{ 
-                st = conn.createStatement();
-                try{
-                    drop();
-                }catch(SQLException e){System.out.println(e.getMessage());}
-                try {
-                    st.executeUpdate(   "CREATE TABLE UTENTI(" +
-                            "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                            "USERNAME       VARCHAR(30) NOT NULL UNIQUE," +
-                            "PASSWORD       VARCHAR(30) NOT NULL," +
-                            "PERMISSION     VARCHAR(30) NOT NULL," +
-                            "PRIMARY KEY(IDUSER))");
-                    
-                } catch (SQLException e){System.out.println(e.getMessage());}
-                try {
-                    st.executeUpdate(   "CREATE TABLE PIZZE(" +
-                            
-                            "IDPIZZA        INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                            "NOME           VARCHAR(30) NOT NULL UNIQUE," +
-                            "INGREDIENTI    VARCHAR(65) NOT NULL," +
-                            "PREZZO         DOUBLE      NOT NULL," +
-                            "PRIMARY KEY(IDPIZZA))");
-                    
-                } catch (SQLException e){System.out.println(e.getMessage());}
-                try {
-                    st.executeUpdate(   "CREATE TABLE PRENOTAZIONI(" +
-                            
-                            "IDPRENOTAZIONE INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                            "IDUTENTE       INT         NOT NULL    ," +
-                            "IDPIZZA        INT         NOT NULL    ," +
-                            "QUANTITA       INT         NOT NULL    ," +
-                            "DATA           VARCHAR(30) NOT NULL    ," +
-                            "STATO          VARCHAR(30) NOT NULL    ," +
-                            "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
-                            "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER),"+
-                            "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA))");
-                    
-                } catch (SQLException e){System.out.println(e.getMessage());}
-                
-            } catch (SQLException e){System.out.println(e.getMessage());}
-            finally{st.close();}
-        } catch (SQLException e){ System.out.println(e.getMessage());}
-        finally{ try{conn.close();}catch (SQLException e){ System.out.println(e.getMessage());}}
+    public void creaTabelle() throws SQLException{
+        st.executeUpdate(   "CREATE TABLE UTENTI(" +
+                "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                "USERNAME       VARCHAR(30) NOT NULL UNIQUE," +
+                "PASSWORD       VARCHAR(30) NOT NULL," +
+                "PERMISSION     VARCHAR(30) NOT NULL," +
+                "PRIMARY KEY(IDUSER))");
+
+        st.executeUpdate(   "CREATE TABLE PIZZE(" +
+
+                "IDPIZZA        INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                "NOME           VARCHAR(30) NOT NULL UNIQUE," +
+                "INGREDIENTI    VARCHAR(65) NOT NULL," +
+                "PREZZO         DOUBLE      NOT NULL," +
+                "PRIMARY KEY(IDPIZZA))");
+
+        st.executeUpdate(   "CREATE TABLE PRENOTAZIONI(" +
+                "IDPRENOTAZIONE INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+                "IDUTENTE       INT         NOT NULL    ," +
+                "IDPIZZA        INT         NOT NULL    ," +
+                "QUANTITA       INT         NOT NULL    ," +
+                "DATA           VARCHAR(30) NOT NULL    ," +
+                "STATO          VARCHAR(30) NOT NULL    ," +
+                "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
+                "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER),"+
+                "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA))");
+ 
     }
     
 ////////////////////////////////////////////////////////////////////////////////
