@@ -16,16 +16,16 @@ public class Prenotazione {
     private int idPizza;
     private int quantita;
     private String data;
-    private String stato;
+    private final String stato;
 
     /**
      * Crea la prenotazione
      *
-     * @param idUtente
-     * @param iPizza
-     * @param quantita
-     * @param data
-     *
+     * @param id
+     * @param idU
+     * @param idP
+     * @param iQuantita
+     * @param iData
      * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
     public Prenotazione(int id, int idU, int idP, int iQuantita, String iData) {
@@ -37,10 +37,6 @@ public class Prenotazione {
         this.stato = "Ordinata";
     }
 
-    @Override
-    public String toString() {
-        return "" + this.idPrenotazione + "-" + this.idUtente + "-" + this.idPizza + "-" + this.quantita + "-" + this.data + "-" + this.stato;
-    }
     //METODI DI GET    
 
     /**
@@ -142,5 +138,10 @@ public class Prenotazione {
      */
     public void setData(String d) {
         this.data = d;
+    }
+    
+    @Override
+    public String toString() {
+        return "Prenotazione { id : '"+this.idPrenotazione+"', idUser : '"+this.idUtente+"', idPizza : '"+this.idPizza+"', quantità : "+this.quantita+"', data : '"+this.data+"', stato : '"+this.stato+" }";
     }
 }

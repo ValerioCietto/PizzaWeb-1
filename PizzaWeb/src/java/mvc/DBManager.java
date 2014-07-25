@@ -130,7 +130,7 @@ public final class DBManager {
         esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')");
         ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+nome+"'");
         rs.next();
-        id = rs.getInt(1);
+        id = rs.getInt("IDUSER");
         return id;
     }
     
@@ -294,9 +294,9 @@ public final class DBManager {
         try{
             ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+username+"'");
             rs.next();
-            int id = rs.getInt(1);
+            int id = rs.getInt("IDUSER");
             return id;
-        }catch(SQLException e){System.out.println(e.getMessage());return -1;}
+        }catch(SQLException e){return -1;}
         
     }
     
@@ -308,16 +308,15 @@ public final class DBManager {
      * @param nome      nome della pizza
      * 
      * @return          ritorna un valore intero che indica l'ID
-     * @throws java.sql.SQLException
      */
     
-    public int getIdPizza(String nome) throws SQLException{
+    public int getIdPizza(String nome){
         try{
         ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'");
         rs.next();
         int id = rs.getInt("IDPIZZA");
         return id;
-        }catch(SQLException e){System.out.println(e.getMessage());return -1;}
+        }catch(SQLException e){return -1;}
     }
     
 ////////////////////////////////////////////////////////////////////////////////    
@@ -338,7 +337,7 @@ public final class DBManager {
             rs.next();
             int id = rs.getInt(1);
             return id;
-        }catch(SQLException e){System.out.println(e.getMessage());return -1;}
+        }catch(SQLException e){return -1;}
     }
 
     

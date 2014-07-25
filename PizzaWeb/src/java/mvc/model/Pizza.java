@@ -115,5 +115,10 @@ public class Pizza {
     public void setPrezzo(double newPrezzo) {
         this.prezzo = newPrezzo;
     }
+    
+    @Override
+    public String toString() {
+        return "Pizza { id : '"+this.idPizza+"', nome : '"+this.nome+"', ingredienti : '"+this.ingredienti+"', prezzo : "+this.prezzo+" }";
+    }
 
 }

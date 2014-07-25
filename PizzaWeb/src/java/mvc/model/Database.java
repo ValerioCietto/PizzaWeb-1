@@ -18,11 +18,36 @@ public class Database {
     private final DBManager dbman;
     
     
-    public Database(){
+    public Database() throws SQLException{
         dbman = new DBManager();
     }
     ////////////////////////////////////////////////////////////////////////////////
     
+    /**
+     * Inserisce un utente nella tabella UTENTI
+     * 
+     * @param u
+     * @throws java.sql.SQLException
+     */
+    
+    public void addUser(Utente u) throws SQLException{
+        try{
+            dbman.openConnection();
+            if(dbman.getIdUser(u.getUsername()) < 0){
+                //aggiungi pizza
+                int tmp = dbman.addUser(u.getUsername(), u.getPassword(), u.getPermission());
+                if(tmp >= 0){
+                    u.setId(tmp);
+                }
+            }
+            else
+                System.out.println("Username non valido");
+        }finally{
+            dbman.closeConnection();
+        }
+    }
+    
+////////////////////////////////////////////////////////////////////////////////    
     /**
      * Aggiunge una pizza nella tabella PIZZE del database
      * 
@@ -33,11 +58,15 @@ public class Database {
     public void addPizza(Pizza p) throws SQLException {
         try{
             dbman.openConnection();
-            //aggiungi pizza
-            int tmp = dbman.addPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
-            if(tmp >= 0){
-                p.setId(tmp);
+            if(dbman.getIdPizza(p.getNome()) < 0){
+                //aggiungi pizza
+                int tmp = dbman.addPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
+                if(tmp >= 0){
+                    p.setId(tmp);
+                }
             }
+            else
+                System.out.println("Pizza già presente");
         }finally{
             dbman.closeConnection();
         }
@@ -77,28 +106,6 @@ public class Database {
             dbman.openConnection();
             //aggiungi pizza
             dbman.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
-        }finally{
-            dbman.closeConnection();
-        }
-    }
-    
-////////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * Inserisce un utente nella tabella UTENTI
-     * 
-     * @param u
-     * @throws java.sql.SQLException
-     */
-    
-    public void addUser(Utente u) throws SQLException{
-        try{
-            dbman.openConnection();
-            //aggiungi pizza
-            int tmp = dbman.addUser(u.getUsername(), u.getPassword(), u.getPermission());
-            if(tmp >= 0){
-                u.setId(tmp);
-            }
         }finally{
             dbman.closeConnection();
         }
@@ -180,6 +187,24 @@ public class Database {
         return tmp;
     }
     
+    
+    public Pizza getPizza(String name) throws SQLException {
+        Pizza result = null;
+        try{
+            dbman.openConnection();
+            ResultSet rs = dbman.getPizza(name);
+            if(rs.next())
+                result = new Pizza( rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO"));
+        } catch( SQLException e ) {
+            System.err.println(e.getMessage());
+            throw e;
+        }finally{
+            dbman.closeConnection();
+        }
+          
+       
+        return result;
+    }
 ////////////////////////////////////////////////////////////////////////////////
     
     /**

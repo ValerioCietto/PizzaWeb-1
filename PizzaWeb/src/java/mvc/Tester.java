@@ -6,19 +6,27 @@
 
 package mvc;
 
+import static java.lang.System.out;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import mvc.model.Database;
+import mvc.model.Pizza;
+import mvc.model.Utente;
 
 /**
  *
  * @author mirko
  */
+
 public class Tester {
     public static void main(String[]args) throws SQLException{
         DBManager dbman=new DBManager();
-        testUser(dbman,true,true,true,true);
+        //testDB(dbman,true,true,true,true);
+        
+        testObj();
     }
-    public static void testUser(DBManager dbman,boolean add,boolean get,boolean mod, boolean rem) throws SQLException{
+    
+    public static void testDB(DBManager dbman,boolean add,boolean get,boolean mod, boolean rem) throws SQLException{
         String user="user";
         String pwd="pwd";
         String ruolo="ruolo";
@@ -35,16 +43,11 @@ public class Tester {
         boolean outB;
         ResultSet rs;
         
-        
-        
-       
-        
         if(add){
             
             //////////////////////////////////////////////////////////////////////////////
             //UTENTI
             
-
             //test addUser
             dbman.openConnection();
             outI=dbman.addUser(user,pwd,ruolo);
@@ -342,6 +345,26 @@ public class Tester {
             System.out.println("KO prenotazione");
         }
         //////////////////////////////////////////////////////////////////////////////        
+    }
+    
+    public static void testObj() throws SQLException {
+        Database db = new Database();
+        
+        db.addUser(new Utente("username", "password", "user"));
+        db.addUser(new Utente("username", "password", "user"));
+        Utente ut = db.getUser("username");
+        System.out.println(ut);
+        
+        ut = db.getUser("puppa");
+        System.out.println(ut);
+        
+        db.addPizza( new Pizza("margherita", "mozzarella, basilico, origano", 12.5d) );
+        db.addPizza( new Pizza("margherita", "mozzarella, basilico, origano", 12.5d) );
+        Pizza pz = db.getPizza("margherita");
+        System.out.println(pz);
+        
+        pz = db.getPizza("napoli");
+        System.out.println(pz);
     }
     
     public static String stampaUtente(ResultSet rs) throws SQLException{

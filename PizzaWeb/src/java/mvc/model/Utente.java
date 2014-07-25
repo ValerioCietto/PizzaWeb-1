@@ -113,4 +113,9 @@ public class Utente {
     public void setPermission(String newRuolo) {
         this.permission = newRuolo;
     }
+    
+    @Override
+    public String toString() {
+        return "Utente { id : '"+this.idUtente+"', username : '"+this.username+"', password : '"+this.pwd+"', permission : "+this.permission+" }";
+    }
 }
