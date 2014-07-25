@@ -57,8 +57,8 @@ public final class DBManager {
                 "DATA           VARCHAR(30) NOT NULL    ," +
                 "STATO          VARCHAR(30) NOT NULL    ," +
                 "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
-                "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER),"+
-                "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA))");
+                "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER) ON DELETE CASCADE,"+
+                "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA) ON DELETE CASCADE)");
  
     }
     
@@ -193,7 +193,7 @@ public final class DBManager {
      */
     
     public boolean remUser(int id) throws SQLException{
-        return esegui("DELETE FROM UTENTI WHERE (ID='"+id+"')");
+        return esegui("DELETE FROM UTENTI WHERE (IDUSER="+id+")");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +208,7 @@ public final class DBManager {
      */
     
     public boolean remPizza(int id) throws SQLException{
-        return esegui("DELETE FROM PIZZE WHERE (ID='"+id+"')");
+        return esegui("DELETE FROM PIZZE WHERE (IDPIZZA="+id+")");
     }
     
 ////////////////////////////////////////////////////////////////////////////////    
@@ -223,7 +223,7 @@ public final class DBManager {
      */
     
     public boolean remPrenotazione(int idP) throws SQLException{
-        return esegui("DELETE FROM PRENOTAZIONE WHERE (IDPRENOTAZIONE='"+idP+"')");
+        return esegui("DELETE FROM PRENOTAZIONI WHERE (IDPRENOTAZIONE="+idP+")");
     }
     
     

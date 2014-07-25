@@ -150,8 +150,7 @@ public class Database {
     public void remPrenotazione(Prenotazione p) throws SQLException{
         try{
             dbman.openConnection();
-            
-            dbman.remPizza(p.getIdPrenotazione());
+            dbman.remPrenotazione(p.getIdPrenotazione());
             p.setIdPrenotazione(-1);
         }finally{
             dbman.closeConnection();

@@ -103,7 +103,7 @@ public class Pizza {
      *
      * @param newIngredienti
      */
-    public void setIngredinti(String newIngredienti) {
+    public void setIngredienti(String newIngredienti) {
         this.ingredienti = newIngredienti;
     }
 

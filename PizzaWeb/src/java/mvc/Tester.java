@@ -369,6 +369,30 @@ public class Tester {
         
         //pr = db.getPrenotazione(5);
         //System.out.println(pr);
+        
+        pr.setQuantita(90);
+        pz.setIngredienti("caccadura");
+        ut.setPwd("gnagna");
+        
+        db.modPrenotazione(pr);
+        db.modPizza(pz);
+        db.modUser(ut);
+        
+        System.out.println("\n\n");
+        System.out.println(ut);
+        System.out.println(pz);
+        System.out.println(pr);
+        
+        db.remPrenotazione(pr);
+        db.remPizza(pz);
+        db.remUser(ut);
+        
+        System.out.println("\n\n");
+        System.out.println(ut);
+        System.out.println(pz);
+        System.out.println(pr);
+        
+        
     }
     
     public static String stampaUtente(ResultSet rs) throws SQLException{
