@@ -175,33 +175,122 @@ public class Tester {
             
             //test getUser(int)
             dbman.openConnection();
-            rs=dbman.getUser(1);
-            outS=stampaUtente(rs);
+            rs = dbman.getUser(1);
+            outS = stampaUtente(rs);
             System.out.println("test getIdUser(int) = "+outS);
             dbman.closeConnection();
             
             //test getUser(int) con id inesistente
             try{
                 dbman.openConnection();
-                rs=dbman.getUser(99999999);
-                outS=stampaUtente(rs);
+                rs = dbman.getUser(99999999);
+                outS = stampaUtente(rs);
                 System.out.println("test getIdUser(int) con id inesistente = "+outS);
                 dbman.closeConnection();
             }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
             
             //test getUser(String)
             dbman.openConnection();
-            rs=dbman.getUser(user);
-            outS=stampaUtente(rs);
+            rs = dbman.getUser(user);
+            outS = stampaUtente(rs);
             System.out.println("test getUser(String) = "+outS);
             dbman.closeConnection();
             
             //test getUser(String) con id inesistente
             try{
                 dbman.openConnection();
-                rs=dbman.getUser(user+"gnagna");
-                outS=stampaUtente(rs);
+                rs = dbman.getUser(user+"gnagna");
+                outS = stampaUtente(rs);
                 System.out.println("test getUser(String) con user inesistente = "+outS);
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
+            
+            
+            //////GET PIZZA /////////
+            
+            //test getIdpizza(String)
+            dbman.openConnection();
+            outI=dbman.getIdPizza(pizza);
+            System.out.println("test getIdPizza(>0) = "+outI);
+            dbman.closeConnection();
+            
+             //test getIdpizza(String)  inesistente
+            try{
+                dbman.openConnection();
+                outI = dbman.getIdPizza(pizza+"k");
+                System.out.println("test getIdpizza con pizza inesistente(-1) = "+outI);
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: ID di pizza inesistente!!!!!!!");}
+            
+            
+            //test getPizza(int)
+            dbman.openConnection();
+            rs = dbman.getPizza(1);
+            outS = stampaPizza(rs);
+            System.out.println("test getPizza(int) = "+outS);
+            dbman.closeConnection();
+            
+            //test getPizza(int) con id inesistente
+            try{
+                dbman.openConnection();
+                rs = dbman.getPizza(99999999);
+                outS = stampaPizza(rs);
+                System.out.println("test getPizza(int) con id inesistente = "+outS);
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
+            
+            //test getPizza(String)
+            dbman.openConnection();
+            rs = dbman.getPizza(pizza);
+            outS = stampaPizza(rs);
+            System.out.println("test getPizza(String) = "+outS);
+            dbman.closeConnection();
+            
+            //test getPizza(String) con id inesistente
+            try{
+                dbman.openConnection();
+                rs = dbman.getPizza(pizza+"gnagna");
+                outS = stampaPizza(rs);
+                System.out.println("test getPizza(String) con pizza inesistente = "+outS);
+                dbman.closeConnection();
+            }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
+            
+            
+            ////GET PRENOTAZIONE//////////////////////////////////////////////////////
+            
+            int a,b;
+             //test getIdprenotazione(int, int, String)
+            dbman.openConnection();
+            a = dbman.getIdUser(user); 
+            b = dbman.getIdPizza(pizza);
+            outI = dbman.getIdPrenotazione(a, b, data);
+            System.out.println("test getIdPrenotazione(>0) = "+outI);
+            dbman.closeConnection();
+            
+            //test getIdprenotazione(int inesistente, int inesistente, String)
+            try{
+            dbman.openConnection();
+            a = dbman.getIdUser(user+77); 
+            b = dbman.getIdPizza(pizza + 33);
+            outI = dbman.getIdPrenotazione(a, b, data);
+            System.out.println("test getIdPrenotazione(>0) = "+outI);
+            dbman.closeConnection();
+             }catch(SQLException e){System.out.println("ERRORE: user e/o pizza inesistente!!!!!!!");}
+            
+            
+            //test getPrenotazione(int)
+            dbman.openConnection();
+            rs = dbman.getPrenotazione(1);
+            outS = stampaPrenotazione(rs);
+            System.out.println("test getPrenotazione(int) = "+outS);
+            dbman.closeConnection();
+            
+            //test getPrenotazione(int) con id inesistente
+            try{
+                dbman.openConnection();
+                rs = dbman.getPrenotazione(99999999);
+                outS = stampaPrenotazione(rs);
+                System.out.println("test getPrenotazione(int) con id inesistente = "+outS);
                 dbman.closeConnection();
             }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
             
@@ -222,15 +311,57 @@ public class Tester {
             dbman.openConnection();
             dbman.modUser(user+"papapa",pwd+"mod"+user,ruolo+"mod"+user);
             dbman.closeConnection();
-            System.out.println("KO");
-
+            System.out.println("KO utente");
+            
+            ///////////////test pizza///////////////////////
+            
+            //test modPizza
+            dbman.openConnection();
+            dbman.modPizza(pizza,ingr+ "pippa", prezzo+21);
+            System.out.println("OK");
+            dbman.closeConnection();
+            
+            //test modUser con user inesistente
+            dbman.openConnection();
+            dbman.modPizza(pizza+"ciccio",ingr+ "pippa", prezzo+21);
+            dbman.closeConnection();
+            System.out.println("KO pizza");
+            
+            ///////////////test prenotazione///////////////////////
+            
+            //test modPrenotazione
+            dbman.openConnection();
+            dbman.modPrenotazione(1, quantita+9, data+"MOD");
+            System.out.println("OK");
+            dbman.closeConnection();
+            
+            //test modPrenotazione con user inesistente
+            dbman.openConnection();
+            dbman.modPrenotazione(999999, quantita+9999, data+"MOD");
+            dbman.closeConnection();
+            System.out.println("KO prenotazione");
         }
-        
+        //////////////////////////////////////////////////////////////////////////////        
     }
+    
     public static String stampaUtente(ResultSet rs) throws SQLException{
         String out="";
         while(rs.next())
-            out+="ID: "+rs.getInt("IDUSER")+";\t Username: "+rs.getString("USERNAME")+"\t Password: "+rs.getString("PASSWORD")+";\t Permission: "+rs.getString("PERMISSION")+";";
+            out+="ID: "+rs.getInt("IDUSER")+";\t Username: "+rs.getString("USERNAME")+";\t Password: "+rs.getString("PASSWORD")+";\t Permission: "+rs.getString("PERMISSION")+";";
+        return out;
+    }
+    
+    public static String stampaPizza(ResultSet rs) throws SQLException{
+        String out="";
+        while(rs.next())
+            out+="ID: "+rs.getInt("IDPIZZA")+";\t Nome: "+rs.getString("NOME")+";\t Ingredienti: "+rs.getString("INGREDIENTI")+";\t Prezzo: "+rs.getString("PREZZO")+";";
+        return out;
+    }
+    
+    public static String stampaPrenotazione(ResultSet rs) throws SQLException{
+        String out="";
+        while(rs.next())
+            out+="ID: "+rs.getInt("IDPRENOTAZIONE")+";\t IDUser: "+rs.getString("IDUTENTE")+";\t IDPizzA: "+rs.getString("IDPIZZA")+";\t Quantità: "+rs.getString("QUANTITA")+";\t Data"+rs.getString("DATA")+";";
         return out;
     }
 }
