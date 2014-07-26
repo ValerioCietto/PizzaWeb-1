@@ -238,7 +238,7 @@ public final class Database {
     
     
 ////////////////////////////////////////////////////////////////////////////////
-// METODI DI RIMOZIONE (OK)
+// METODI DI ELIMINAZIONE (OK)
     
     /**
      * Rimuove un utente dalla tabella UTENTI e dalla lista
