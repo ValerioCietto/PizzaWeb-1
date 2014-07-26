@@ -7,17 +7,24 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-import mvc.model.*;
 
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
 
 public class Controller extends HttpServlet {
+    
     private final Model model;
+
+////////////////////////////////////////////////////////////////////////////////
+// COSTRUTTORE
+    
     public Controller() throws SQLException {
         super();
         model = new Model();       
         
     }
+
+////////////////////////////////////////////////////////////////////////////////
+// GESTIONE DELLE PAGINE
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
@@ -78,47 +85,48 @@ public class Controller extends HttpServlet {
             req.getSession().setAttribute("view","");
         aggPage(req);
     }
-    
-    //visualizza il catalogo pizze
-    
-    
+   
     public void aggPage(HttpServletRequest req){
         String ruolo=(String)(req.getSession()).getAttribute("ruolo");
         String login=(String)(req.getSession()).getAttribute("username");
         String page=(String)(req.getSession()).getAttribute("view");
         if(page.equals("catalogo"))
-            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PIZZE"));
+            System.out.println();
         else if(page.equals("loginManager"))
-            req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM UTENTI"));
+            System.out.println();
         else if(page.equals("prenotazioni")){
-            //
-            if (ruolo.equals("user"))
-                req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ WHERE CLIENTE= '"+login+ "'"));
-            //
-            else req.getSession().setAttribute("dati",DBManager.query("SELECT * FROM PRENOTAZ"));
+
+        if (ruolo.equals("user"))
+            System.out.println();
+        else
+            System.out.println();
         }
     }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// METODI DEL MODEL    
     
-    /////////////////////////INIZIO METODI DAL MODEL/////////////////////////////////////
-    
-    
-    
-      public void login(HttpServletRequest req) throws SQLException {
+    public void login(HttpServletRequest req) throws SQLException {
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         model.loginModel(username, password, s);
     }
-    
-    
-    
-        public void logout(HttpServletRequest req) {
+
+    public void logout(HttpServletRequest req) {
         HttpSession s = req.getSession();
         s.invalidate();
         s = req.getSession();
         s.setAttribute("message", "logout effettuato");
     }
+
     
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// NON MODIFICARE    
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
    /**

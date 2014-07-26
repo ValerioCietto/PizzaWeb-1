@@ -6,9 +6,12 @@
 
 package mvc;
 
+import components.Prenotazione;
+import components.Pizza;
+import components.Utente;
+import components.Database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import mvc.model.*;
 /**
  *
  * @author mirko
