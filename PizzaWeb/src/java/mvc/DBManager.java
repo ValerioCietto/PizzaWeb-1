@@ -4,8 +4,8 @@ import java.sql.*;
 
 public final class DBManager {
     static final String ur = "jdbc:derby://localhost:1527/PizzaWeb";
-    static final String us= "pizzeria";
-    static final String p= "pizzeria";
+    static final String us = "pizzeria";
+    static final String p = "pizzeria";
     Connection conn;
     Statement st;
 
@@ -20,8 +20,10 @@ public final class DBManager {
         // registrazione driver JDBC da utilizzare
         DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
         openConnection();
-        if(!checkDatabase())
+        if(!checkDatabase()){
             creaTabelle();
+            inizializza();
+        }
         closeConnection();
     }
     
@@ -36,16 +38,16 @@ public final class DBManager {
     public void creaTabelle() throws SQLException{
         st.execute(   "CREATE TABLE UTENTI(" +
                 "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                "USERNAME       VARCHAR(30) NOT NULL UNIQUE," +
-                "PASSWORD       VARCHAR(30) NOT NULL," +
-                "PERMISSION     VARCHAR(30) NOT NULL," +
+                "USERNAME       VARCHAR(33) NOT NULL UNIQUE," +
+                "PASSWORD       VARCHAR(33) NOT NULL," +
+                "PERMISSION     VARCHAR(5) NOT NULL," +
                 "PRIMARY KEY(IDUSER))");
 
         st.execute(   "CREATE TABLE PIZZE(" +
 
                 "IDPIZZA        INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-                "NOME           VARCHAR(30) NOT NULL UNIQUE," +
-                "INGREDIENTI    VARCHAR(65) NOT NULL," +
+                "NOME           VARCHAR(33) NOT NULL UNIQUE," +
+                "INGREDIENTI    VARCHAR(99) NOT NULL," +
                 "PREZZO         DOUBLE      NOT NULL," +
                 "PRIMARY KEY(IDPIZZA))");
 
@@ -54,11 +56,27 @@ public final class DBManager {
                 "IDUTENTE       INT         NOT NULL    ," +
                 "IDPIZZA        INT         NOT NULL    ," +
                 "QUANTITA       INT         NOT NULL    ," +
-                "DATA           VARCHAR(30) NOT NULL    ," +
-                "STATO          VARCHAR(30) NOT NULL    ," +
+                "DATA           VARCHAR(8) NOT NULL    ," +
+                "STATO          VARCHAR(10) NOT NULL    ," +
                 "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
                 "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER) ON DELETE CASCADE,"+
                 "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA) ON DELETE CASCADE)");
+    }
+    
+    /**
+     * Inizializza il database con 4 utenti e 4 pizze
+     * @throws java.sql.SQLException
+     */
+    
+    public void inizializza() throws SQLException{
+        addUser("admin", "admin", "admin");
+        addUser("alessandro", "password", "user");
+        addUser("mirko", "password", "user");
+        addUser("anna", "password", "user");
+        addPizza("Margherita", "pomodoro, mozzarella, basilico", 5.00);
+        addPizza("4 Formaggi", "pomodoro, mozzarella, fontina, gorgonzola, emmenthal", 8.00);
+        addPizza("Wurstel", "pomodoro, mozzarella, wurstel", 6.00);
+        addPizza("Prosciutto e funghi", "pomodoro, mozzarella, prosciutto, funghi", 7.00);
     }
     
 ////////////////////////////////////////////////////////////////////////////////      

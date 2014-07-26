@@ -3,13 +3,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import mvc.*;
 
-public class Database {
-    
+public final class Database {
+
     private final DBManager dbman;
+    private  ArrayList<Utente> listaUtenti;
+    private  ArrayList<Pizza> listaPizze;
+    private  ArrayList<Prenotazione> listaPrenotazioni;
     
     
     public Database() throws SQLException{
         dbman = new DBManager();
+        listaUtenti = getListaUtenti();
+        listaPizze = getCatalogo();
+        listaPrenotazioni = getListaPrenotazioni();
+        
+        
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +52,28 @@ public class Database {
      * Popola il Database con dati di default
      */
     
-    public void startDati(){}
+    public void startDati(){
+    
+    }
+    
+    /**
+     * Fornisce la lista di tutti gli utenti
+     * @return 
+     * @throws java.sql.SQLException 
+     */
+    
+    protected ArrayList<Utente> getListaUtenti() throws SQLException{
+        ArrayList<Utente> listaUtenti = new ArrayList(); 
+        try{
+            dbman.openConnection();
+            ResultSet rs = dbman.query("SELECT * FROM UTENTI");
+            while(rs.next())
+               listaUtenti.add(new Utente(rs.getInt("IDUSER"),rs.getString("USERNAME"),rs.getString("PASSWORD"), rs.getString("PERMISSION")));            
+        }finally{
+            dbman.closeConnection();
+        }
+        return listaUtenti;
+    }
     
     /**
      * Fornisce il catalogo delle pizze
@@ -66,13 +95,33 @@ public class Database {
     }
     
     /**
+     *  Fornisce la lista di tutte le prenotazioni
+     * 
+     * @return 
+     * @throws java.sql.SQLException 
+     */
+    
+    public ArrayList<Prenotazione> getListaPrenotazioni() throws SQLException{
+        ArrayList<Prenotazione> listaPren = new ArrayList(); 
+        try{
+            dbman.openConnection();
+            ResultSet rs = dbman.query("SELECT * FROM PRENOTAZIONI");
+            while(rs.next())
+               listaPren.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA")));            
+        }finally{
+            dbman.closeConnection();
+        }
+        return listaPren;
+    }
+    
+    /**
      *  Fornisce la lista di prenotazioni associate ad uno specifico utente
      * @param idUtente
      * @return 
      * @throws java.sql.SQLException 
      */
     
-    public ArrayList<Prenotazione> getPrenotazioni(int idUtente) throws SQLException{
+    public ArrayList<Prenotazione> getListaPrenotazioni(int idUtente) throws SQLException{
         ArrayList<Prenotazione> listaPren = new ArrayList(); 
         try{
             dbman.openConnection();
@@ -105,6 +154,7 @@ public class Database {
                 int tmp = dbman.addUser(u.getUsername(), u.getPassword(), u.getPermission());
                 if(tmp >= 0){
                     u.setId(tmp);
+                    listaUtenti.add(u);
                 }
             }
             else
@@ -129,6 +179,7 @@ public class Database {
                 int tmp = dbman.addPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
                 if(tmp >= 0){
                     p.setId(tmp);
+                    listaPizze.add(p);
                 }
             }
             else
@@ -154,6 +205,7 @@ public class Database {
                 int tmp = dbman.addPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getQuantita(), p.getData());
                 if(tmp >= 0){
                     p.setIdPrenotazione(tmp);
+                    listaPrenotazioni.add(p);
                 }
             }
             else
@@ -180,6 +232,7 @@ public class Database {
             //rimuovi utente
             dbman.remUser(u.getId());
             u.setId(-1);
+            listaUtenti.remove(u);
         }finally{
             dbman.closeConnection();
         }
@@ -198,6 +251,7 @@ public class Database {
             //rimuovi pizza
             dbman.remPizza(p.getId());
             p.setId(-1);
+            listaPizze.remove(p);
         }finally{
             dbman.closeConnection();
         }
@@ -215,6 +269,7 @@ public class Database {
             dbman.openConnection();
             dbman.remPrenotazione(p.getIdPrenotazione());
             p.setIdPrenotazione(-1);
+            listaPrenotazioni.remove(p);
         }finally{
             dbman.closeConnection();
         }
@@ -234,8 +289,8 @@ public class Database {
     public void modUser(Utente u) throws SQLException{
         try{
             dbman.openConnection();
-            //aggiungi pizza
             dbman.modUser(u.getUsername(), u.getPassword(), u.getPermission());
+            listaUtenti = getListaUtenti();
         }finally{
             dbman.closeConnection();
         }
@@ -251,15 +306,15 @@ public class Database {
     public void modPizza(Pizza p) throws SQLException{
         try{
             dbman.openConnection();
-            //aggiungi pizza
             dbman.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
+            listaPizze = getCatalogo();
         }finally{
             dbman.closeConnection();
         }
     }
     
     /**
-     * Rimuove una prenotazione
+     * Modifica una prenotazione
      * 
      * @param p
      * @throws java.sql.SQLException
@@ -268,8 +323,8 @@ public class Database {
     public void modPrenotazione(Prenotazione p) throws SQLException{
         try{
             dbman.openConnection();
-
             dbman.modPrenotazione(p.getIdPrenotazione(), p.getQuantita(), p.getData());
+            listaPrenotazioni = getListaPrenotazioni();
         }finally{
             dbman.closeConnection();
         }
