@@ -23,19 +23,6 @@ public class Model {
         db = new Database();
     }
 
-    
-    /**
-     * Estrapola dalla request gli input password e utente Controlla che non
-     * siano nulli. Crea un oggetto utente(con parametri vuoti se usr o pwd
-     * errati) Controlla la riuscita del punto precedente Carica i parametri
-     * nella sessione ////////// -da aggiungere il controllo del se è gia
-     * connesso -forse passare oggetto invece che stringhe
-     * @param username
-     * @param password
-     * @param s
-     * @throws java.sql.SQLException
-     */
-    
     public void loginModel(String username, String password, HttpSession s) throws SQLException{
         if (username != null && password != null && !username.equals("") && !password.equals("")) {
             Utente login = db.checkLogin(username, password);
@@ -51,20 +38,6 @@ public class Model {
         }
     }
 
-    /**
-     * Invalida i dati di sessione Genera una nuova sessione
-     *
-     * @param req
-     */
-
-
-    /**
-     * Estrapola il nome della pizza da eliminare Richiama il DB per rimuovare
-     * la pizza --------------------- controllare che pizza non sia nullo
-     *
-     * @param req
-     * @throws java.sql.SQLException
-     */
     public void remPizza(HttpServletRequest req) throws SQLException{
         String nomePizza = req.getParameter("pizza");
         Pizza tmp = db.getPizza(nomePizza);
@@ -76,14 +49,6 @@ public class Model {
         }
     }
 
-    /**
-     * Estrapola il nome, ingredienti e prezzo della pizza da aggiungere Crea
-     * un'oggetto pizza con i parametri sopra(nel caso non riesca i valori sono
-     * vuoti) Controlla la riuscita della creazione della pizza Carica la pizza
-     * nel DB
-     *
-     * @param req
-     */
     public void addPizza(HttpServletRequest req) {
         HttpSession s = req.getSession();
         if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("")) {
@@ -132,17 +97,6 @@ public class Model {
         db.addUser(utente); 
     }
 
-   
-
-    /**
-     * Estrapola il nome della pizza e la quantità, il nome del cliente e l'ora
-     * di prenotazione Carica un solo tipo di pizza nel database
-     *
-     * /////////////// Manca creazione oggetto Prenotazione Manca controllo dei
-     * dati
-     *
-     * @param req
-     */
     void addPren(HttpServletRequest req) throws SQLException {
         String nomePizza = req.getParameter("pizza");
         String user = (String) req.getSession().getAttribute("username");

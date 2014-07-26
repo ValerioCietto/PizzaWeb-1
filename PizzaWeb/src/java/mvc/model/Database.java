@@ -9,19 +9,19 @@ public final class Database {
     private  ArrayList<Utente> listaUtenti;
     private  ArrayList<Pizza> listaPizze;
     private  ArrayList<Prenotazione> listaPrenotazioni;
-    
+
+////////////////////////////////////////////////////////////////////////////////
+// COSTRUTTORE
     
     public Database() throws SQLException{
         dbman = new DBManager();
         listaUtenti = getListaUtenti();
         listaPizze = getCatalogo();
-        listaPrenotazioni = getListaPrenotazioni();
-        
-        
+        listaPrenotazioni = getListaPrenotazioni();   
     }
     
 ////////////////////////////////////////////////////////////////////////////////
-    // UTILITY DATABASE
+// UTILITY DATABASE
     
     /**
      * Effettua un controllo sul login dell'utente
@@ -30,6 +30,7 @@ public final class Database {
      * @param pwd
      * 
      * @return          ritorna un booleano
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -47,18 +48,12 @@ public final class Database {
         }
         return tmp;
     }
-
-    /**
-     * Popola il Database con dati di default
-     */
-    
-    public void startDati(){
-    
-    }
     
     /**
      * Fornisce la lista di tutti gli utenti
+     * 
      * @return 
+     * 
      * @throws java.sql.SQLException 
      */
     
@@ -77,7 +72,9 @@ public final class Database {
     
     /**
      * Fornisce il catalogo delle pizze
+     * 
      * @return 
+     * 
      * @throws java.sql.SQLException 
      */
     
@@ -98,6 +95,7 @@ public final class Database {
      *  Fornisce la lista di tutte le prenotazioni
      * 
      * @return 
+     * 
      * @throws java.sql.SQLException 
      */
     
@@ -116,8 +114,11 @@ public final class Database {
     
     /**
      *  Fornisce la lista di prenotazioni associate ad uno specifico utente
+     * 
      * @param idUtente
+     * 
      * @return 
+     * 
      * @throws java.sql.SQLException 
      */
     
@@ -133,16 +134,18 @@ public final class Database {
         }
         return listaPren;
     }
+ 
     
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-    // METODI DI INSERIMENTO (OK)
+// METODI DI INSERIMENTO (OK)
     
     /**
-     * Inserisce un utente nella tabella UTENTI
+     * Inserisce un utente nella tabella UTENTI e lo aggiunge in lista
      * 
      * @param u
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -165,9 +168,10 @@ public final class Database {
     }
     
     /**
-     * Aggiunge una pizza nella tabella PIZZE del database
+     * Aggiunge una pizza nella tabella PIZZE del database e lo aggiunge in lista
      * 
      * @param p
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -190,11 +194,11 @@ public final class Database {
     }      
     
     /**
-     * Aggiunge una prenotazione ad un cliente
+     * Aggiunge una prenotazione ad un cliente e la aggiunge in lista
      * 
      * @param p
-     * @throws java.sql.SQLException
      * 
+     * @throws java.sql.SQLException
      */
     
     public void addPrenotazione(Prenotazione p) throws SQLException{
@@ -217,12 +221,13 @@ public final class Database {
     
     
 ////////////////////////////////////////////////////////////////////////////////
-    // METODI DI RIMOZIONE (OK)
+// METODI DI RIMOZIONE (OK)
     
     /**
-     * Rimuove un utente dalla tabella UTENTI
+     * Rimuove un utente dalla tabella UTENTI e dalla lista
      * 
      * @param u
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -239,9 +244,10 @@ public final class Database {
     }
    
     /**
-     * Rimuove una pizza dalla tabella PIZZE
+     * Rimuove una pizza dalla tabella PIZZE e dalla lista
      * 
      * @param p
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -258,9 +264,10 @@ public final class Database {
     }   
     
     /**
-     * Rimuove una prenotazione
+     * Rimuove una prenotazione e dalla lista
      * 
      * @param p
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -277,12 +284,13 @@ public final class Database {
     
     
 ////////////////////////////////////////////////////////////////////////////////
-    // METODI DI MODIFICA (OK)
+// METODI DI MODIFICA (OK)
     
     /**
-     * Modifica un utente nella tabella UTENTI
+     * Modifica un utente nella tabella UTENTI e ricrea la lista
      * 
      * @param u
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -297,9 +305,10 @@ public final class Database {
     }
     
     /**
-     * Modifica una pizza nella tabella PIZZE
+     * Modifica una pizza nella tabella PIZZE e ricrea la lista
      * 
      * @param p
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -314,9 +323,10 @@ public final class Database {
     }
     
     /**
-     * Modifica una prenotazione
+     * Modifica una prenotazione e ricrea la lista
      * 
      * @param p
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -332,7 +342,7 @@ public final class Database {
 
     
 ////////////////////////////////////////////////////////////////////////////////
-    // METODI DI GET ID (OK)
+// METODI DI GET ID (OK)
     
     /**
      * Prende in input il nome utente e password e restituisce l'ID dell'utente
@@ -340,6 +350,7 @@ public final class Database {
      * @param username  nome utente
      * 
      * @return          ritorna un valore intero che indica l'ID
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -360,6 +371,7 @@ public final class Database {
      * @param nome      nome della pizza
      * 
      * @return          ritorna un valore intero che indica l'ID
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -375,13 +387,14 @@ public final class Database {
     }    
     
     /**
-     * Prende in input il nome utente e password e restituisce l'ID dell'utente
+     * Prende in input l'ID utente, l'ID pizza e la data e restituisce l'ID della prenotazione
      * 
      * @param username  ID dell'utenteutente
      * @param pizza     ID della pizza
      * @param data      Data della prenotazione
      * 
      * @return          ritorna un valore intero che indica l'ID
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -398,14 +411,15 @@ public final class Database {
 
     
 ////////////////////////////////////////////////////////////////////////////////
-    // METODI DI GET (OK)
+// METODI DI GET (OK)
     
     /**
-     * Ritorna una Stringa contenente l'utente
+     * Ritorna un oggetto Utente partendo dall'username
      * 
      * @param name
      * 
-     * @return          ritorna una Stringa contenente il risultato della query
+     * @return          ritorna un Oggetto contenente il risultato della query
+     * 
      * @throws java.sql.SQLException
      */
     
@@ -422,6 +436,16 @@ public final class Database {
         return tmp;
     }
     
+    /**
+     * Ritorna un oggetto Utente partendo dall'ID
+     * 
+     * @param id
+     * 
+     * @return          ritorna un Oggetto contenente il risultato della query
+     * 
+     * @throws java.sql.SQLException
+     */
+    
     public Utente getUser(int id) throws SQLException{
         Utente tmp = null;  
         try{
@@ -435,6 +459,15 @@ public final class Database {
         return tmp;
     }
     
+    /**
+     * Ritorna un oggetto Pizza partendo dal nome
+     * 
+     * @param name
+     * 
+     * @return          ritorna un Oggetto contenente il risultato della query
+     * 
+     * @throws java.sql.SQLException
+     */
     
     public Pizza getPizza(String name) throws SQLException {
         Pizza result = null;
@@ -448,6 +481,16 @@ public final class Database {
         }
         return result;
     }
+    
+    /**
+     * Ritorna un oggetto Prenotazione partendo dall'ID
+     * 
+     * @param id
+     * 
+     * @return          ritorna un Oggetto contenente il risultato della query
+     * 
+     * @throws java.sql.SQLException
+     */
     
     public Prenotazione getPrenotazione(int id) throws SQLException{
         Prenotazione tmp = null;  

@@ -10,6 +10,7 @@ public final class DBManager {
     Statement st;
 
 ////////////////////////////////////////////////////////////////////////////////
+// COSTRUTTORE
     
     /**
      * Inizializza il Database
@@ -28,6 +29,7 @@ public final class DBManager {
     }
     
 ////////////////////////////////////////////////////////////////////////////////
+// CREAZIONE DATABASE
     
     /**
      * Genera il database creando tre tabelle:
@@ -80,16 +82,31 @@ public final class DBManager {
     }
     
 ////////////////////////////////////////////////////////////////////////////////      
-//UTILITY DATABASE
+// UTILITY DATABASE
+    
+    /**
+     * Controlla se esiste un utente con quell'username e password
+     * 
+     * @param usr
+     * @param pwd
+     * 
+     * @return 
+     */
     
     public int checkLogin(String usr,String pwd){
         try{
-        ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'");
-        rs.next();
-        int id = rs.getInt("IDUSER");
-        return id;
+            ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+usr+"' AND PASSWORD ='"+pwd+"'");
+            rs.next();
+            int id = rs.getInt("IDUSER");
+            return id;
         }catch(SQLException e){return -1;}
     }
+    
+    /**
+     * Controlla se esiste il database
+     * 
+     * @return 
+     */
     
     public boolean checkDatabase(){
         try{
@@ -97,11 +114,31 @@ public final class DBManager {
         }catch(SQLException e){return false;}
     } 
     
+    /**
+     * Esegue una query SQL ritornando un booleano
+     * 
+     * @param sql
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
+    
     public boolean esegui(String sql) throws SQLException {
         boolean tmp;
         tmp = st.execute(sql);
         return tmp;
     }
+    
+    /**
+     * Esegue una query SQL ritornando un ResultSet
+     * 
+     * @param sql
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
     
     public ResultSet query(String sql) throws SQLException{
         try{        
@@ -109,11 +146,23 @@ public final class DBManager {
         }catch(SQLException e){return null;}
     }
 
+    /**
+     * Apre una Connection con il Database e crea uno Statement
+     * 
+     * @throws SQLException 
+     */
+    
     public void openConnection() throws SQLException{
         conn = DriverManager.getConnection(ur, us, p);
         st = conn.createStatement();
         
     }
+    
+    /**
+     * Chiude la Connection e lo Statement precedentemente creati
+     * 
+     * @throws SQLException 
+     */
     
     public void closeConnection() throws SQLException{
         st.close();
@@ -123,7 +172,7 @@ public final class DBManager {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////    
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI INSERIMENTO (OK)
+// METODI DI INSERIMENTO (OK)
     
     /**
      * Inserisce un utente nella tabella UTENTI
@@ -188,7 +237,7 @@ public final class DBManager {
 
     
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI RIMOZIONE (OK)
+// METODI DI RIMOZIONE (OK)
     
     /**
      * Elimina un utente nella tabella UTENTI
@@ -231,7 +280,7 @@ public final class DBManager {
     
     
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI MODIFICA (OK)
+// METODI DI MODIFICA (OK)
     
     /**
      * Modifica un utente nella tabella UTENTI
@@ -264,7 +313,7 @@ public final class DBManager {
     }
         
     /**
-     * Modifica una pizza nella tabella PIZZE
+     * Modifica una prenotqazione nella tabella PRENOTAZIONI
      * 
      * 
      * @param idPrenotazione
@@ -280,7 +329,7 @@ public final class DBManager {
     
     
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI GET ID (OK)   
+// METODI DI GET ID (OK)   
     
     /**
      * Prende in input il nome utente e password e restituisce l'ID dell'utente
@@ -318,7 +367,7 @@ public final class DBManager {
     }
 
     /**
-     * Prende in input il nome utente e password e restituisce l'ID dell'utente
+     * Prende in input l'ID utente, l'ID pizza e la data e restituisce l'ID della prenotazione associata
      * 
      * @param username  ID dell'utenteutente
      * @param pizza     ID della pizza
@@ -338,10 +387,10 @@ public final class DBManager {
 
     
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI GET (OK)
+// METODI DI GET (OK)
     
     /**
-     * Ritorna una Stringa contenente l'utente
+     * Ritorna ResultSet contenente l'utente
      * 
      * @param usr       nome dell'utente
      * 
@@ -360,7 +409,7 @@ public final class DBManager {
     }
  
     /**
-     * Ritorna una Stringa contenente la pizza
+     * Ritorna un ResultSet contenente la pizza
      * 
      * @param usr       nome della pizza
      * 
@@ -379,7 +428,7 @@ public final class DBManager {
     }
 
     /**
-     * Ritorna una Stringa contenente la prenotazione
+     * Ritorna un ResultSet contenente la prenotazione
      * 
      * @param id       
      * 
