@@ -77,7 +77,9 @@ public class Tester {
 
         
     /**
-     * Esegue i test di add, rem, get e mod su DBManager
+     * Crea un oggetto DBManager ed inizializza il database;
+     * esegue i test di add, rem, get e mod su DBManager;
+     * esegue il drop del database
      * 
      * @param add
      * @param get
