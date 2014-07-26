@@ -137,6 +137,17 @@ public final class Database {
         return listaPren;
     }
  
+    public void drop() throws SQLException{
+        dbman.openConnection();
+        try{
+            listaUtenti = null;
+            listaPizze = null;
+            listaPrenotazioni = null;
+            dbman.drop();
+        }finally{
+            dbman.closeConnection();
+        }
+    }
     
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

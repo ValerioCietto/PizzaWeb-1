@@ -1,31 +1,96 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package mvc;
 
-import components.DBManager;
-import components.Prenotazione;
-import components.Pizza;
-import components.Utente;
-import components.Database;
+import components.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-/**
- *
- * @author mirko
- */
+
+////////////////////////////////////////////////////////////////////////////////
+// MAIN
 
 public class Tester {
     public static void main(String[]args) throws SQLException{
-        DBManager dbman=new DBManager();
-        //testDB(dbman,true,true,true,true);
-        testObj();
+        testDBManager(true,true,true,true);
+        Database db = creaFreshDB();
+        testDatabase(db);
+        dropDB(db);
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+// UTILITY
+    
+    /**
+     * Stampa il contenuto di un oggetto Utente
+     * 
+     * @param rs
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
+    
+    public static String stampaUtente(ResultSet rs) throws SQLException{
+        String out="";
+        while(rs.next())
+            out+="ID: "+rs.getInt("IDUSER")+";\t Username: "+rs.getString("USERNAME")+";\t Password: "+rs.getString("PASSWORD")+";\t Permission: "+rs.getString("PERMISSION")+";";
+        return out;
     }
     
-    public static void testDB(DBManager dbman,boolean add,boolean get,boolean mod, boolean rem) throws SQLException{
+    /**
+     * Stampa il contenuto di un oggetto Pizza
+     * 
+     * @param rs
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
+        
+    public static String stampaPizza(ResultSet rs) throws SQLException{
+        String out="";
+        while(rs.next())
+            out+="ID: "+rs.getInt("IDPIZZA")+";\t Nome: "+rs.getString("NOME")+";\t Ingredienti: "+rs.getString("INGREDIENTI")+";\t Prezzo: "+rs.getString("PREZZO")+";";
+        return out;
+    }
+    
+    /**
+     * Stampa il contenuto di un oggetto Prenotazione
+     * 
+     * @param rs
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
+    
+    public static String stampaPrenotazione(ResultSet rs) throws SQLException{
+        String out="";
+        while(rs.next())
+            out+="ID: "+rs.getInt("IDPRENOTAZIONE")+";\t IDUser: "+rs.getString("IDUTENTE")+";\t IDPizzA: "+rs.getString("IDPIZZA")+";\t Quantità: "+rs.getString("QUANTITA")+";\t Data"+rs.getString("DATA")+";";
+        return out;
+    }
+    
+    
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// METODI DI TEST
+
+        
+    /**
+     * Esegue i test di add, rem, get e mod su DBManager
+     * 
+     * @param add
+     * @param get
+     * @param mod
+     * @param rem
+     * 
+     * @throws SQLException 
+     */
+    
+    public static void testDBManager(boolean add,boolean get,boolean mod, boolean rem) throws SQLException{
+        
+        DBManager dbman = new DBManager();
+        
         String user="user";
         String pwd="pwd";
         String ruolo="ruolo";
@@ -39,13 +104,17 @@ public class Tester {
         
         int outI;
         String outS;
-        boolean outB;
         ResultSet rs;
+        
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // START ADD
         
         if(add){
             
-            //////////////////////////////////////////////////////////////////////////////
-            //UTENTI
+            ////////////////////////////////////////////////////////////////////
+            // UTENTI
             
             //test addUser
             dbman.openConnection();
@@ -77,7 +146,8 @@ public class Tester {
             
             System.out.println("\n\n");
             
-            //PIZZE
+            ////////////////////////////////////////////////////////////////////
+            // PIZZE
             
             //test addPizza
             dbman.openConnection();
@@ -109,7 +179,8 @@ public class Tester {
             
             System.out.println("\n\n");
             
-            //PRENOTAZIONI
+            ////////////////////////////////////////////////////////////////////
+            // PRENOTAZIONI
             
             //test addPrenotazione
             dbman.openConnection();
@@ -151,13 +222,19 @@ public class Tester {
             System.out.println("test addPrenotazione con ingr esistente(>0) = "+outI);
             dbman.closeConnection();
             
-            //////////////////////////////////////////////////////////////////////////////
-            
-            System.out.println("\n\n");
+            System.out.println("\n\n");  
         }
+        
+        
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // START GET
+        
         if(get){
             
-            //////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////
+            // ID UTENTI
             
             //test getIdUser(String)
             dbman.openConnection();
@@ -173,7 +250,8 @@ public class Tester {
                 dbman.closeConnection();
             }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
             
-            //////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////
+            // UTENTI
             
             //test getUser(int)
             dbman.openConnection();
@@ -207,8 +285,8 @@ public class Tester {
                 dbman.closeConnection();
             }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
             
-            
-            //////GET PIZZA /////////
+            ////////////////////////////////////////////////////////////////////
+            // ID PIZZE
             
             //test getIdpizza(String)
             dbman.openConnection();
@@ -224,6 +302,8 @@ public class Tester {
                 dbman.closeConnection();
             }catch(SQLException e){System.out.println("ERRORE: ID di pizza inesistente!!!!!!!");}
             
+            ////////////////////////////////////////////////////////////////////
+            // PIZZE
             
             //test getPizza(int)
             dbman.openConnection();
@@ -257,8 +337,8 @@ public class Tester {
                 dbman.closeConnection();
             }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
             
-            
-            ////GET PRENOTAZIONE//////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////
+            // ID PRENOTAZIONI
             
             int a,b;
              //test getIdprenotazione(int, int, String)
@@ -279,6 +359,8 @@ public class Tester {
             dbman.closeConnection();
              }catch(SQLException e){System.out.println("ERRORE: user e/o pizza inesistente!!!!!!!");}
             
+            ////////////////////////////////////////////////////////////////////
+            // PRENOTAZIONI
             
             //test getPrenotazione(int)
             dbman.openConnection();
@@ -296,26 +378,33 @@ public class Tester {
                 dbman.closeConnection();
             }catch(SQLException e){System.out.println("ERRORE: ID inesistente!!!!!!!");}
             
-            //////////////////////////////////////////////////////////////////////////////
-            
             System.out.println("\n\n");
         }
-
+        
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////
+        // START MOD
+        
         if(mod){
+            
+            ////////////////////////////////////////////////////////////////////
+            // UTENTI
             
             //test modUser
             dbman.openConnection();
-            dbman.modUser(user,pwd+"mod"+user,ruolo+"mod"+user);
+            dbman.modUser(user,pwd+"mod"+user,ruolo+"mod1");
             System.out.println("OK");
             dbman.closeConnection();
             
             //test modUser con user inesistente
             dbman.openConnection();
-            dbman.modUser(user+"papapa",pwd+"mod"+user,ruolo+"mod"+user);
+            dbman.modUser(user+"papapa",pwd+"mod"+user,ruolo+"mod2");
             dbman.closeConnection();
             System.out.println("KO utente");
             
-            ///////////////test pizza///////////////////////
+            ////////////////////////////////////////////////////////////////////
+            // PIZZE
             
             //test modPizza
             dbman.openConnection();
@@ -329,25 +418,48 @@ public class Tester {
             dbman.closeConnection();
             System.out.println("KO pizza");
             
-            ///////////////test prenotazione///////////////////////
+            ////////////////////////////////////////////////////////////////////
+            // PRENOTAZIONI
             
             //test modPrenotazione
             dbman.openConnection();
-            dbman.modPrenotazione(1, quantita+9, data+"MOD");
+            dbman.modPrenotazione(1, quantita+9, data+"1");
             System.out.println("OK");
             dbman.closeConnection();
             
             //test modPrenotazione con user inesistente
             dbman.openConnection();
-            dbman.modPrenotazione(999999, quantita+9999, data+"MOD");
+            dbman.modPrenotazione(999999, quantita+9999, data+"1");
             dbman.closeConnection();
             System.out.println("KO prenotazione");
         }
-        //////////////////////////////////////////////////////////////////////////////        
+        dbman.drop();
     }
     
-    public static void testObj() throws SQLException {
-        Database db = new Database();
+    /**
+     * Crea un Database pulito
+     * 
+     * @return 
+     * 
+     * @throws SQLException 
+     */
+    
+    public static Database creaFreshDB() throws SQLException{
+        return new Database();
+    }
+
+    /**
+     * Esegue i test di add, mod e rem su Database
+     * 
+     * @param db
+     * 
+     * @throws SQLException 
+     */
+    
+    private static void testDatabase(Database db) throws SQLException {
+        
+        ////////////////////////////////////////////////////////////////////////
+        // START ADD
         
         db.addUser(new Utente("username", "password", "user"));
         db.addUser(new Utente("username", "password", "user"));
@@ -373,6 +485,9 @@ public class Tester {
         //pr = db.getPrenotazione(5);
         //System.out.println(pr);
         
+        ////////////////////////////////////////////////////////////////////////
+        // START MOD
+        
         pr.setQuantita(90);
         pz.setIngredienti("caccadura");
         ut.setPwd("gnagna");
@@ -386,37 +501,33 @@ public class Tester {
         System.out.println(pz);
         System.out.println(pr);
         
-        //db.remPrenotazione(pr);
-        //db.remPizza(pz);
-        //db.remUser(ut);
+        ////////////////////////////////////////////////////////////////////////
+        // START REM
         
-        //System.out.println("\n\n");
-        //System.out.println(ut);
-        //System.out.println(pz);
-        //System.out.println(pr);
+        db.remPrenotazione(pr);
+        db.remPizza(pz);
+        db.remUser(ut);
         
-        
+        System.out.println("\n\n");
+        System.out.println(ut);
+        System.out.println(pz);
+        System.out.println(pr);
     }
     
-    public static String stampaUtente(ResultSet rs) throws SQLException{
-        String out="";
-        while(rs.next())
-            out+="ID: "+rs.getInt("IDUSER")+";\t Username: "+rs.getString("USERNAME")+";\t Password: "+rs.getString("PASSWORD")+";\t Permission: "+rs.getString("PERMISSION")+";";
-        return out;
+    /**
+     * Elimina le tabelle dal database in questione
+     * 
+     * @param db
+     * @throws java.sql.SQLException
+     */
+    
+    public static void dropDB(Database db) throws SQLException{
+        db.drop();
     }
     
-    public static String stampaPizza(ResultSet rs) throws SQLException{
-        String out="";
-        while(rs.next())
-            out+="ID: "+rs.getInt("IDPIZZA")+";\t Nome: "+rs.getString("NOME")+";\t Ingredienti: "+rs.getString("INGREDIENTI")+";\t Prezzo: "+rs.getString("PREZZO")+";";
-        return out;
-    }
-    
-    public static String stampaPrenotazione(ResultSet rs) throws SQLException{
-        String out="";
-        while(rs.next())
-            out+="ID: "+rs.getInt("IDPRENOTAZIONE")+";\t IDUser: "+rs.getString("IDUTENTE")+";\t IDPizzA: "+rs.getString("IDPIZZA")+";\t Quantità: "+rs.getString("QUANTITA")+";\t Data"+rs.getString("DATA")+";";
-        return out;
-    }
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 }
 

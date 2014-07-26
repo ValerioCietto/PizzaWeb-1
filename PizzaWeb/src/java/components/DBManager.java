@@ -42,7 +42,7 @@ public final class DBManager {
                 "IDUSER         INT         NOT NULL GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
                 "USERNAME       VARCHAR(33) NOT NULL UNIQUE," +
                 "PASSWORD       VARCHAR(33) NOT NULL," +
-                "PERMISSION     VARCHAR(5) NOT NULL," +
+                "PERMISSION     VARCHAR(10) NOT NULL," +
                 "PRIMARY KEY(IDUSER))");
 
         st.execute(   "CREATE TABLE PIZZE(" +
@@ -58,7 +58,7 @@ public final class DBManager {
                 "IDUTENTE       INT         NOT NULL    ," +
                 "IDPIZZA        INT         NOT NULL    ," +
                 "QUANTITA       INT         NOT NULL    ," +
-                "DATA           VARCHAR(8) NOT NULL    ," +
+                "DATA           VARCHAR(10) NOT NULL    ," +
                 "STATO          VARCHAR(10) NOT NULL    ," +
                 "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
                 "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER) ON DELETE CASCADE,"+
@@ -80,7 +80,7 @@ public final class DBManager {
         addPizza("Wurstel", "pomodoro, mozzarella, wurstel", 6.00);
         addPizza("Prosciutto e funghi", "pomodoro, mozzarella, prosciutto, funghi", 7.00);
     }
-    
+
 ////////////////////////////////////////////////////////////////////////////////      
 // UTILITY DATABASE
     
@@ -114,6 +114,20 @@ public final class DBManager {
         }catch(SQLException e){return false;}
     } 
     
+    /**
+     * Elimina tutte le tabelle del database
+     * 
+     * @throws SQLException 
+     */
+    
+    public void drop() throws SQLException{
+        if(checkDatabase()){
+            esegui("DROP TABLE PRENOTAZIONI");
+            esegui("DROP TABLE PIZZE");
+            esegui("DROP TABLE UTENTI");
+        }
+    }
+        
     /**
      * Esegue una query SQL ritornando un booleano
      * 
