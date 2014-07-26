@@ -18,7 +18,6 @@ public class Tester {
     public static void main(String[]args) throws SQLException{
         DBManager dbman=new DBManager();
         //testDB(dbman,true,true,true,true);
-        
         testObj();
     }
     
@@ -383,14 +382,14 @@ public class Tester {
         System.out.println(pz);
         System.out.println(pr);
         
-        db.remPrenotazione(pr);
-        db.remPizza(pz);
-        db.remUser(ut);
+        //db.remPrenotazione(pr);
+        //db.remPizza(pz);
+        //db.remUser(ut);
         
-        System.out.println("\n\n");
-        System.out.println(ut);
-        System.out.println(pz);
-        System.out.println(pr);
+        //System.out.println("\n\n");
+        //System.out.println(ut);
+        //System.out.println(pz);
+        //System.out.println(pr);
         
         
     }

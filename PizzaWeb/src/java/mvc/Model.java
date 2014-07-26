@@ -1,32 +1,40 @@
 package mvc;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.servlet.http.*;
 import mvc.model.*;
 
-import javax.servlet.http.*;
-import java.sql.SQLException;
+/**
+ * 
+ * @author Alessandro
+ */
 
 public class Model {
-    private Database db;
+    private final Database db;
     private Pizza pizza;
     private Utente utente;
     private Prenotazione prenotazione;
+    
+    private ArrayList<Pizza> catalogo;
+    private ArrayList<Pizza> listaPrenotazioni;
     
     public Model() throws SQLException{
         db = new Database();
     }
 
+    
     /**
      * Estrapola dalla request gli input password e utente Controlla che non
-     * siano nulli Crea un'oggetto utente(con parametri vuoti se usr o pwd
+     * siano nulli. Crea un oggetto utente(con parametri vuoti se usr o pwd
      * errati) Controlla la riuscita del punto precedente Carica i parametri
      * nella sessione ////////// -da aggiungere il controllo del se è gia
      * connesso -forse passare oggetto invece che stringhe
-     *
-     * @param req
+     * @param username
+     * @param password
+     * @param s
+     * @throws java.sql.SQLException
      */
-    // FACOLTATIVO : GESTIRE LOGIN CON POST
-  
-    
     
     public void loginModel(String username, String password, HttpSession s) throws SQLException{
         if (username != null && password != null && !username.equals("") && !password.equals("")) {
@@ -55,11 +63,11 @@ public class Model {
      * la pizza --------------------- controllare che pizza non sia nullo
      *
      * @param req
+     * @throws java.sql.SQLException
      */
     public void remPizza(HttpServletRequest req) throws SQLException{
-        String pizza = req.getParameter("pizza");
-        Pizza tmp = db.getPizza(pizza);
-        int idpizza= tmp.getId();
+        String nomePizza = req.getParameter("pizza");
+        Pizza tmp = db.getPizza(nomePizza);
         try {
         db.remPizza(tmp);
             
@@ -136,12 +144,12 @@ public class Model {
      * @param req
      */
     void addPren(HttpServletRequest req) throws SQLException {
-        String pizza = req.getParameter("pizza");
+        String nomePizza = req.getParameter("pizza");
         String user = (String) req.getSession().getAttribute("username");
         int quantita = (Integer.parseInt(req.getParameter("quantita"))); //questo gli riempie solo un numero
         String data = req.getParameter("data");
        
-        Pizza tmp = db.getPizza(pizza);
+        Pizza tmp = db.getPizza(nomePizza);
         int idPizza= tmp.getId();
         int idUser = db.getIdUser(user);
         prenotazione= new Prenotazione(idUser, idPizza, quantita,  data);
@@ -152,13 +160,13 @@ public class Model {
     void remPren(HttpServletRequest req) throws SQLException {
 
         String user = req.getParameter("nomecliente");
-        String pizza = req.getParameter("nomepizza");
+        String nomePizza = req.getParameter("nomepizza");
         String data = req.getParameter("data");
         
         
 
         int idUser = db.getIdUser(user);
-        int idPizza = db.getIdPizza(pizza);
+        int idPizza = db.getIdPizza(nomePizza);
         int idPren = db.getIdPrenotazione(idUser, idPizza, data);
         if (idPren > 0) {
             Prenotazione tmp = db.getPrenotazione(idPren);
@@ -167,21 +175,3 @@ public class Model {
     }
 
 }
-
-//TEST
-/*    
- public static void main(String[] args){
- Utente user;
- Pizza pizza;
- Prenotazione ordine;
-        
- pizza = new Pizza(1, "margherita" , "tanta cacca al formaggio" , 4.67);
- user = new Utente(7, "gigimarzullo", "Puccicucci9", "utente");
- ordine = new Prenotazione(pizza.getId(), user.getId(), 5, 71, "34/14/2034");
-        
- System.out.println(pizza.toString());
- System.out.println(user.toString());
- System.out.println(ordine.toString());
-        
- }
- */

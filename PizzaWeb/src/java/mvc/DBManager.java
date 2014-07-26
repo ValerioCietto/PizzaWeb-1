@@ -20,8 +20,8 @@ public final class DBManager {
         // registrazione driver JDBC da utilizzare
         DriverManager.registerDriver(new org.apache.derby.jdbc.ClientDriver());
         openConnection();
-        drop();
-        creaTabelle();
+        if(!checkDatabase())
+            creaTabelle();
         closeConnection();
     }
     
@@ -59,7 +59,6 @@ public final class DBManager {
                 "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
                 "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER) ON DELETE CASCADE,"+
                 "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA) ON DELETE CASCADE)");
- 
     }
     
 ////////////////////////////////////////////////////////////////////////////////      
@@ -72,35 +71,24 @@ public final class DBManager {
         int id = rs.getInt("IDUSER");
         return id;
         }catch(SQLException e){return -1;}
-    }    
-    
-    public void startDati() throws SQLException { //startDati(String tab, String nome, String mezzo, String fine)
-        addUser("admin","admin","admin");
-        addUser("user","user","user");
-        addUser("mario","mario","user");
-        addUser("b","b","user");
-        addPizza("Margherita","pomodoro e mozzarella", 15);
-        addPizza("Funghi","pomodoro e funghi", 6);
-       // addPrenotazione("user","210491", "Margherita",3);
-       // addPrenotazione("user","220591", "funghi",4);
-       // addPrenotazione("mario","100291", "bianca",2);
-       // addPrenotazione("mario","100291", "rossa",2);
     }
-
+    
+    public boolean checkDatabase(){
+        try{
+            return esegui("select * from UTENTI") && esegui("select * from PIZZE") && esegui("select * from PRENOTAZIONI");
+        }catch(SQLException e){return false;}
+    } 
     
     public boolean esegui(String sql) throws SQLException {
         boolean tmp;
         tmp = st.execute(sql);
         return tmp;
     }
-
     
-    public void drop() throws SQLException{
-        
-        System.out.println(esegui("DROP TABLE PRENOTAZIONI"));
-        System.out.println(esegui("DROP TABLE UTENTI"));
-        System.out.println(esegui("DROP TABLE PIZZE"));
-    
+    public ResultSet query(String sql) throws SQLException{
+        try{        
+        return st.executeQuery(sql);
+        }catch(SQLException e){return null;}
     }
 
     public void openConnection() throws SQLException{
@@ -117,7 +105,7 @@ public final class DBManager {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////    
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI INSERIMENTO
+//METODI DI INSERIMENTO (OK)
     
     /**
      * Inserisce un utente nella tabella UTENTI
@@ -139,8 +127,6 @@ public final class DBManager {
         return id;
     }
     
-////////////////////////////////////////////////////////////////////////////////   
-    
     /**
      * Aggiunge una pizza nella tabella PIZZE del database
      * 
@@ -160,8 +146,6 @@ public final class DBManager {
         id = rs.getInt("IDPIZZA");
         return id;
     }
-
-////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Aggiunge una prenotazione ad un cliente
@@ -186,7 +170,7 @@ public final class DBManager {
 
     
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI RIMOZIONE
+//METODI DI RIMOZIONE (OK)
     
     /**
      * Elimina un utente nella tabella UTENTI
@@ -200,9 +184,7 @@ public final class DBManager {
     public boolean remUser(int id) throws SQLException{
         return esegui("DELETE FROM UTENTI WHERE (IDUSER="+id+")");
     }
-    
-////////////////////////////////////////////////////////////////////////////////
-    
+       
     /**
      * Rimuove una pizza dalla tabella PIZZE
      * 
@@ -215,9 +197,7 @@ public final class DBManager {
     public boolean remPizza(int id) throws SQLException{
         return esegui("DELETE FROM PIZZE WHERE (IDPIZZA="+id+")");
     }
-    
-////////////////////////////////////////////////////////////////////////////////    
-    
+       
     /**
      * Rimuove una prenotazione
      * 
@@ -233,7 +213,7 @@ public final class DBManager {
     
     
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI MODIFICA
+//METODI DI MODIFICA (OK)
     
     /**
      * Modifica un utente nella tabella UTENTI
@@ -249,8 +229,6 @@ public final class DBManager {
     public boolean modUser(String nome, String nPassword, String nRuolo) throws SQLException{
         return esegui("UPDATE UTENTI SET PASSWORD='" +nPassword+"', PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'");
     }
-
-////////////////////////////////////////////////////////////////////////////////
     
     /**
      * Modifica una pizza nella tabella PIZZE
@@ -266,8 +244,6 @@ public final class DBManager {
     public boolean modPizza(String nome, String nIngr, double nPrezzo) throws SQLException{
         return esegui("UPDATE PIZZE SET INGREDIENTI='" + nIngr+ "', PREZZO=" +nPrezzo+" WHERE NOME ='" +nome+"'");
     }
-
-////////////////////////////////////////////////////////////////////////////////
         
     /**
      * Modifica una pizza nella tabella PIZZE
@@ -286,7 +262,8 @@ public final class DBManager {
     
     
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI GET ID       
+//METODI DI GET ID (OK)   
+    
     /**
      * Prende in input il nome utente e password e restituisce l'ID dell'utente
      * 
@@ -304,9 +281,7 @@ public final class DBManager {
         }catch(SQLException e){return -1;}
         
     }
-    
-////////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Prende in input il nome della pizza e restituisce l'ID della pizza
      * 
@@ -323,9 +298,7 @@ public final class DBManager {
         return id;
         }catch(SQLException e){return -1;}
     }
-    
-////////////////////////////////////////////////////////////////////////////////    
-    
+
     /**
      * Prende in input il nome utente e password e restituisce l'ID dell'utente
      * 
@@ -347,7 +320,7 @@ public final class DBManager {
 
     
 ////////////////////////////////////////////////////////////////////////////////      
-//METODI DI GET
+//METODI DI GET (OK)
     
     /**
      * Ritorna una Stringa contenente l'utente
@@ -367,9 +340,7 @@ public final class DBManager {
         ResultSet rs = st.executeQuery("SELECT * FROM UTENTI WHERE IDUSER="+ id);
         return rs;
     }
-
-////////////////////////////////////////////////////////////////////////////////
-    
+ 
     /**
      * Ritorna una Stringa contenente la pizza
      * 
@@ -388,9 +359,7 @@ public final class DBManager {
         ResultSet rs = st.executeQuery("SELECT * FROM PIZZE WHERE IDPIZZA="+ id);
         return rs;
     }
-        
-////////////////////////////////////////////////////////////////////////////////
-    
+
     /**
      * Ritorna una Stringa contenente la prenotazione
      * 
@@ -404,6 +373,8 @@ public final class DBManager {
         ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONI WHERE IDPRENOTAZIONE="+ id);
         return rs;
     }
+
+
 ////////////////////////////////////////////////////////////////////////////////    
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////        

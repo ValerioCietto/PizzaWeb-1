@@ -36,29 +36,29 @@ public class Controller extends HttpServlet {
                     logout(request);
                     break;
                 case "addPizza":
-                    Model.addPizza(request);
+                    model.addPizza(request);
                     aggPage(request);
                     break;
                 case "remPizza":
-                    Model.remPizza(request);
+                    model.remPizza(request);
                     aggPage(request);
                     break;
                 case "modPizza":
-                    Model.modPizza(request);
+                    model.modPizza(request);
                     aggPage(request);
                     break;
                 case "registration":
-                    Model.addUser(request);
+                    model.addUser(request);
                     break;
                 case "addPrenotaz":
                      //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
-                    Model.addPren(request);
+                    model.addPren(request);
                    // Logger.getGlobal().info("sono nel controller in addprenotaz");
                     aggPage(request);
                     break;
                     
                 case "remPrenotaz":
-                    Model.remPren(request);
+                    model.remPren(request);
                     aggPage(request);
                     break;
    
