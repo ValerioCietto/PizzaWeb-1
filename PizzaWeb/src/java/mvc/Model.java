@@ -1,9 +1,6 @@
 package mvc;
 
-import components.Prenotazione;
-import components.Pizza;
-import components.Utente;
-import components.Database;
+import components.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.http.*;

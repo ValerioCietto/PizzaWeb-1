@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package components;
 
-/**
- *
- * @author jorkut
- */
+////////////////////////////////////////////////////////////////////////////////
+
 public class Pizza {
 
     private int idPizza = -1;
@@ -16,9 +9,11 @@ public class Pizza {
     private String ingredienti;
     private double prezzo;
 
+////////////////////////////////////////////////////////////////////////////////
+// COSTRUTTORE
+    
     /**
-     * Controlla che gli input non siano nulli o non accettabili In caso di non
-     * riuscita i parametri sono nulli Altrimenti carica i dati nell'oggetto
+     * Controlla che gli input non siano nulli o non accettabili In caso di non riuscita i parametri sono nulli Altrimenti carica i dati nell'oggetto
      *
      * @param id
      * @param iNome
@@ -27,6 +22,7 @@ public class Pizza {
      *
      * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
+    
     protected Pizza(int id, String iNome, String iIngredienti, double iPrezzo) {
         this.idPizza = id;
         this.ingredienti = iIngredienti;
@@ -40,12 +36,25 @@ public class Pizza {
         this.prezzo = iPrezzo;
     }
 
-    // METODI DI GET
+////////////////////////////////////////////////////////////////////////////////
+// UTILITY    
+    
+    @Override
+    public String toString() {
+        return "Pizza { id : '"+this.idPizza+"', nome : '"+this.nome+"', ingredienti : '"+this.ingredienti+"', prezzo : "+this.prezzo+" }";
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// METODI DI GET
+    
     /**
      * Restituisce l'ID della pizza
      *
-     * @return \<String\> nome pizza
+     * @return nome pizza
      */
+    
     public int getId() {
         return this.idPizza;
     }
@@ -53,8 +62,9 @@ public class Pizza {
     /**
      * Restituisce il nome della pizza
      *
-     * @return \<String\> nome pizza
+     * @return nome pizza
      */
+    
     public String getNome() {
         return this.nome;
     }
@@ -62,8 +72,9 @@ public class Pizza {
     /**
      * Restituisce gli ingredienti della pizza
      *
-     * @return \<String\> nome pizza
+     * @return nome pizza
      */
+    
     public String getIngredinti() {
         return this.ingredienti;
     }
@@ -71,13 +82,15 @@ public class Pizza {
     /**
      * Restituisce il prezzo della pizza
      *
-     * @return \<double\> prezzo
+     * @return prezzo
      */
+    
     public double getPrezzo() {
         return this.prezzo;
     }
 
-    //METODI DI SET
+////////////////////////////////////////////////////////////////////////////////
+// METODI DI SET
     
     /**
      * Modifica l'id della pizza
@@ -94,6 +107,7 @@ public class Pizza {
      *
      * @param newNome
      */
+    
     public void setNome(String newNome) {
         this.nome = newNome;
     }
@@ -103,6 +117,7 @@ public class Pizza {
      *
      * @param newIngredienti
      */
+    
     public void setIngredienti(String newIngredienti) {
         this.ingredienti = newIngredienti;
     }
@@ -112,13 +127,11 @@ public class Pizza {
      *
      * @param newPrezzo
      */
+    
     public void setPrezzo(double newPrezzo) {
         this.prezzo = newPrezzo;
     }
-    
-    @Override
-    public String toString() {
-        return "Pizza { id : '"+this.idPizza+"', nome : '"+this.nome+"', ingredienti : '"+this.ingredienti+"', prezzo : "+this.prezzo+" }";
-    }
-
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 }

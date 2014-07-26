@@ -1,7 +1,10 @@
 package components;
+
 import java.sql.*;
 import java.util.ArrayList;
 import mvc.*;
+
+////////////////////////////////////////////////////////////////////////////////
 
 public final class Database {
 

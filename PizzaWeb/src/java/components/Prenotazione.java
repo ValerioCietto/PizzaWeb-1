@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package components;
 
-/**
- *
- * @author jorkut
- */
+////////////////////////////////////////////////////////////////////////////////
+
 public class Prenotazione {
 
     private int idPrenotazione = -1;
@@ -18,16 +11,19 @@ public class Prenotazione {
     private String data;
     private final String stato;
 
+////////////////////////////////////////////////////////////////////////////////
+// COSTRUTTORE
+    
     /**
-     * Crea la prenotazione
+     * Crea la prenotazione conoscendo l'ID
      *
      * @param id
      * @param idU
      * @param idP
      * @param iQuantita
      * @param iData
-     * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
-     */
+    */
+    
     protected Prenotazione(int id, int idU, int idP, int iQuantita, String iData) {
         this.idPrenotazione = id;
         this.idUtente = idU;
@@ -37,6 +33,15 @@ public class Prenotazione {
         this.stato = "Ordinata";
     }
     
+    /**
+     * Crea la prenotazione senza conoscere l'ID
+     *
+     * @param idU
+     * @param idP
+     * @param iQuantita
+     * @param iData
+    */
+    
     public Prenotazione(int idU, int idP, int iQuantita, String iData) {
             this.idUtente = idU;
             this.idPizza = idP;
@@ -44,13 +49,26 @@ public class Prenotazione {
             this.data = iData;
             this.stato = "Ordinata";
         }   
-    //METODI DI GET    
+
+////////////////////////////////////////////////////////////////////////////////
+// UTILITY    
+    
+    @Override
+    public String toString() {
+        return "Prenotazione { id : '"+this.idPrenotazione+"', idUser : '"+this.idUtente+"', idPizza : '"+this.idPizza+"', quantità : "+this.quantita+"', data : '"+this.data+"', stato : '"+this.stato+" }";
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////    
+// METODI DI GET
 
     /**
      * Restituisce l'ID della prenotazione
      *
-     * @return int idPrenotazione
+     * @return idPrenotazione
      */
+    
     public int getIdPrenotazione() {
         return idPrenotazione;
     }
@@ -58,8 +76,9 @@ public class Prenotazione {
     /**
      * Restituisce l'ID dell'utente che ha effettuato la prenotazione
      *
-     * @return \<int\> idUtente
+     * @return idUtente
      */
+    
     public int getIdUtente() {
         return idUtente;
     }
@@ -67,8 +86,9 @@ public class Prenotazione {
     /**
      * Restituisce l'ID della pizza prenotata
      *
-     * @return \<int\> idPizza
+     * @return idPizza
      */
+    
     public int getIdPizza() {
         return idPizza;
     }
@@ -76,8 +96,9 @@ public class Prenotazione {
     /**
      * Restituisce la quantità di pizze prenotate
      *
-     * @return \<int\> quantita
+     * @return quantita
      */
+    
     public int getQuantita() {
         return quantita;
     }
@@ -85,8 +106,9 @@ public class Prenotazione {
     /**
      * Restituisce la data della prenotazione
      *
-     * @return \<String\> data
+     * @return data
      */
+    
     public String getData() {
         return data;
     }
@@ -94,19 +116,22 @@ public class Prenotazione {
     /**
      * Restituisce lo stato della prenotazione
      *
-     * @return \<String\> stato
+     * @return stato
      */
+    
     public String getStato() {
         return stato;
     }
-
-    //METODI DI SET
+    
+////////////////////////////////////////////////////////////////////////////////
+// METODI DI SET
     
     /**
      * Imposta l'id prenotazione
      *
      * @param q
      */
+    
     public void setIdPrenotazione(int q) {
         this.idPrenotazione = q;
     }
@@ -116,6 +141,7 @@ public class Prenotazione {
      *
      * @param q
      */
+    
     public void setIdUtente(int q) {
         this.idUtente = q;
     }
@@ -125,6 +151,7 @@ public class Prenotazione {
      *
      * @param q
      */
+    
     public void setIdPizza(int q) {
         this.idPizza = q;
     }
@@ -134,6 +161,7 @@ public class Prenotazione {
      *
      * @param q
      */
+    
     public void setQuantita(int q) {
         this.quantita = q;
     }
@@ -143,12 +171,12 @@ public class Prenotazione {
      *
      * @param d
      */
+    
     public void setData(String d) {
         this.data = d;
     }
-    
-    @Override
-    public String toString() {
-        return "Prenotazione { id : '"+this.idPrenotazione+"', idUser : '"+this.idUtente+"', idPizza : '"+this.idPizza+"', quantità : "+this.quantita+"', data : '"+this.data+"', stato : '"+this.stato+" }";
-    }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 }

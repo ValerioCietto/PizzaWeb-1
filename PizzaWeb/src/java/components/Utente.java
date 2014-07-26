@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package components;
 
-/**
- *
- * @author jorkut
- */
+////////////////////////////////////////////////////////////////////////////////
+
 public class Utente {
 
     private int idUtente = -1;
@@ -16,16 +9,18 @@ public class Utente {
     private String pwd;
     private String permission;
 
+////////////////////////////////////////////////////////////////////////////////
+// COSTRUTTORE
+    
     /**
-     * Crea l'utente
+     * Crea l'utente conoscendo l'ID
      *
      * @param id
      * @param iNome
      * @param iPwd
      * @param iRuolo
-     *
-     * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
+    
     protected Utente(int id, String iNome, String iPwd, String iRuolo) {
         this.idUtente = id;
         this.username = iNome;
@@ -33,19 +28,39 @@ public class Utente {
         this.permission = iRuolo;
     }
     
+    /**
+     * Crea l'utente senza conoscere l'ID
+     *
+     * @param iNome
+     * @param iPwd
+     * @param iRuolo
+     */
+    
     public Utente(String iNome, String iPwd, String iRuolo) {
         this.username = iNome;
         this.pwd = iPwd;
         this.permission = iRuolo;
     }
 
-
-        //METODI DI GET    
+////////////////////////////////////////////////////////////////////////////////
+// UTILITY
+    
+    @Override
+    public String toString() {
+        return "Utente { id : '"+this.idUtente+"', username : '"+this.username+"', password : '"+this.pwd+"', permission : "+this.permission+" }";
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// METODI DI GET   
+    
     /**
      * Restituisce l'ID dell'utente
      *
-     * @return int nome Pizza
+     * @return nome Pizza
      */
+    
     public int getId() {
         return idUtente;
     }
@@ -53,8 +68,9 @@ public class Utente {
     /**
      * Restituisce il nome dell'utente
      *
-     * @return \<String\> nome Pizza
+     * @return nome Pizza
      */
+    
     public String getUsername() {
         return username;
     }
@@ -62,8 +78,9 @@ public class Utente {
     /**
      * Restituisce la password dell'utente
      *
-     * @return <String>
+     * @return 
      */
+    
     public String getPassword() {
         return pwd;
     }
@@ -71,18 +88,22 @@ public class Utente {
     /**
      * Restituisce il ruolo dell'utente
      *
-     * @return \<String\>
+     * @return 
      */
+    
     public String getPermission() {
         return permission;
     }
 
-        //METODI DI SET
+////////////////////////////////////////////////////////////////////////////////
+// METODI DI SET
+    
     /**
      * Modifica l'id dell'utente
      *
      * @param id
      */
+    
     protected void setId(int id) {
         this.idUtente = id;
     }
@@ -92,6 +113,7 @@ public class Utente {
      *
      * @param name
      */
+    
     protected void setUsername(String name) {
         this.username = name;
     }
@@ -101,6 +123,7 @@ public class Utente {
      *
      * @param newPwd
      */
+    
     public void setPwd(String newPwd) {
         this.pwd = newPwd;
     }
@@ -110,12 +133,12 @@ public class Utente {
      *
      * @param newRuolo
      */
+    
     public void setPermission(String newRuolo) {
         this.permission = newRuolo;
     }
-    
-    @Override
-    public String toString() {
-        return "Utente { id : '"+this.idUtente+"', username : '"+this.username+"', password : '"+this.pwd+"', permission : "+this.permission+" }";
-    }
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 }
