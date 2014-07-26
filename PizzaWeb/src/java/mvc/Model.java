@@ -11,7 +11,9 @@ import javax.servlet.http.*;
  */
 
 public class Model {
+    
     private final Database db;
+    
     private Pizza pizza;
     private Utente utente;
     private Prenotazione prenotazione;
@@ -19,10 +21,17 @@ public class Model {
     private ArrayList<Pizza> catalogo;
     private ArrayList<Pizza> listaPrenotazioni;
     
+////////////////////////////////////////////////////////////////////////////////
+// COSTRUTTORE
+    
     public Model() throws SQLException{
         db = new Database();
     }
 
+    
+////////////////////////////////////////////////////////////////////////////////
+// UTILITY MODEL
+    
     public void loginModel(String username, String password, HttpSession s) throws SQLException{
         if (username != null && password != null && !username.equals("") && !password.equals("")) {
             Utente login = db.checkLogin(username, password);
@@ -38,6 +47,11 @@ public class Model {
         }
     }
 
+    
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+    
     public void remPizza(HttpServletRequest req) throws SQLException{
         String nomePizza = req.getParameter("pizza");
         Pizza tmp = db.getPizza(nomePizza);
@@ -128,4 +142,8 @@ public class Model {
         }
     }
 
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 }
