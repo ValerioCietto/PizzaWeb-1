@@ -6,6 +6,7 @@
 
 package mvc;
 
+import components.DBManager;
 import components.Prenotazione;
 import components.Pizza;
 import components.Utente;

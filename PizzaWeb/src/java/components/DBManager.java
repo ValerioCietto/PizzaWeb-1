@@ -1,4 +1,4 @@
-package mvc;
+package components;
 
 import java.sql.*;
 
