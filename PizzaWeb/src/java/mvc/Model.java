@@ -108,9 +108,9 @@ public class Model {
         }
     }
 
-    void remPren(HttpServletRequest req) throws SQLException {
+    void remPrenotazione(HttpServletRequest req) throws SQLException {
 
-        String user = req.getParameter("nomecliente");
+        String user = req.getParameter("username");
         String nomePizza = req.getParameter("nomepizza");
         String data = req.getParameter("data");
         
@@ -122,6 +122,18 @@ public class Model {
         if (idPren > 0) {
             Prenotazione tmp = db.getPrenotazione(idPren);
             db.remPrenotazione(tmp);
+        }
+    }
+
+    void remUtente(HttpServletRequest req) throws SQLException {
+
+        String user = req.getParameter("username");
+        
+        int idUser = db.getIdUser(user);
+        
+        if (idUser > 0) {
+            Utente tmp = db.getUser(idUser);
+            db.remUser(tmp);
         }
     }
 
@@ -141,6 +153,38 @@ public class Model {
             try{
             db.modPizza(pizza);
                 s.setAttribute("message", "Pizza modificata");
+               
+            } catch (SQLException e){s.setAttribute("message", "Problema sql");}
+        } else {
+            s.setAttribute("message", "inserisci un nome, gli ingredienti e il prezzo.");
+        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    void modPrenotazione(HttpServletRequest req) throws SQLException {
+
+        HttpSession s = req.getSession();
+        if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("") &&
+                req.getParameter("username") != null && !req.getParameter("username").equals("") &&
+                    req.getParameter("data") != null && !req.getParameter("data").equals("")) {
+            
+            String username = req.getParameter("username");
+            String nomePizza = req.getParameter("nomepizza");
+            String data = req.getParameter("data");
+
+            prenotazione = db.getPrenotazione(db.getIdPrenotazione(db.getIdUser(username), db.getIdPizza(nomePizza), data));
+            
+            String newData = req.getParameter("newData");
+            String quantita = req.getParameter("quantità");
+            String stato = req.getParameter("stato");
+            
+            prenotazione.setData(newData);
+            prenotazione.setQuantita(Integer.parseInt(quantita));
+            prenotazione.setStato("stato");
+            
+            try{
+            db.modPrenotazione(prenotazione);
+                s.setAttribute("message", "Prenotazione modificata");
                
             } catch (SQLException e){s.setAttribute("message", "Problema sql");}
         } else {

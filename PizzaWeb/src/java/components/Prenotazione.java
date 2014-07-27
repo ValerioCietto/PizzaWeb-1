@@ -9,7 +9,7 @@ public class Prenotazione {
     private int idPizza;
     private int quantita;
     private String data;
-    private final String stato;
+    private String stato;
 
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -178,6 +178,16 @@ public class Prenotazione {
     
     public void setData(String d) {
         this.data = d;
+    }
+
+    /**
+     * Imposta lo stato dell'ordine
+     *
+     * @param d
+     */
+    
+    public void setStato(String d) {
+        this.stato = d;
     }
 
     
