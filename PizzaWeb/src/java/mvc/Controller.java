@@ -148,14 +148,6 @@ public class Controller extends HttpServlet {
         String username = req.getParameter("username");
         try{
             ArrayList<Pizza> listaPizze = model.getCatalogo();
-            switch (model.getUtente(username).getPermission()){
-                case "user":
-                    System.out.println();
-                    break;
-                case "admin":
-                    System.out.println();
-                    break;
-            }
         }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
     }
 
@@ -169,7 +161,7 @@ public class Controller extends HttpServlet {
         s.setAttribute("message", "logout effettuato");
     }
     
-    // Solo proprie prenotazioni
+    
     public ArrayList<Prenotazione> getPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
@@ -177,6 +169,7 @@ public class Controller extends HttpServlet {
         try{
             ArrayList<Prenotazione> listaPrenotazioni = new ArrayList();
             switch (model.getUtente(username).getPermission()){
+                // Solo proprie prenotazioni
                 case "user":
                     System.out.println();
                     break;
