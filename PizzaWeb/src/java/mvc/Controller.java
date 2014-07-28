@@ -111,10 +111,14 @@ public class Controller extends HttpServlet {
         }
     }
 
+    
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 // METODI DEL MODEL    
+    
+////////////////////////////////////////////////////////////////////////////////
+// METODI USER NON LOGGATO
     
     public void login(HttpServletRequest req){
         HttpSession s = req.getSession();
@@ -126,6 +130,26 @@ public class Controller extends HttpServlet {
             System.out.println("Login fallito!");
         }
     }
+    
+    public void register(HttpServletRequest req){
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        try{
+            model.creaUtente(username, password);
+        }catch(SQLException e){
+            System.out.println("Registrazione fallita!");
+        }
+    }
+    
+    // Solo visualizzazione
+    public ArrayList<Pizza> getCatalogo(){
+        ArrayList<Pizza> listaPizze = new ArrayList();
+        return listaPizze;
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+// METODI USER LOGGATO
 
     public void logout(HttpServletRequest req) {
         HttpSession s = req.getSession();
@@ -134,17 +158,14 @@ public class Controller extends HttpServlet {
         s.setAttribute("message", "logout effettuato");
     }
     
-    public void register(HttpServletRequest req){
-        HttpSession s = req.getSession();
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        try{
-            model.login(username, password, s);
-        }catch(SQLException e){
-            System.out.println("Login fallito!");
-        }
+    // Solo proprie prenotazioni
+    public ArrayList<Prenotazione> getPrenotazioni(){
+        ArrayList<Prenotazione> listaPrenotazioni = new ArrayList();
+        return listaPrenotazioni;
     }
 
+////////////////////////////////////////////////////////////////////////////////
+// METODI ADMIN    
     
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
