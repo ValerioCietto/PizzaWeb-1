@@ -159,7 +159,7 @@ public class Controller extends HttpServlet {
         try{
              listaPizze= model.getCatalogo();
         }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
-        //View.visualizzaCatalogo(listaPizze ,req) possibile listaPizze null
+        View.visualizzaCatalogo(listaPizze ,req);
     }
     public void modPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
@@ -228,7 +228,7 @@ public class Controller extends HttpServlet {
                     break;
             }
         }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
-        //View.visualizzaPrenotazioni(listaPrenotazioni, req);
+        View.visualizzaPrenotazioni(listaPrenotazioni, req);
     }
     public void modPrenotazioni(HttpServletRequest req){
         
