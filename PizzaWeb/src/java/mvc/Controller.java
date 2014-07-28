@@ -25,8 +25,7 @@ public class Controller extends HttpServlet {
     
     public Controller() throws SQLException {
         super();
-        model = new Model();       
-        
+        model = new Model();
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,17 +60,17 @@ public class Controller extends HttpServlet {
                     aggPage(request);
                     break;
                 case "registration":
-                    model.addUser(request);
+                    model.addUtente(request);
                     break;
                 case "addPrenotaz":
                      //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
-                    model.addPren(request);
+                    model.addPrenotazione(request);
                    // Logger.getGlobal().info("sono nel controller in addprenotaz");
                     aggPage(request);
                     break;
                     
                 case "remPrenotaz":
-                    model.remPren(request);
+                    model.remPrenotazione(request);
                     aggPage(request);
                     break;
    
@@ -96,16 +95,20 @@ public class Controller extends HttpServlet {
         String ruolo=(String)(req.getSession()).getAttribute("ruolo");
         String login=(String)(req.getSession()).getAttribute("username");
         String page=(String)(req.getSession()).getAttribute("view");
-        if(page.equals("catalogo"))
-            System.out.println();
-        else if(page.equals("loginManager"))
-            System.out.println();
-        else if(page.equals("prenotazioni")){
-
-        if (ruolo.equals("user"))
-            System.out.println();
-        else
-            System.out.println();
+        
+        switch (page) {
+            case "catalogo":
+                System.out.println();
+                break;
+            case "loginManager":
+                System.out.println();
+                break;
+            case "prenotazioni":
+                if (ruolo.equals("user"))
+                    System.out.println();
+                else
+                    System.out.println();
+                break;
         }
     }
 
@@ -114,11 +117,15 @@ public class Controller extends HttpServlet {
 ////////////////////////////////////////////////////////////////////////////////
 // METODI DEL MODEL    
     
-    public void login(HttpServletRequest req) throws SQLException {
+    public void login(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
-        model.loginModel(username, password, s);
+        try{
+            model.login(username, password, s);
+        }catch(SQLException e){
+            System.out.println("Login fallito!");
+        }
     }
 
     public void logout(HttpServletRequest req) {
