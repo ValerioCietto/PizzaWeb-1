@@ -10,34 +10,31 @@ import javax.servlet.http.*;
 ////////////////////////////////////////////////////////////////////////////////
 
 public class Model {
-    
     private final DBManager dbman;
     
-    
+
 ////////////////////////////////////////////////////////////////////////////////
 // COSTRUTTORE
     
     public Model() throws SQLException{
         dbman = new DBManager();
     }
-
+    
     
 ////////////////////////////////////////////////////////////////////////////////
 // CREATORI DI OGGETTI
     
-    public Utente login(String username, String password, HttpSession s) throws SQLException{
-        Utente login = checkLogin(username, password);
-            if (login!=null) {
-                s.setAttribute("username", login.getUsername());
-                s.setAttribute("permission", login.getPermission());
-                s.setAttribute("message", "login effettuato, benvenuto " + login.getUsername() + "!");
-            } else {
-                s.setAttribute("message", "login errato, sicuro di esserti registrato?");
-            }
-        return login;
-    }
-
-    public boolean register(String username, String password) throws SQLException{
+    /**
+     * Crea un oggetto Utente e lo inserisce nel database
+     * @param username
+     * @param password
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
+    
+    public boolean creaUtente(String username, String password) throws SQLException{
         if (getUtente(username)== null){
             Utente user = new Utente(username, password, "user");
             addUtente(user);
@@ -45,6 +42,17 @@ public class Model {
         }
         return false;
     }
+    
+    /**
+     * Crea un oggetto Pizza e lo inserisce nel Database
+     * @param nome
+     * @param ingredienti
+     * @param prezzo
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
     
     public boolean creaPizza(String nome, String ingredienti, double prezzo) throws SQLException{
         if (getPizza(nome)== null){
@@ -54,6 +62,19 @@ public class Model {
         }
         return false;
     }
+    
+    /**
+     * Crea un oggetto Prenotazione e lo inserisce nel Database
+     * 
+     * @param idUtente
+     * @param idPizza
+     * @param quantita
+     * @param data
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
     
     public boolean creaPrenotazione(int idUtente, int idPizza, int quantita, String data) throws SQLException{
         if (getIdPrenotazione(idUtente, idPizza, data) < 0){
@@ -66,6 +87,31 @@ public class Model {
 
 ////////////////////////////////////////////////////////////////////////////////
 // UTILITY MODEL    
+    
+    /**
+     * Controlla l'esistenza dell'utente ed effettua il set degli attributi della sessione in uso
+     * 
+     * @param username
+     * @param password
+     * @param s
+     * 
+     * @return
+     * 
+     * @throws SQLException 
+     */
+    
+    public boolean login(String username, String password, HttpSession s) throws SQLException{
+        Utente login = checkLogin(username, password);
+        if (login!=null) {
+            s.setAttribute("username", login.getUsername());
+            s.setAttribute("permission", login.getPermission());
+            s.setAttribute("message", "login effettuato, benvenuto " + login.getUsername() + "!");
+            return true;
+        } else {
+            s.setAttribute("message", "login errato, sicuro di esserti registrato?");
+            return false;
+        }
+    }
     
     /**
      * Effettua un controllo sul login dell'utente
@@ -128,6 +174,9 @@ public class Model {
         }
         return listaUtenti;
     }
+    
+////////////////////////////////////////////////////////////////////////////////
+// FORNITORI DI LISTE
     
     /**
      * Fornisce il catalogo delle pizze
@@ -198,7 +247,7 @@ public class Model {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-// METODI DI INSERIMENTO (OK)
+// METODI DI INSERIMENTO NEL DATABASE(OK)
     
     /**
      * Inserisce un utente nella tabella UTENTI e lo aggiunge in lista
@@ -277,7 +326,7 @@ public class Model {
     
     
 ////////////////////////////////////////////////////////////////////////////////
-// METODI DI ELIMINAZIONE (OK)
+// METODI DI ELIMINAZIONE DAL DATABASE(OK)
     
     /**
      * Rimuove un utente dalla tabella UTENTI e dalla lista
@@ -337,7 +386,7 @@ public class Model {
     
     
 ////////////////////////////////////////////////////////////////////////////////
-// METODI DI MODIFICA (OK)
+// METODI DI MODIFICA NEL DATABASE(OK)
     
     /**
      * Modifica un utente nella tabella UTENTI e ricrea la lista
@@ -392,7 +441,7 @@ public class Model {
 
     
 ////////////////////////////////////////////////////////////////////////////////
-// METODI DI GET ID (OK)
+// METODI DI GET ID DAL DATABASE(OK)
     
     /**
      * Prende in input il nome utente e password e restituisce l'ID dell'utente
@@ -461,7 +510,7 @@ public class Model {
 
     
 ////////////////////////////////////////////////////////////////////////////////
-// METODI DI GET (OK)
+// METODI DI GET DAL DATABASE(OK)
     
     /**
      * Ritorna un oggetto Utente partendo dall'username
