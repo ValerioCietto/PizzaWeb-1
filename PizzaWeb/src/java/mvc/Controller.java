@@ -198,7 +198,7 @@ public class Controller extends HttpServlet {
                     notifica(s, "pizza non trovata");
             }else
                 notifica(s, "non hai i permessi");
-        }catch(SQLException e){System.out.println("???B???");}
+        }catch(SQLException e){notifica(s,"???B???");}
         getCatalogo(req);
     }
 
@@ -226,7 +226,7 @@ public class Controller extends HttpServlet {
                     notifica(s, "non hai i permessi");
                     break;
             }
-        }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
+        }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
         View.visualizzaPrenotazioni(listaPrenotazioni, req);
     }
     public void modPrenotazioni(HttpServletRequest req){
@@ -248,11 +248,6 @@ public class Controller extends HttpServlet {
                             int quantita=Integer.parseInt(req.getParameter("quantitaPrenotaz"));
                             if(quantita>0)
                                 p.setIdPizza(quantita);
-
-                            /////////////////////
-                            //gestione id
-                            /////////////////////
-
                             //gestione data
                             String data=req.getParameter("dataPrenotaz");
                             if(data!=null && !data.equals(""))
@@ -303,7 +298,7 @@ public class Controller extends HttpServlet {
                     notifica(s, "non hai i permessi");
                     break;
             }
-        }catch(SQLException e){System.out.println("???B???");}
+        }catch(SQLException e){notifica(s,"???B???");}
         getPrenotazioni(req);
     }
     public void remPrenotazioni(HttpServletRequest req){
@@ -338,7 +333,7 @@ public class Controller extends HttpServlet {
                     notifica(s, "non hai i permessi");
                     break;
             }
-        }catch(SQLException e){System.out.println("???B???");}
+        }catch(SQLException e){notifica(s,"???B???");}
         getPrenotazioni(req);
     }
 ////////////////////////////////////////////////////////////////////////////////
