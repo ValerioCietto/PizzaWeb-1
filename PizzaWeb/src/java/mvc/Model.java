@@ -16,9 +16,6 @@ public class Model {
     private Utente utente;
     private Prenotazione prenotazione;
     
-    private ArrayList<Pizza> catalogo;
-    private ArrayList<Pizza> listaPrenotazioni;
-    
 ////////////////////////////////////////////////////////////////////////////////
 // COSTRUTTORE
     
@@ -30,9 +27,10 @@ public class Model {
 ////////////////////////////////////////////////////////////////////////////////
 // UTILITY MODEL
     
-    public void loginModel(String username, String password, HttpSession s) throws SQLException{
+    public Utente login(String username, String password, HttpSession s) throws SQLException{
+        Utente login = null;
         if (username != null && password != null && !username.equals("") && !password.equals("")) {
-            Utente login = db.checkLogin(username, password);
+            login = db.checkLogin(username, password);
             if (login!=null) {
                 s.setAttribute("username", login.getUsername());
                 s.setAttribute("permission", login.getPermission());
@@ -43,23 +41,35 @@ public class Model {
         } else {
             s.setAttribute("message", "inserisci il tuo nome utente e la tua password.");
         }
+        return login;
     }
 
+    public void register(String username, String password, HttpSession s){}
+    
+    public ArrayList<Pizza> getCatalogo() throws SQLException{
+        return db.getCatalogo();
+    }
+    
+    public ArrayList<Prenotazione> ottieniPrenotazioni(int id) throws SQLException{
+        return db.getListaPrenotazioni(id);
+    }
+    
+    
     
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 // METODI DI INSERIMENTO
     
-    void addUser(HttpServletRequest req) throws SQLException {
+    protected void addUtente(HttpServletRequest req) throws SQLException {
         String n = req.getParameter("username");
         String p = req.getParameter("pwd1");
         String ruolo = "user";
         utente = new Utente(n, p, ruolo);
-        db.addUser(utente); 
+        db.addUtente(utente); 
     }
 
-    void addPizza(HttpServletRequest req) {
+    protected void addPizza(HttpServletRequest req) {
         HttpSession s = req.getSession();
         if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("")) {
             String n = req.getParameter("pizza");
@@ -79,7 +89,7 @@ public class Model {
         }
     }
 
-    void addPren(HttpServletRequest req) throws SQLException {
+    protected void addPrenotazione(HttpServletRequest req) throws SQLException {
         String nomePizza = req.getParameter("pizza");
         String user = (String) req.getSession().getAttribute("username");
         int quantita = (Integer.parseInt(req.getParameter("quantita"))); //questo gli riempie solo un numero
@@ -87,7 +97,7 @@ public class Model {
        
         Pizza tmp = db.getPizza(nomePizza);
         int idPizza= tmp.getId();
-        int idUser = db.getIdUser(user);
+        int idUser = db.getIdUtente(user);
         prenotazione= new Prenotazione(idUser, idPizza, quantita,  data);
 
         db.addPrenotazione(prenotazione);
@@ -96,8 +106,20 @@ public class Model {
     
 ////////////////////////////////////////////////////////////////////////////////
 // METODI DI ELIMINAZIONE
-    
-    void remPizza(HttpServletRequest req) throws SQLException{
+ 
+    protected void remUtente(HttpServletRequest req) throws SQLException {
+
+        String user = req.getParameter("username");
+        
+        int idUser = db.getIdUtente(user);
+        
+        if (idUser > 0) {
+            Utente tmp = db.getUtente(idUser);
+            db.remUtente(tmp);
+        }
+    }
+
+    protected void remPizza(HttpServletRequest req) throws SQLException{
         String nomePizza = req.getParameter("pizza");
         Pizza tmp = db.getPizza(nomePizza);
         try {
@@ -108,7 +130,7 @@ public class Model {
         }
     }
 
-    void remPrenotazione(HttpServletRequest req) throws SQLException {
+    protected void remPrenotazione(HttpServletRequest req) throws SQLException {
 
         String user = req.getParameter("username");
         String nomePizza = req.getParameter("nomepizza");
@@ -116,7 +138,7 @@ public class Model {
         
         
 
-        int idUser = db.getIdUser(user);
+        int idUser = db.getIdUtente(user);
         int idPizza = db.getIdPizza(nomePizza);
         int idPren = db.getIdPrenotazione(idUser, idPizza, data);
         if (idPren > 0) {
@@ -125,23 +147,38 @@ public class Model {
         }
     }
 
-    void remUtente(HttpServletRequest req) throws SQLException {
-
-        String user = req.getParameter("username");
-        
-        int idUser = db.getIdUser(user);
-        
-        if (idUser > 0) {
-            Utente tmp = db.getUser(idUser);
-            db.remUser(tmp);
-        }
-    }
-
     
 ////////////////////////////////////////////////////////////////////////////////
 // METODI DI MODIFICA
+    
+    protected void modUtente(HttpServletRequest req) throws SQLException {
 
-    void modPizza(HttpServletRequest req) {
+        HttpSession s = req.getSession();
+        if (req.getParameter("username") != null && !req.getParameter("username").equals("") &&
+                req.getParameter("password") != null && !req.getParameter("password").equals("")) {
+            
+            int idUser = Integer.parseInt(req.getParameter("idUtente"));
+            String username = req.getParameter("username");
+            String password = req.getParameter("password");
+            String permission = req.getParameter("permission");
+            
+
+            utente = db.getUtente(idUser);
+            utente.setUsername(username);
+            utente.setPwd(password);
+            utente.setPermission(permission);
+            try{
+            db.modUtente(utente);
+                s.setAttribute("message", "Utente modificato");
+               
+            } catch (SQLException e){s.setAttribute("message", "Problema sql");}
+        } else {
+            s.setAttribute("message", "inserisci i dati dell'utente.");
+        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    protected void modPizza(HttpServletRequest req) {
 
         HttpSession s = req.getSession();
         if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("")) {
@@ -161,7 +198,7 @@ public class Model {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    void modPrenotazione(HttpServletRequest req) throws SQLException {
+    protected void modPrenotazione(HttpServletRequest req) throws SQLException {
 
         HttpSession s = req.getSession();
         if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("") &&
@@ -172,15 +209,15 @@ public class Model {
             String nomePizza = req.getParameter("nomepizza");
             String data = req.getParameter("data");
 
-            prenotazione = db.getPrenotazione(db.getIdPrenotazione(db.getIdUser(username), db.getIdPizza(nomePizza), data));
+            prenotazione = db.getPrenotazione(db.getIdPrenotazione(db.getIdUtente(username), db.getIdPizza(nomePizza), data));
             
             String newData = req.getParameter("newData");
-            String quantita = req.getParameter("quantità");
+            int quantita = Integer.parseInt(req.getParameter("quantità"));
             String stato = req.getParameter("stato");
             
             prenotazione.setData(newData);
-            prenotazione.setQuantita(Integer.parseInt(quantita));
-            prenotazione.setStato("stato");
+            prenotazione.setQuantita(quantita);
+            prenotazione.setStato(stato);
             
             try{
             db.modPrenotazione(prenotazione);

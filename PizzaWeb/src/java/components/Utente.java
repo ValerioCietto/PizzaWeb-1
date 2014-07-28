@@ -119,7 +119,7 @@ public class Utente {
      * @param name
      */
     
-    protected void setUsername(String name) {
+    public void setUsername(String name) {
         this.username = name;
     }
     

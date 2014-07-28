@@ -1,7 +1,9 @@
 package mvc;
 
+import components.*;
 import java.io.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +15,10 @@ import javax.servlet.http.*;
 public class Controller extends HttpServlet {
     
     private final Model model;
+    private Utente user;
+    private ArrayList<Pizza> catalogo;
+    private ArrayList<Prenotazione> listaPrenotazioni;
+    
 
 ////////////////////////////////////////////////////////////////////////////////
 // COSTRUTTORE

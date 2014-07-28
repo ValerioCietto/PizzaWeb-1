@@ -140,6 +140,11 @@ public final class Database {
         return listaPren;
     }
  
+    /**
+     * Elimina le tabelle del Database
+     * @throws SQLException 
+     */
+    
     public void drop() throws SQLException{
         dbman.openConnection();
         try{
@@ -166,7 +171,7 @@ public final class Database {
      * @throws java.sql.SQLException
      */
     
-    public void addUser(Utente u) throws SQLException{
+    public void addUtente(Utente u) throws SQLException{
         try{
             dbman.openConnection();
             if(dbman.getIdUser(u.getUsername()) < 0){
@@ -248,7 +253,7 @@ public final class Database {
      * @throws java.sql.SQLException
      */
     
-    public void remUser(Utente u) throws SQLException{
+    public void remUtente(Utente u) throws SQLException{
         try{
             dbman.openConnection();
             //rimuovi utente
@@ -311,7 +316,7 @@ public final class Database {
      * @throws java.sql.SQLException
      */
     
-    public void modUser(Utente u) throws SQLException{
+    public void modUtente(Utente u) throws SQLException{
         try{
             dbman.openConnection();
             dbman.modUser(u.getUsername(), u.getPassword(), u.getPermission());
@@ -371,7 +376,7 @@ public final class Database {
      * @throws java.sql.SQLException
      */
     
-    public int getIdUser(String username) throws SQLException{
+    public int getIdUtente(String username) throws SQLException{
         int tmp = -1;
         try{
             dbman.openConnection();
@@ -440,7 +445,7 @@ public final class Database {
      * @throws java.sql.SQLException
      */
     
-    public Utente getUser(String name) throws SQLException{
+    public Utente getUtente(String name) throws SQLException{
         Utente tmp = null;
         try{
             dbman.openConnection();
@@ -463,7 +468,7 @@ public final class Database {
      * @throws java.sql.SQLException
      */
     
-    public Utente getUser(int id) throws SQLException{
+    public Utente getUtente(int id) throws SQLException{
         Utente tmp = null;  
         try{
             dbman.openConnection();
