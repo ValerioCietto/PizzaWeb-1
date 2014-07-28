@@ -143,9 +143,20 @@ public class Controller extends HttpServlet {
     }
     
     // Solo visualizzazione
-    public ArrayList<Pizza> getCatalogo(){
-        ArrayList<Pizza> listaPizze = new ArrayList();
-        return listaPizze;
+    public void getCatalogo(HttpServletRequest req){
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        try{
+            ArrayList<Pizza> listaPizze = model.getCatalogo();
+            switch (model.getUtente(username).getPermission()){
+                case "user":
+                    System.out.println();
+                    break;
+                case "admin":
+                    System.out.println();
+                    break;
+            }
+        }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -159,11 +170,26 @@ public class Controller extends HttpServlet {
     }
     
     // Solo proprie prenotazioni
-    public ArrayList<Prenotazione> getPrenotazioni(){
-        ArrayList<Prenotazione> listaPrenotazioni = new ArrayList();
+    public ArrayList<Prenotazione> getPrenotazioni(HttpServletRequest req){
+        
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        try{
+            ArrayList<Prenotazione> listaPrenotazioni = new ArrayList();
+            switch (model.getUtente(username).getPermission()){
+                case "user":
+                    System.out.println();
+                    break;
+                case "admin":
+                    System.out.println();
+                    break;
+            }
+        }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
         return listaPrenotazioni;
     }
 
+    //mod prenotazione, mod pizza, rem prenotazione, rem pizza,
+    
 ////////////////////////////////////////////////////////////////////////////////
 // METODI ADMIN    
     
