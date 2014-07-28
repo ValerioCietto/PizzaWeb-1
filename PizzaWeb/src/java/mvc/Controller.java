@@ -155,118 +155,193 @@ public class Controller extends HttpServlet {
     // Solo visualizzazione
     public void getCatalogo(HttpServletRequest req){
         HttpSession s = req.getSession();
-        String username = req.getParameter("username");
+        ArrayList<Pizza> listaPizze=null;
         try{
-            ArrayList<Pizza> listaPizze = model.getCatalogo();
+             listaPizze= model.getCatalogo();
         }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
+        //View.visualizzaCatalogo(listaPizze ,req) possibile listaPizze null
     }
     public void modPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
-        //......
         try{
             if(model.getUtente(username).getPermission().equals("admin")){
-                //if (ho tutti i parametri e la pizza esiste)
-                    //modifica pizza
-                //else
-                    //mancano dati o pizza
-            }else{
-                //non hai i permessi
-            }
+                Pizza p=model.getPizza(req.getParameter("nomePizza"));
+                if(p!=null){
+                    //gestione prezzo
+                    double prezzo=Double.parseDouble(req.getParameter("prezzoPizza"));
+                    if(prezzo>0)
+                        p.setPrezzo(prezzo);
+                    //gestione ingrediente
+                    String ingredienti=req.getParameter("prezzoPizza");
+                    if(ingredienti!=null && !ingredienti.equals(""))
+                        p.setIngredienti(ingredienti);
+                    //applica modifiche
+                    model.modPizza(p);
+                    s.setAttribute("message", "pizza aggiornata");
+                }else
+                    s.setAttribute("message", "pizza non trovata");
+            }else
+                s.setAttribute("message", "non hai i permessi");
         }catch(SQLException e){System.out.println("???A???");}
+        getCatalogo(req);
     }
     public void remPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
-        //......
         try{
             if(model.getUtente(username).getPermission().equals("admin")){
-                //if (pizza esiste)
-                    //rimuovi pizza
-                //else
-                    //non esisteva gia...
-            }
-            else{
-                //non hai i permessi
-            }
+                Pizza p=model.getPizza(req.getParameter("nomePizza"));
+                if(p!=null){
+                    model.remPizza(p);
+                    s.setAttribute("message", "pizza rimossa");
+                }else
+                    s.setAttribute("message", "pizza non trovata");
+            }else
+                s.setAttribute("message", "non hai i permessi");
         }catch(SQLException e){System.out.println("???B???");}
+        getCatalogo(req);
     }
 
 ////////////////////////////////////////////////////////////////////////////////
 // METODI SU PRENOTAZIONI
 
-    public ArrayList<Prenotazione> getPrenotazioni(HttpServletRequest req){
+    public void getPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
+        ArrayList<Prenotazione> listaPrenotazioni=null;
         try{
-            ArrayList<Prenotazione> listaPrenotazioni = new ArrayList();
-            switch (model.getUtente(username).getPermission()){
+            listaPrenotazioni = new ArrayList();
+            Utente u=model.getUtente(username);
+            switch (u.getPermission()){
                 case "user":
-                    //visualizza proprie prenotazioni
+                    listaPrenotazioni=model.getListaPrenotazioni(u.getId());
+                    s.setAttribute("message", "Caricate Proprie Prenotazioni");
                     break;
                 case "admin":
-                    //visualizza le prenotazioni di tutti
+                    listaPrenotazioni=model.getListaPrenotazioni();
+                    s.setAttribute("message", "Caricate Tutte Prenotazioni");
                     break;
                 default:
-                    //non hai i permessi
+                    s.setAttribute("message", "non hai i permessi");
                     break;
             }
         }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
-        return listaPrenotazioni;
+        //View.visualizzaPrenotazioni(listaPrenotazioni, req);
     }
     public void modPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
+        Prenotazione p=null;
         try{
             switch (model.getUtente(username).getPermission()){
                 case "user":
-                    //if (ho tutti i parametri e la prenotazione esiste ed è tua)
-                        //modifica prenotaz
-                    //else
-                        //mancano dati o prenotaz o non è tua
+                    p=model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    if(p!=null){
+                        if(p.getIdUtente()==model.getIdUtente(username)){
+                            //gestione pizza
+                            int pizza=Integer.parseInt(req.getParameter("pizzaPrenotaz"));
+                            if(pizza>0)
+                                p.setIdPizza(pizza);
+                            //gestione quantità
+                            int quantita=Integer.parseInt(req.getParameter("quantitaPrenotaz"));
+                            if(quantita>0)
+                                p.setIdPizza(quantita);
+
+                            /////////////////////
+                            //gestione id
+                            /////////////////////
+
+                            //gestione data
+                            String data=req.getParameter("dataPrenotaz");
+                            if(data!=null && !data.equals(""))
+                                p.setData(data);
+                            //gestione stato
+                            String stato=req.getParameter("statoPrenotaz");
+                            if(stato!=null && !stato.equals(""))
+                                p.setData(stato);
+
+                            model.modPrenotazione(p);
+                            s.setAttribute("message", "prenotazione aggiornata");
+                        }else
+                            s.setAttribute("message", "prenotazione non tua");
+                    }else
+                        s.setAttribute("message", "prenotazione non trovata");
                     break;
                 case "admin":
-                     //if (ho tutti i parametri e la prenotazione esiste)
-                        //modifica prenotaz
-                    //else
-                        //mancano dati o prenotaz
+                    p=model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    if(p!=null){
+                        //gestione cliente
+                        int cliente=Integer.parseInt(req.getParameter("clientePrenotaz"));
+                        if(cliente>0)
+                            p.setIdUtente(cliente);
+                        //gestione pizza
+                        int pizza=Integer.parseInt(req.getParameter("pizzaPrenotaz"));
+                        if(pizza>0)
+                            p.setIdPizza(pizza);
+                        //gestione quantità
+                        int quantita=Integer.parseInt(req.getParameter("quantitaPrenotaz"));
+                        if(quantita>0)
+                            p.setIdPizza(quantita);
+                        //gestione data
+                        String data=req.getParameter("dataPrenotaz");
+                        if(data!=null && !data.equals(""))
+                            p.setData(data);
+                        //gestione stato
+                        String stato=req.getParameter("statoPrenotaz");
+                        if(stato!=null && !stato.equals(""))
+                            p.setData(stato);
+
+                        model.modPrenotazione(p);
+                        s.setAttribute("message", "prenotazione aggiornata");
+                        
+                    }else
+                        s.setAttribute("message", "prenotazione non trovata");
                     break;
                 default:
-                    //non hai i permessi
+                    s.setAttribute("message", "non hai i permessi");
                     break;
             }
         }catch(SQLException e){System.out.println("???B???");}
+        getPrenotazioni(req);
     }
     public void remPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
+        Prenotazione p=null;
         try{
             switch (model.getUtente(username).getPermission()){
                 case "user":
-                    //if (la prenotazione esiste ed è tua)
-                        //rem prenotaz
-                    //else
-                        //prenotaz non esiste o non è tua
+                    p =model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    if(p!=null){
+                        if(p.getIdUtente()==model.getIdUtente(username)){
+                            model.remPrenotazione(p);
+                            s.setAttribute("message", "prenotazione rimossa");
+                        }else
+                            s.setAttribute("message", "prenotazione non tua");
+                    }
+                    else
+                        s.setAttribute("message", "prenotazione non trovata");
                     break;
                 case "admin":
-                     //if (la prenotazione esiste)
-                        //rem prenotaz
-                    //else
-                        //non esiste pren prenotaz
+                    p =model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    if(p!=null){
+                        model.remPrenotazione(p);
+                        s.setAttribute("message", "prenotazione rimossa");
+                    }
+                    else
+                        s.setAttribute("message", "prenotazione non trovata");
                     break;
                 default:
-                    //non hai i permessi
+                    s.setAttribute("message", "non hai i permessi");
                     break;
             }
         }catch(SQLException e){System.out.println("???B???");}
+        getPrenotazioni(req);
     }
-
-////////////////////////////////////////////////////////////////////////////////
-// METODI ADMIN    
-    
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
