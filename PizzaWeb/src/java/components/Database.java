@@ -9,9 +9,6 @@ import java.util.ArrayList;
 public final class Database {
 
     private final DBManager dbman;
-    private  ArrayList<Utente> listaUtenti;
-    private  ArrayList<Pizza> listaPizze;
-    private  ArrayList<Prenotazione> listaPrenotazioni;
 
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -19,9 +16,6 @@ public final class Database {
     
     public Database() throws SQLException{
         dbman = new DBManager();
-        listaUtenti = getListaUtenti();
-        listaPizze = getCatalogo();
-        listaPrenotazioni = getListaPrenotazioni();   
     }
     
     
@@ -52,6 +46,20 @@ public final class Database {
             dbman.closeConnection();
         }
         return tmp;
+    }
+    
+    /**
+     * Elimina le tabelle del Database
+     * @throws SQLException 
+     */
+    
+    public void drop() throws SQLException{
+        dbman.openConnection();
+        try{
+            dbman.drop();
+        }finally{
+            dbman.closeConnection();
+        }
     }
     
     /**
@@ -139,24 +147,7 @@ public final class Database {
         }
         return listaPren;
     }
- 
-    /**
-     * Elimina le tabelle del Database
-     * @throws SQLException 
-     */
-    
-    public void drop() throws SQLException{
-        dbman.openConnection();
-        try{
-            listaUtenti = null;
-            listaPizze = null;
-            listaPrenotazioni = null;
-            dbman.drop();
-        }finally{
-            dbman.closeConnection();
-        }
-    }
-    
+
     
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +170,6 @@ public final class Database {
                 int tmp = dbman.addUser(u.getUsername(), u.getPassword(), u.getPermission());
                 if(tmp >= 0){
                     u.setId(tmp);
-                    listaUtenti.add(u);
                 }
             }
             else
@@ -205,7 +195,6 @@ public final class Database {
                 int tmp = dbman.addPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
                 if(tmp >= 0){
                     p.setId(tmp);
-                    listaPizze.add(p);
                 }
             }
             else
@@ -231,7 +220,6 @@ public final class Database {
                 int tmp = dbman.addPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getQuantita(), p.getData());
                 if(tmp >= 0){
                     p.setIdPrenotazione(tmp);
-                    listaPrenotazioni.add(p);
                 }
             }
             else
@@ -259,7 +247,6 @@ public final class Database {
             //rimuovi utente
             dbman.remUser(u.getId());
             u.setId(-1);
-            listaUtenti.remove(u);
         }finally{
             dbman.closeConnection();
         }
@@ -279,7 +266,6 @@ public final class Database {
             //rimuovi pizza
             dbman.remPizza(p.getId());
             p.setId(-1);
-            listaPizze.remove(p);
         }finally{
             dbman.closeConnection();
         }
@@ -298,7 +284,6 @@ public final class Database {
             dbman.openConnection();
             dbman.remPrenotazione(p.getIdPrenotazione());
             p.setIdPrenotazione(-1);
-            listaPrenotazioni.remove(p);
         }finally{
             dbman.closeConnection();
         }
@@ -320,7 +305,6 @@ public final class Database {
         try{
             dbman.openConnection();
             dbman.modUser(u.getUsername(), u.getPassword(), u.getPermission());
-            listaUtenti = getListaUtenti();
         }finally{
             dbman.closeConnection();
         }
@@ -338,7 +322,6 @@ public final class Database {
         try{
             dbman.openConnection();
             dbman.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
-            listaPizze = getCatalogo();
         }finally{
             dbman.closeConnection();
         }
@@ -356,7 +339,6 @@ public final class Database {
         try{
             dbman.openConnection();
             dbman.modPrenotazione(p.getIdPrenotazione(), p.getQuantita(), p.getData());
-            listaPrenotazioni = getListaPrenotazioni();
         }finally{
             dbman.closeConnection();
         }
