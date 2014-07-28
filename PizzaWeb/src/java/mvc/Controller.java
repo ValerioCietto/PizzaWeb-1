@@ -163,14 +163,13 @@ public class Controller extends HttpServlet {
     public void modPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
-        ArrayList<Pizza> listaPizze;
         //......
         try{
             if(model.getUtente(username).getPermission().equals("admin")){
                 //if (ho tutti i parametri e la pizza esiste)
                     //modifica pizza
                 //else
-                    //mancano dati
+                    //mancano dati o pizza
             }else{
                 //non hai i permessi
             }
@@ -179,7 +178,6 @@ public class Controller extends HttpServlet {
     public void remPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
-        ArrayList<Pizza> listaPizze;
         //......
         try{
             if(model.getUtente(username).getPermission().equals("admin")){
@@ -204,7 +202,6 @@ public class Controller extends HttpServlet {
         try{
             ArrayList<Prenotazione> listaPrenotazioni = new ArrayList();
             switch (model.getUtente(username).getPermission()){
-                // Solo proprie prenotazioni
                 case "user":
                     //visualizza proprie prenotazioni
                     break;
@@ -225,10 +222,40 @@ public class Controller extends HttpServlet {
         try{
             switch (model.getUtente(username).getPermission()){
                 case "user":
-                    //
+                    //if (ho tutti i parametri e la prenotazione esiste ed è tua)
+                        //modifica prenotaz
+                    //else
+                        //mancano dati o prenotaz o non è tua
                     break;
                 case "admin":
-                    System.out.println();
+                     //if (ho tutti i parametri e la prenotazione esiste)
+                        //modifica prenotaz
+                    //else
+                        //mancano dati o prenotaz
+                    break;
+                default:
+                    //non hai i permessi
+                    break;
+            }
+        }catch(SQLException e){System.out.println("???B???");}
+    }
+    public void remPrenotazioni(HttpServletRequest req){
+        
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        try{
+            switch (model.getUtente(username).getPermission()){
+                case "user":
+                    //if (la prenotazione esiste ed è tua)
+                        //rem prenotaz
+                    //else
+                        //prenotaz non esiste o non è tua
+                    break;
+                case "admin":
+                     //if (la prenotazione esiste)
+                        //rem prenotaz
+                    //else
+                        //non esiste pren prenotaz
                     break;
                 default:
                     //non hai i permessi
