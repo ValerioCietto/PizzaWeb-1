@@ -35,7 +35,7 @@ public class Model {
      */
     
     public boolean creaUtente(String username, String password) throws SQLException{
-        if (getUtente(username)== null){
+        if (getIdUtente(username)<0){
             Utente user = new Utente(username, password, "user");
             addUtente(user);
             return true;
@@ -55,7 +55,7 @@ public class Model {
      */
     
     public boolean creaPizza(String nome, String ingredienti, double prezzo) throws SQLException{
-        if (getPizza(nome)== null){
+        if (getIdPizza(nome)<0){
             Pizza pizza = new Pizza(nome, ingredienti, prezzo);
             addPizza(pizza);
             return true;
@@ -85,6 +85,7 @@ public class Model {
         return false;
     }
 
+    
 ////////////////////////////////////////////////////////////////////////////////
 // UTILITY MODEL    
     
@@ -154,6 +155,10 @@ public class Model {
         }
     }
     
+    
+////////////////////////////////////////////////////////////////////////////////
+// FORNITORI DI LISTE
+    
     /**
      * Fornisce la lista di tutti gli utenti
      * 
@@ -174,9 +179,6 @@ public class Model {
         }
         return listaUtenti;
     }
-    
-////////////////////////////////////////////////////////////////////////////////
-// FORNITORI DI LISTE
     
     /**
      * Fornisce il catalogo delle pizze
