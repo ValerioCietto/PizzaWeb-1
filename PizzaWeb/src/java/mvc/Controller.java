@@ -118,7 +118,7 @@ public class Controller extends HttpServlet {
 // METODI DEL MODEL    
     
 ////////////////////////////////////////////////////////////////////////////////
-// METODI USER NON LOGGATO
+// METODI SESSIONE
     
     public void login(HttpServletRequest req){
         HttpSession s = req.getSession();
@@ -142,6 +142,16 @@ public class Controller extends HttpServlet {
         }
     }
     
+    public void logout(HttpServletRequest req) {
+        HttpSession s = req.getSession();
+        s.invalidate();
+        s = req.getSession();
+        s.setAttribute("message", "logout effettuato");
+    }
+    
+////////////////////////////////////////////////////////////////////////////////
+// METODI SU CATALOGO   
+
     // Solo visualizzazione
     public void getCatalogo(HttpServletRequest req){
         HttpSession s = req.getSession();
@@ -152,16 +162,8 @@ public class Controller extends HttpServlet {
     }
 
 ////////////////////////////////////////////////////////////////////////////////
-// METODI USER LOGGATO
+// METODI SU PRENOTAZIONI
 
-    public void logout(HttpServletRequest req) {
-        HttpSession s = req.getSession();
-        s.invalidate();
-        s = req.getSession();
-        s.setAttribute("message", "logout effettuato");
-    }
-    
-    
     public ArrayList<Prenotazione> getPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
