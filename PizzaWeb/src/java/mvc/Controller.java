@@ -4,8 +4,7 @@ import components.*;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
+import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
@@ -146,7 +145,7 @@ public class Controller extends HttpServlet {
         HttpSession s = req.getSession();
         s.invalidate();
         s = req.getSession();
-        s.setAttribute("message", "logout effettuato");
+        notifica(s, "logout effettuato");
     }
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -158,7 +157,7 @@ public class Controller extends HttpServlet {
         ArrayList<Pizza> listaPizze=null;
         try{
              listaPizze= model.getCatalogo();
-        }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
+        }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
         View.visualizzaCatalogo(listaPizze ,req);
     }
     public void modPizza(HttpServletRequest req){
@@ -178,12 +177,12 @@ public class Controller extends HttpServlet {
                         p.setIngredienti(ingredienti);
                     //applica modifiche
                     model.modPizza(p);
-                    s.setAttribute("message", "pizza aggiornata");
+                    notifica(s, "pizza aggiornata");
                 }else
-                    s.setAttribute("message", "pizza non trovata");
+                    notifica(s, "pizza non trovata");
             }else
-                s.setAttribute("message", "non hai i permessi");
-        }catch(SQLException e){System.out.println("???A???");}
+                notifica(s, "non hai i permessi");
+        }catch(SQLException e){notifica(s,"???A???");}
         getCatalogo(req);
     }
     public void remPizza(HttpServletRequest req){
@@ -194,11 +193,11 @@ public class Controller extends HttpServlet {
                 Pizza p=model.getPizza(req.getParameter("nomePizza"));
                 if(p!=null){
                     model.remPizza(p);
-                    s.setAttribute("message", "pizza rimossa");
+                    notifica(s, "pizza rimossa");
                 }else
-                    s.setAttribute("message", "pizza non trovata");
+                    notifica(s, "pizza non trovata");
             }else
-                s.setAttribute("message", "non hai i permessi");
+                notifica(s, "non hai i permessi");
         }catch(SQLException e){System.out.println("???B???");}
         getCatalogo(req);
     }
@@ -217,14 +216,14 @@ public class Controller extends HttpServlet {
             switch (u.getPermission()){
                 case "user":
                     listaPrenotazioni=model.getListaPrenotazioni(u.getId());
-                    s.setAttribute("message", "Caricate Proprie Prenotazioni");
+                    notifica(s, "Caricate Proprie Prenotazioni");
                     break;
                 case "admin":
                     listaPrenotazioni=model.getListaPrenotazioni();
-                    s.setAttribute("message", "Caricate Tutte Prenotazioni");
+                    notifica(s, "Caricate Tutte Prenotazioni");
                     break;
                 default:
-                    s.setAttribute("message", "non hai i permessi");
+                    notifica(s, "non hai i permessi");
                     break;
             }
         }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
@@ -264,11 +263,11 @@ public class Controller extends HttpServlet {
                                 p.setData(stato);
 
                             model.modPrenotazione(p);
-                            s.setAttribute("message", "prenotazione aggiornata");
+                            notifica(s, "prenotazione aggiornata");
                         }else
-                            s.setAttribute("message", "prenotazione non tua");
+                            notifica(s, "prenotazione non tua");
                     }else
-                        s.setAttribute("message", "prenotazione non trovata");
+                        notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
                     p=model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
@@ -295,13 +294,13 @@ public class Controller extends HttpServlet {
                             p.setData(stato);
 
                         model.modPrenotazione(p);
-                        s.setAttribute("message", "prenotazione aggiornata");
+                        notifica(s, "prenotazione aggiornata");
                         
                     }else
-                        s.setAttribute("message", "prenotazione non trovata");
+                        notifica(s, "prenotazione non trovata");
                     break;
                 default:
-                    s.setAttribute("message", "non hai i permessi");
+                    notifica(s, "non hai i permessi");
                     break;
             }
         }catch(SQLException e){System.out.println("???B???");}
@@ -319,24 +318,24 @@ public class Controller extends HttpServlet {
                     if(p!=null){
                         if(p.getIdUtente()==model.getIdUtente(username)){
                             model.remPrenotazione(p);
-                            s.setAttribute("message", "prenotazione rimossa");
+                            notifica(s, "prenotazione rimossa");
                         }else
-                            s.setAttribute("message", "prenotazione non tua");
+                            notifica(s, "prenotazione non tua");
                     }
                     else
-                        s.setAttribute("message", "prenotazione non trovata");
+                        notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
                     p =model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
                     if(p!=null){
                         model.remPrenotazione(p);
-                        s.setAttribute("message", "prenotazione rimossa");
+                        notifica(s, "prenotazione rimossa");
                     }
                     else
-                        s.setAttribute("message", "prenotazione non trovata");
+                        notifica(s, "prenotazione non trovata");
                     break;
                 default:
-                    s.setAttribute("message", "non hai i permessi");
+                    notifica(s, "non hai i permessi");
                     break;
             }
         }catch(SQLException e){System.out.println("???B???");}
@@ -387,4 +386,9 @@ public class Controller extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    public void notifica(HttpSession s,String txt){
+        s.setAttribute("message",txt);
+        System.out.println(txt);
+    }
+
 }

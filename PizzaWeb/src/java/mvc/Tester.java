@@ -1,8 +1,11 @@
 package mvc;
 
 import components.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.xml.ws.handler.MessageContext;
 
 ////////////////////////////////////////////////////////////////////////////////
 // MAIN
@@ -526,7 +529,24 @@ public class Tester {
     public static void dropDB(Model db) throws SQLException{
         db.drop();
     }
+
+    public static void testController(Controller ctl){
+        String username="username";
+        String password="password";
+        HttpSession s = req.getSession();
+        ctl.logout(req);//errore non sei loggato
+        ctl.login(req);//errore mancano parametri
+        s.setAttribute("username", username);
+        s.setAttribute("password", password);
+        ctl.login(req);//ok
+        ctl.login(req);//errore sei gia loggato
+        ctl.register(req);//errore sei gia loggato
+        ctl.logout(req);//ok
+        ctl.register(req);//ok
+        ctl.login(req);//ok
+        
     
+    }
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
