@@ -25,7 +25,7 @@ public class Pizza {
      * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
      */
     
-    protected Pizza(int id, String iNome, String iIngredienti, double iPrezzo) {
+    public Pizza(int id, String iNome, String iIngredienti, double iPrezzo) {
         this.idPizza = id;
         this.ingredienti = iIngredienti;
         this.nome = iNome;
@@ -103,7 +103,7 @@ public class Pizza {
      * @param newId
      */
     
-    protected void setId(int newId) {
+    public void setId(int newId) {
         this.idPizza = newId;
     }
     

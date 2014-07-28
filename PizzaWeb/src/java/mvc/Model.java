@@ -502,7 +502,7 @@ public class Model {
             dbman.openConnection();
             ResultSet rs = dbman.getUser(id);
             if(rs.next())
-                tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
+                tmp = new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
         }finally{
             dbman.closeConnection();
         }

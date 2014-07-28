@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class Tester {
     public static void main(String[]args) throws SQLException{
         testDBManager(true,true,true,true);
-        Database db = creaFreshDB();
+        Model db = creaFreshDB();
         testDatabase(db);
         dropDB(db);
     }
@@ -446,8 +446,8 @@ public class Tester {
      * @throws SQLException 
      */
     
-    public static Database creaFreshDB() throws SQLException{
-        return new Database();
+    public static Model creaFreshDB() throws SQLException{
+        return new Model();
     }
 
     /**
@@ -458,14 +458,14 @@ public class Tester {
      * @throws SQLException 
      */
     
-    private static void testDatabase(Database db) throws SQLException {
+    private static void testDatabase(Model db) throws SQLException {
         
         ////////////////////////////////////////////////////////////////////////
         // START ADD
         
-        db.addUser(new Utente("username", "password", "user"));
-        db.addUser(new Utente("username", "password", "user"));
-        Utente ut = db.getUser("username");
+        db.addUtente(new Utente("username", "password", "user"));
+        db.addUtente(new Utente("username", "password", "user"));
+        Utente ut = db.getUtente("username");
         System.out.println(ut);
         
         //ut = db.getUser("puppa");
@@ -496,7 +496,7 @@ public class Tester {
         
         db.modPrenotazione(pr);
         db.modPizza(pz);
-        db.modUser(ut);
+        db.modUtente(ut);
         
         System.out.println("\n\n");
         System.out.println(ut);
@@ -508,7 +508,7 @@ public class Tester {
         
         db.remPrenotazione(pr);
         db.remPizza(pz);
-        db.remUser(ut);
+        db.remUtente(ut);
         
         System.out.println("\n\n");
         System.out.println(ut);
@@ -523,7 +523,7 @@ public class Tester {
      * @throws java.sql.SQLException
      */
     
-    public static void dropDB(Database db) throws SQLException{
+    public static void dropDB(Model db) throws SQLException{
         db.drop();
     }
     

@@ -134,6 +134,17 @@ public class Controller extends HttpServlet {
         s = req.getSession();
         s.setAttribute("message", "logout effettuato");
     }
+    
+    public void register(HttpServletRequest req){
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        try{
+            model.login(username, password, s);
+        }catch(SQLException e){
+            System.out.println("Login fallito!");
+        }
+    }
 
     
 ////////////////////////////////////////////////////////////////////////////////

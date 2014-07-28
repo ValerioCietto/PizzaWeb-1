@@ -25,7 +25,7 @@ public class Prenotazione {
      * @param iData
     */
     
-    protected Prenotazione(int id, int idU, int idP, int iQuantita, String iData) {
+    public Prenotazione(int id, int idU, int idP, int iQuantita, String iData) {
         this.idPrenotazione = id;
         this.idUtente = idU;
         this.idPizza = idP;

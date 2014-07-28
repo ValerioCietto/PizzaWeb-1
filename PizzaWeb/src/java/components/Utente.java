@@ -23,7 +23,7 @@ public class Utente {
      * @param iRuolo
      */
     
-    protected Utente(int id, String iNome, String iPwd, String iRuolo) {
+    public Utente(int id, String iNome, String iPwd, String iRuolo) {
         this.idUtente = id;
         this.username = iNome;
         this.pwd = iPwd;
@@ -109,7 +109,7 @@ public class Utente {
      * @param id
      */
     
-    protected void setId(int id) {
+    public void setId(int id) {
         this.idUtente = id;
     }
     
