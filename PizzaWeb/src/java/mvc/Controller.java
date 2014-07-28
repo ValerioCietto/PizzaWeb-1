@@ -160,6 +160,39 @@ public class Controller extends HttpServlet {
             ArrayList<Pizza> listaPizze = model.getCatalogo();
         }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
     }
+    public void modPizza(HttpServletRequest req){
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        ArrayList<Pizza> listaPizze;
+        //......
+        try{
+            if(model.getUtente(username).getPermission().equals("admin")){
+                //if (ho tutti i parametri e la pizza esiste)
+                    //modifica pizza
+                //else
+                    //mancano dati
+            }else{
+                //non hai i permessi
+            }
+        }catch(SQLException e){System.out.println("???A???");}
+    }
+    public void remPizza(HttpServletRequest req){
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        ArrayList<Pizza> listaPizze;
+        //......
+        try{
+            if(model.getUtente(username).getPermission().equals("admin")){
+                //if (pizza esiste)
+                    //rimuovi pizza
+                //else
+                    //non esisteva gia...
+            }
+            else{
+                //non hai i permessi
+            }
+        }catch(SQLException e){System.out.println("???B???");}
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
 // METODI SU PRENOTAZIONI
@@ -173,18 +206,37 @@ public class Controller extends HttpServlet {
             switch (model.getUtente(username).getPermission()){
                 // Solo proprie prenotazioni
                 case "user":
-                    System.out.println();
+                    //visualizza proprie prenotazioni
                     break;
                 case "admin":
-                    System.out.println();
+                    //visualizza le prenotazioni di tutti
+                    break;
+                default:
+                    //non hai i permessi
                     break;
             }
         }catch(SQLException e){System.out.println("Impossibile ottenere il catalogo");}
         return listaPrenotazioni;
     }
+    public void modPrenotazioni(HttpServletRequest req){
+        
+        HttpSession s = req.getSession();
+        String username = req.getParameter("username");
+        try{
+            switch (model.getUtente(username).getPermission()){
+                case "user":
+                    //
+                    break;
+                case "admin":
+                    System.out.println();
+                    break;
+                default:
+                    //non hai i permessi
+                    break;
+            }
+        }catch(SQLException e){System.out.println("???B???");}
+    }
 
-    //mod prenotazione, mod pizza, rem prenotazione, rem pizza,
-    
 ////////////////////////////////////////////////////////////////////////////////
 // METODI ADMIN    
     
