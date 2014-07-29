@@ -9,7 +9,7 @@
         <title>Catalogo</title>
     </head>
     <body>
-        <%String ruolo=(String)(request.getSession()).getAttribute("ruolo");%>
+        <%ruolo=(String)(request.getSession()).getAttribute("ruolo");%>
         
         
         <article>
