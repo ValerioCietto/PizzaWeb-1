@@ -1,3 +1,5 @@
+<%@page import="mvc.Controller"%>
+<%@page import="mvc.Model"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,21 +13,14 @@
                 <input type="submit" name="name"   value="catalogo">
                 </form>
             </div>
-            
-            
-            
-            <div>
-                <form action="/PizzaWeb/Servlet" method="get">
-                    <input type="hidden" name="action" value="switch">
-                    <input type="submit" name="name" value="prenotazioni">
-                </form>
-           </div>
-            
-            
-            
-          
-            <div>prenotazioni</div>
-            <div>loginManager (admin)</div>
+            <%if(Controller.checkLogin(request)){ %>   
+                <div>
+                    <form action="/PizzaWeb/Servlet" method="get">
+                        <input type="hidden" name="action" value="switch">
+                        <input type="submit" name="name" value="prenotazioni">
+                    </form>
+                </div>
+            <%} %>
         </nav>   
     </body>
 </html>

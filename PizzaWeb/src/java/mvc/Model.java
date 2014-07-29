@@ -3,7 +3,6 @@ package mvc;
 import components.*;
 import java.sql.*;
 import java.util.ArrayList;
-import javax.servlet.http.*;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -83,24 +82,18 @@ public final class Model {
      * 
      * @param username
      * @param password
-     * @param s
      * 
      * @return
      * 
      * @throws SQLException 
      */
     
-    public static boolean login(String username, String password, HttpSession s) throws SQLException{
+    public static boolean login(String username, String password) throws SQLException{
         Utente login = checkLogin(username, password);
-        if (login!=null) {
-            s.setAttribute("username", login.getUsername());
-            s.setAttribute("permission", login.getPermission());
-            s.setAttribute("message", "login effettuato, benvenuto " + login.getUsername() + "!");
+        if(login!=null)
             return true;
-        } else {
-            s.setAttribute("message", "login errato, sicuro di esserti registrato?");
+        else
             return false;
-        }
     }
     
     /**
@@ -118,20 +111,14 @@ public final class Model {
         Utente tmp = null;
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            if(DBManager.checkLogin(username, password, st) > 0){
-                DBManager.openConnection();
-                ResultSet rs = DBManager.getUser(username, st);
-                if(rs.next()){
-                    tmp = new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
-                }
+        if(DBManager.checkLogin(username, password, st) > 0){
+            ResultSet rs = DBManager.getUser(username, st);
+            if(rs.next()){
+                tmp = new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
             }
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
         }
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
         return tmp;
     }
     

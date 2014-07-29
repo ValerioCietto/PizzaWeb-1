@@ -12,16 +12,24 @@ import javax.servlet.http.*;
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
 
 public class Controller extends HttpServlet {
-    public static HttpServletResponse res;
 
 ////////////////////////////////////////////////////////////////////////////////
 // GESTIONE DELLE PAGINE
     
+    /**
+     *  Gestisce le richieste provenienti dalle pagine jsp
+     * 
+     * @param request
+     * @param response
+     * 
+     * @throws ServletException
+     * @throws IOException 
+     */
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
-        res=response;
         response.setContentType("text/html;charset=UTF-8");
-        
         String action= request.getParameter("action");
+        request.getSession().setAttribute("message", "");
         
         if(action!=null){
             switch (action) {
@@ -59,18 +67,21 @@ public class Controller extends HttpServlet {
                     //Model.remPrenotazione(request);
                     aggiornaPagina(request);
                     break;
-                    
-                case "catalogo":
-                    switchPage(request);
-                    break;
    
             }
         }
+        
         RequestDispatcher rd;
         //request e non named perchè richiediamo una jsp
         rd = getServletContext().getRequestDispatcher("/index.jsp");
         rd.include(request, response);
     }
+    
+    /**
+     *  Si occupa di visualizzare la pagina richiesta
+     * 
+     * @param req 
+     */
     
     public static void switchPage(HttpServletRequest req){
         String page = req.getParameter("name");
@@ -80,22 +91,24 @@ public class Controller extends HttpServlet {
             req.getSession().setAttribute("view","");
         aggiornaPagina(req);
     }
-   
+    
+    /**
+     * Esegue il refresh della pagina
+     * 
+     * @param req 
+     */
+    
     public static void aggiornaPagina(HttpServletRequest req){
-        String ruolo=(String)(req.getSession()).getAttribute("ruolo");
-        String login=(String)(req.getSession()).getAttribute("username");
         String page=(String)(req.getSession()).getAttribute("view");
         
         switch (page) {
             case "catalogo":
                 getCatalogo(req);
                 break;
-            case "loginManager":
-                System.out.println();
-                break;
             case "prenotazioni":
                 getPrenotazioni(req);
                 break;
+            
         }
     }
 
@@ -103,25 +116,31 @@ public class Controller extends HttpServlet {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-// METODI DEL MODEL    
-    
-////////////////////////////////////////////////////////////////////////////////
 // METODI SESSIONE
     
     /**
      * Gestisce il login
      * 
      * @param req 
+     * 
+     * @return  
      */
     
     public static void login(HttpServletRequest req){
-        HttpSession s = req.getSession();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         try{
-            Model.login(username, password, s);
+            if(Model.login(username, password)){
+                View.login(req);
+                req.setAttribute("username", username);
+                req.setAttribute("password", password);
+                req.getSession().setAttribute("message", "Login ok!");
+            }
+            else{
+                req.getSession().setAttribute("message", "Login error!");            
+            }
         }catch(SQLException e){
-            System.out.println("Login fallito!");
+            req.getSession().setAttribute("message", "SQL error!");
         }
     }
     
@@ -142,6 +161,30 @@ public class Controller extends HttpServlet {
         }
     }
     
+    
+    /**
+     * Controlla se è stato effettuato il login
+     * 
+     * @param s
+     * @param req 
+     * 
+     * @return  
+     */
+    
+    public static boolean checkLogin(HttpServletRequest req){
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        try{
+            if(Model.checkLogin(username, password)!=null){
+                return true;
+            }
+        }catch(SQLException e){
+                req.getSession().setAttribute("message", "SQL error!");   
+        }
+        return false;
+    }
+    
+    
     /**
      * Gestisce la disconnessione
      * 
@@ -149,10 +192,10 @@ public class Controller extends HttpServlet {
      */
     
     public static void logout(HttpServletRequest req) {
-        HttpSession s = req.getSession();
-        s.invalidate();
-        s = req.getSession();
-        notifica(s, "logout effettuato");
+        req.removeAttribute("username");
+        req.removeAttribute("password");
+        req.removeAttribute("View");
+        notifica(req.getSession(), "logout effettuato");
     }
     
     
@@ -185,24 +228,7 @@ public class Controller extends HttpServlet {
                 notifica(s, "non hai i permessi");
         }catch(SQLException e){notifica(s,"???A???");}
     }
-  
-    /**
-     * Permette a TUTTI di visualizzare il catalogo pizze
-     * 
-     * @param req 
-     * @return  
-     */
-    
-    public static String getCatalogo(HttpServletRequest req){
-        HttpSession s = req.getSession();
-        ArrayList<Pizza> listaPizze=null;
-        try{
-             listaPizze= Model.getCatalogo();
-             notifica(s,"catalogo ottenuto");
-        }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
-        return View.visualizzaCatalogo(listaPizze ,req);
-    }
-    
+
     /**
      * Permette all'admin di modificare una pizza
      * 
@@ -261,37 +287,6 @@ public class Controller extends HttpServlet {
 // METODI SU PRENOTAZIONI
 
     /**
-     * Permette ad un user di visualizzare le sue prenotazioni ed all'admin di visualizzarle tutte
-     * 
-     * @param req 
-     */
-    
-    public static String getPrenotazioni(HttpServletRequest req){
-        
-        HttpSession s = req.getSession();
-        String username = req.getParameter("username");
-        ArrayList<Prenotazione> listaPrenotazioni=null;
-        try{
-            listaPrenotazioni = new ArrayList();
-            Utente u=Model.getUtente(username);
-            if(u != null){
-                if (u.getPermission().equals("user")){
-                        listaPrenotazioni=Model.getListaPrenotazioni(u.getId());
-                        notifica(s, "Caricate Proprie Prenotazioni");
-                }
-                else{
-                        listaPrenotazioni=Model.getListaPrenotazioni();
-                        notifica(s, "Caricate Tutte Prenotazioni");
-                }
-            }
-            else{
-                notifica(s, "non hai i permessi");
-            }
-        }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
-        return View.visualizzaPrenotazioni(listaPrenotazioni, req);
-    }
-    
-    /**
      * Permette ad un user di aggiungere una prenotazione
      * 
      * @param req 
@@ -300,7 +295,7 @@ public class Controller extends HttpServlet {
     public static void addPrenotazioni(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
-        Prenotazione p=null;
+        Prenotazione p;
         int idUser;
         int idPizza;
         int quantita;
@@ -348,7 +343,7 @@ public class Controller extends HttpServlet {
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
-        Prenotazione p=null;
+        Prenotazione p;
         try{
             switch (Model.getUtente(username).getPermission()){
                 case "user":
@@ -431,7 +426,7 @@ public class Controller extends HttpServlet {
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
-        Prenotazione p= null;
+        Prenotazione p;
         try{
             switch (Model.getUtente(username).getPermission()){
                 case "user":
@@ -467,14 +462,70 @@ public class Controller extends HttpServlet {
      * 
      * @param s
      * @param txt
-     * @param req 
      */
     
     public static void notifica(HttpSession s,String txt){
         s.setAttribute("message",txt+"<p>"+s.getAttribute("message")+"</p>");
-        System.out.println(txt);
     }
 
+      
+///////////////////////////////////////////////////////////////////////////////////////////
+// METODI DI GET
+    
+    /**
+     * Permette a TUTTI di visualizzare il catalogo pizze
+     * 
+     * @param req 
+     * @return  
+     */
+    
+    public static String getCatalogo(HttpServletRequest req){
+        HttpSession s = req.getSession();
+        ArrayList<Pizza> listaPizze=null;
+        
+        try{
+             listaPizze= Model.getCatalogo();
+             notifica(s,"catalogo ottenuto");
+        }catch(SQLException e){
+            notifica(s,"Impossibile ottenere il catalogo");
+        }
+        
+        return View.visualizzaCatalogo(listaPizze ,req);
+    }
+    
+    /**
+     * Permette ad un user di visualizzare le sue prenotazioni ed all'admin di visualizzarle tutte
+     * 
+     * @param req 
+     * @return  
+     */
+    
+    public static String getPrenotazioni(HttpServletRequest req){
+        String username = req.getParameter("username");
+        ArrayList<Prenotazione> listaPrenotazioni = null;
+        
+        try{
+            listaPrenotazioni = new ArrayList();
+            Utente u = Model.getUtente(username);
+            
+            if (u != null && u.getPermission().equals("user")){
+                listaPrenotazioni = Model.getListaPrenotazioni(u.getId());
+                notifica(req.getSession(), "Caricate Proprie Prenotazioni");
+            }
+            else if(u != null && u.getPermission().equals("admin")){
+                listaPrenotazioni = Model.getListaPrenotazioni();
+                notifica(req.getSession(), "Caricate Tutte Prenotazioni");
+            }
+            else{
+                notifica(req.getSession(), "non hai i permessi");
+            }
+        }catch(SQLException e){
+            notifica(req.getSession(),"Impossibile ottenere il catalogo");
+        }
+        
+        return View.visualizzaPrenotazioni(listaPrenotazioni, req);
+    }
+        
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

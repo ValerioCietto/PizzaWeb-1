@@ -3,17 +3,26 @@ package mvc;
 ////////////////////////////////////////////////////////////////////////////////
 
 import components.*;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.http.*;
 
 
 public class View {
     
-    public static String visualizzaCatalogo(ArrayList<Pizza>al,HttpServletRequest req){
+    /**
+     * Ritorna una stringa che fornisce i dati per costruire l'article
+     * 
+     * @param al
+     * @param req
+     * 
+     * @return 
+     */
+    
+    public static String visualizzaCatalogo(ArrayList<Pizza>al, HttpServletRequest req){
+        
         req.getSession().setAttribute("View", "catalogo");
         String html = "";
+        
         if(al==null)
             return visualizzaFallimento(req);
         else{
@@ -27,6 +36,16 @@ public class View {
         }
         return html;
     }
+    
+    /**
+     * Ritorna una stringa che fornisce i dati per costruire l'article
+     * 
+     * @param al
+     * @param req
+     * 
+     * @return 
+     */
+    
     public static String visualizzaPrenotazioni(ArrayList<Prenotazione>al,HttpServletRequest req){
         req.getSession().setAttribute("View", "prenotazioni");
         String html="";
@@ -43,9 +62,35 @@ public class View {
         return html;
     }
     
+    /**
+     * Genera un messaggio di errore
+     * 
+     * @param req
+     * 
+     * @return 
+     */
+    
     public static String visualizzaFallimento(HttpServletRequest req){
         String html = "";
         html += "Errore" + req.getAttribute("message");
         return html;
     }
+    
+    /**
+     * Esegue il refresh della pagina
+     * 
+     * @param req
+     * 
+     * @return 
+     */
+    
+    public static String login(HttpServletRequest req){
+        req.getSession().setAttribute("View", "login");
+        String html = "";
+        html += "Benvenuto " + req.getParameter("username");
+        return html;
+    }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////    
 }

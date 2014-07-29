@@ -1,5 +1,5 @@
-<%@ page import = "mvc.*"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="mvc.*" %>
+<%@page session = "true" contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     

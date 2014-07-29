@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
     <footer>
-        <h1>Hello Footer!</h1>
+            <%=request.getSession().getAttribute("message")%>
+            <%request.getSession().setAttribute("message","");%>
     </footer>
 </html>
