@@ -12,12 +12,13 @@ import javax.servlet.http.*;
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
 
 public class Controller extends HttpServlet {
-    
+    public static HttpServletResponse res;
 
 ////////////////////////////////////////////////////////////////////////////////
 // GESTIONE DELLE PAGINE
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
+        res=response;
         response.setContentType("text/html;charset=UTF-8");
         
         String action= request.getParameter("action");
@@ -35,15 +36,15 @@ public class Controller extends HttpServlet {
                     break;
                 case "addPizza":
                     addPizza(request);
-                    aggPage(request);
+                    aggiornaPagina(request);
                     break;
                 case "remPizza":
                     remPizza(request);
-                    aggPage(request);
+                    aggiornaPagina(request);
                     break;
                 case "modPizza":
                     modPizza(request);
-                    aggPage(request);
+                    aggiornaPagina(request);
                     break;
                 case "registration":
                     register(request);
@@ -52,11 +53,15 @@ public class Controller extends HttpServlet {
                     //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
                     addPrenotazioni(request);
                    // Logger.getGlobal().info("sono nel controller in addprenotaz");
-                    aggPage(request);
+                    aggiornaPagina(request);
                     break;
                 case "remPrenotaz":
                     //Model.remPrenotazione(request);
-                    aggPage(request);
+                    aggiornaPagina(request);
+                    break;
+                    
+                case "catalogo":
+                    switchPage(request);
                     break;
    
             }
@@ -68,22 +73,22 @@ public class Controller extends HttpServlet {
     }
     
     public static void switchPage(HttpServletRequest req){
-        String page= req.getParameter("name");
+        String page = req.getParameter("name");
         if(page!=null)
             req.getSession().setAttribute("view",page);
         else
             req.getSession().setAttribute("view","");
-        aggPage(req);
+        aggiornaPagina(req);
     }
    
-    public static void aggPage(HttpServletRequest req){
+    public static void aggiornaPagina(HttpServletRequest req){
         String ruolo=(String)(req.getSession()).getAttribute("ruolo");
         String login=(String)(req.getSession()).getAttribute("username");
         String page=(String)(req.getSession()).getAttribute("view");
         
         switch (page) {
             case "catalogo":
-                System.out.println();
+                getCatalogo(req);
                 break;
             case "loginManager":
                 System.out.println();
@@ -106,6 +111,12 @@ public class Controller extends HttpServlet {
 ////////////////////////////////////////////////////////////////////////////////
 // METODI SESSIONE
     
+    /**
+     * Gestisce il login
+     * 
+     * @param req 
+     */
+    
     public static void login(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
@@ -116,6 +127,12 @@ public class Controller extends HttpServlet {
             System.out.println("Login fallito!");
         }
     }
+    
+    /**
+     * Gestisce la registrazione
+     * 
+     * @param req 
+     */
     
     public static void register(HttpServletRequest req){
         HttpSession s = req.getSession();
@@ -128,6 +145,12 @@ public class Controller extends HttpServlet {
         }
     }
     
+    /**
+     * Gestisce la disconnessione
+     * 
+     * @param req 
+     */
+    
     public static void logout(HttpServletRequest req) {
         HttpSession s = req.getSession();
         s.invalidate();
@@ -135,10 +158,17 @@ public class Controller extends HttpServlet {
         notifica(s, "logout effettuato");
     }
     
+    
 ////////////////////////////////////////////////////////////////////////////////
 // METODI SU CATALOGO   
 
     // Solo visualizzazione
+    
+    /**
+     * Permette all'admin di aggiungere  una pizza
+     * 
+     * @param req 
+     */
     
     public static void addPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
@@ -159,14 +189,28 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???A???");}
         getCatalogo(req);
     }
+  
+    /**
+     * Permette a TUTTI di visualizzare il catalogo pizze
+     * 
+     * @param req 
+     */
+    
     public static void getCatalogo(HttpServletRequest req){
         HttpSession s = req.getSession();
         ArrayList<Pizza> listaPizze=null;
         try{
              listaPizze= Model.getCatalogo();
         }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
-        View.visualizzaCatalogo(listaPizze ,req);
+        View.visualizzaCatalogo(listaPizze ,req,res);
     }
+    
+    /**
+     * Permette all'admin di modificare una pizza
+     * 
+     * @param req 
+     */
+    
     public static void modPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
@@ -192,6 +236,13 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???A???");}
         getCatalogo(req);
     }
+    
+    /**
+     * Permette all'admin di rimuovere una pizza
+     * 
+     * @param req 
+     */
+    
     public static void remPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
@@ -209,9 +260,16 @@ public class Controller extends HttpServlet {
         getCatalogo(req);
     }
 
+    
 ////////////////////////////////////////////////////////////////////////////////
 // METODI SU PRENOTAZIONI
 
+    /**
+     * Permette ad un user di visualizzare le sue prenotazioni ed all'admin di visualizzarle tutte
+     * 
+     * @param req 
+     */
+    
     public static void getPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
@@ -236,6 +294,13 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
         View.visualizzaPrenotazioni(listaPrenotazioni, req);
     }
+    
+    /**
+     * Permette ad un user di aggiungere una prenotazione
+     * 
+     * @param req 
+     */
+    
     public static void addPrenotazioni(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
@@ -277,6 +342,13 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???B???");}
         getPrenotazioni(req);
     }
+    
+    /**
+     * Permette ad un user di modificare le sue prenotazioni ed all'admin di modificarle tutte
+     * 
+     * @param req 
+     */
+    
     public static void modPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
@@ -349,11 +421,18 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???B???");}
         getPrenotazioni(req);
     }
+    
+    /**
+     * Permette ad un user di rimuovere le sue prenotazioni
+     * 
+     * @param req 
+     */
+    
     public static void remPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
-        Prenotazione p=null;
+        Prenotazione p= null;
         try{
             switch (Model.getUtente(username).getPermission()){
                 case "user":
@@ -385,10 +464,20 @@ public class Controller extends HttpServlet {
         getPrenotazioni(req);
     }
     
+    /**
+     * Permette di assegnegnare una stringa ad un attributo della sessione
+     * 
+     * @param s
+     * @param txt
+     * @param req 
+     */
+    
     public static void notifica(HttpSession s,String txt){
         s.setAttribute("message",txt);
         System.out.println(txt);
     }
+
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
