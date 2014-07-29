@@ -13,19 +13,6 @@ import javax.servlet.http.*;
 
 public class Controller extends HttpServlet {
     
-    private final Model model;
-    private Utente user;
-    private ArrayList<Pizza> catalogo;
-    private ArrayList<Prenotazione> listaPrenotazioni;
-    
-
-////////////////////////////////////////////////////////////////////////////////
-// COSTRUTTORE
-    
-    public Controller() throws SQLException {
-        super();
-        model = new Model();
-    }
 
 ////////////////////////////////////////////////////////////////////////////////
 // GESTIONE DELLE PAGINE
@@ -47,28 +34,28 @@ public class Controller extends HttpServlet {
                     logout(request);
                     break;
                 case "addPizza":
-                    //model.addPizza(request);
+                    //Model.addPizza(request);
                     aggPage(request);
                     break;
                 case "remPizza":
-                    //model.remPizza(request);
+                    //Model.remPizza(request);
                     aggPage(request);
                     break;
                 case "modPizza":
-                    //model.modPizza(request);
+                    //Model.modPizza(request);
                     aggPage(request);
                     break;
                 case "registration":
-                    //model.addUtente(request);
+                    //Model.addUtente(request);
                     break;
                 case "addPrenotaz":
                      //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
-                    //model.addPrenotazione(request);
+                    //Model.addPrenotazione(request);
                    // Logger.getGlobal().info("sono nel controller in addprenotaz");
                     aggPage(request);
                     break;
                 case "remPrenotaz":
-                    //model.remPrenotazione(request);
+                    //Model.remPrenotazione(request);
                     aggPage(request);
                     break;
    
@@ -80,7 +67,7 @@ public class Controller extends HttpServlet {
         rd.include(request, response);
     }
     
-    public void switchPage(HttpServletRequest req){
+    public static void switchPage(HttpServletRequest req){
         String page= req.getParameter("name");
         if(page!=null)
             req.getSession().setAttribute("view",page);
@@ -89,7 +76,7 @@ public class Controller extends HttpServlet {
         aggPage(req);
     }
    
-    public void aggPage(HttpServletRequest req){
+    public static void aggPage(HttpServletRequest req){
         String ruolo=(String)(req.getSession()).getAttribute("ruolo");
         String login=(String)(req.getSession()).getAttribute("username");
         String page=(String)(req.getSession()).getAttribute("view");
@@ -119,29 +106,29 @@ public class Controller extends HttpServlet {
 ////////////////////////////////////////////////////////////////////////////////
 // METODI SESSIONE
     
-    public void login(HttpServletRequest req){
+    public static void login(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         try{
-            model.login(username, password, s);
+            Model.login(username, password, s);
         }catch(SQLException e){
             System.out.println("Login fallito!");
         }
     }
     
-    public void register(HttpServletRequest req){
+    public static void register(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         try{
-            model.creaUtente(username, password);
+            Model.creaUtente(username, password);
         }catch(SQLException e){
             System.out.println("Registrazione fallita!");
         }
     }
     
-    public void logout(HttpServletRequest req) {
+    public static void logout(HttpServletRequest req) {
         HttpSession s = req.getSession();
         s.invalidate();
         s = req.getSession();
@@ -153,17 +140,17 @@ public class Controller extends HttpServlet {
 
     // Solo visualizzazione
     
-    public void addPizza(HttpServletRequest req){
+    public static void addPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         try{
-            if(model.getUtente(username).getPermission().equals("admin")){
+            if(Model.getUtente(username).getPermission().equals("admin")){
                 String nome=req.getParameter("nome");
                 String ingredienti=req.getParameter("ingredientiPizza");
                 double prezzo=Double.parseDouble(req.getParameter("prezzoPizza"));
                 if(nome!=null && ingredienti!=null && !nome.equals("") && !ingredienti.equals("") && prezzo >0){
                     Pizza p=new Pizza(nome,ingredienti,prezzo);
-                    model.addPizza(p);
+                    Model.addPizza(p);
                     notifica(s, "pizza aggiunta");
                 }else
                     notifica(s, "pizza non aggiunta");
@@ -172,20 +159,20 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???A???");}
         getCatalogo(req);
     }
-    public void getCatalogo(HttpServletRequest req){
+    public static void getCatalogo(HttpServletRequest req){
         HttpSession s = req.getSession();
         ArrayList<Pizza> listaPizze=null;
         try{
-             listaPizze= model.getCatalogo();
+             listaPizze= Model.getCatalogo();
         }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
         View.visualizzaCatalogo(listaPizze ,req);
     }
-    public void modPizza(HttpServletRequest req){
+    public static void modPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         try{
-            if(model.getUtente(username).getPermission().equals("admin")){
-                Pizza p=model.getPizza(req.getParameter("nomePizza"));
+            if(Model.getUtente(username).getPermission().equals("admin")){
+                Pizza p=Model.getPizza(req.getParameter("nomePizza"));
                 if(p!=null){
                     //gestione prezzo
                     double prezzo=Double.parseDouble(req.getParameter("prezzoPizza"));
@@ -196,7 +183,7 @@ public class Controller extends HttpServlet {
                     if(ingredienti!=null && !ingredienti.equals(""))
                         p.setIngredienti(ingredienti);
                     //applica modifiche
-                    model.modPizza(p);
+                    Model.modPizza(p);
                     notifica(s, "pizza aggiornata");
                 }else
                     notifica(s, "pizza non trovata");
@@ -205,14 +192,14 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???A???");}
         getCatalogo(req);
     }
-    public void remPizza(HttpServletRequest req){
+    public static void remPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         try{
-            if(model.getUtente(username).getPermission().equals("admin")){
-                Pizza p=model.getPizza(req.getParameter("nomePizza"));
+            if(Model.getUtente(username).getPermission().equals("admin")){
+                Pizza p=Model.getPizza(req.getParameter("nomePizza"));
                 if(p!=null){
-                    model.remPizza(p);
+                    Model.remPizza(p);
                     notifica(s, "pizza rimossa");
                 }else
                     notifica(s, "pizza non trovata");
@@ -225,21 +212,21 @@ public class Controller extends HttpServlet {
 ////////////////////////////////////////////////////////////////////////////////
 // METODI SU PRENOTAZIONI
 
-    public void getPrenotazioni(HttpServletRequest req){
+    public static void getPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         ArrayList<Prenotazione> listaPrenotazioni=null;
         try{
             listaPrenotazioni = new ArrayList();
-            Utente u=model.getUtente(username);
+            Utente u=Model.getUtente(username);
             switch (u.getPermission()){
                 case "user":
-                    listaPrenotazioni=model.getListaPrenotazioni(u.getId());
+                    listaPrenotazioni=Model.getListaPrenotazioni(u.getId());
                     notifica(s, "Caricate Proprie Prenotazioni");
                     break;
                 case "admin":
-                    listaPrenotazioni=model.getListaPrenotazioni();
+                    listaPrenotazioni=Model.getListaPrenotazioni();
                     notifica(s, "Caricate Tutte Prenotazioni");
                     break;
                 default:
@@ -249,7 +236,7 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
         View.visualizzaPrenotazioni(listaPrenotazioni, req);
     }
-    public void addPrenotazioni(HttpServletRequest req){
+    public static void addPrenotazioni(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         Prenotazione p=null;
@@ -258,15 +245,15 @@ public class Controller extends HttpServlet {
         int quantita;
         String data;
         try{
-            switch (model.getUtente(username).getPermission()){
+            switch (Model.getUtente(username).getPermission()){
                 case "user":
-                    idUser=model.getIdUtente(username);
+                    idUser=Model.getIdUtente(username);
                     idPizza=Integer.parseInt(req.getParameter("idPizza"));
                     quantita=Integer.parseInt(req.getParameter("quantita"));
                     data=req.getParameter("data");
-                    if(model.getPizza(data)!=null && quantita>0 && data!=null && !data.equals("")){
+                    if(Model.getPizza(data)!=null && quantita>0 && data!=null && !data.equals("")){
                         p = new Prenotazione(idUser,idPizza,quantita,data);
-                        model.addPrenotazione(p);
+                        Model.addPrenotazione(p);
                         notifica(s, "prenotazione aggiunta");
                     }else
                         notifica(s,"prenotazione non aggiunta");
@@ -276,9 +263,9 @@ public class Controller extends HttpServlet {
                     idPizza=Integer.parseInt(req.getParameter("idPizza"));
                     quantita=Integer.parseInt(req.getParameter("quantita"));
                     data=req.getParameter("data");
-                    if(model.getPizza(data)!=null && quantita>0 && data!=null && !data.equals("")){
+                    if(Model.getPizza(data)!=null && quantita>0 && data!=null && !data.equals("")){
                         p = new Prenotazione(idUser,idPizza,quantita,data);
-                        model.addPrenotazione(p);
+                        Model.addPrenotazione(p);
                         notifica(s, "prenotazione aggiunta");
                     }else
                         notifica(s,"prenotazione non aggiunta");
@@ -290,17 +277,17 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???B???");}
         getPrenotazioni(req);
     }
-    public void modPrenotazioni(HttpServletRequest req){
+    public static void modPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         Prenotazione p=null;
         try{
-            switch (model.getUtente(username).getPermission()){
+            switch (Model.getUtente(username).getPermission()){
                 case "user":
-                    p=model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
                     if(p!=null){
-                        if(p.getIdUtente()==model.getIdUtente(username)){
+                        if(p.getIdUtente()==Model.getIdUtente(username)){
                             //gestione pizza
                             int pizza=Integer.parseInt(req.getParameter("pizzaPrenotaz"));
                             if(pizza>0)
@@ -318,7 +305,7 @@ public class Controller extends HttpServlet {
                             if(stato!=null && !stato.equals(""))
                                 p.setData(stato);
 
-                            model.modPrenotazione(p);
+                            Model.modPrenotazione(p);
                             notifica(s, "prenotazione aggiornata");
                         }else
                             notifica(s, "prenotazione non tua");
@@ -326,7 +313,7 @@ public class Controller extends HttpServlet {
                         notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
-                    p=model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
                     if(p!=null){
                         //gestione cliente
                         int cliente=Integer.parseInt(req.getParameter("clientePrenotaz"));
@@ -349,7 +336,7 @@ public class Controller extends HttpServlet {
                         if(stato!=null && !stato.equals(""))
                             p.setData(stato);
 
-                        model.modPrenotazione(p);
+                        Model.modPrenotazione(p);
                         notifica(s, "prenotazione aggiornata");
                         
                     }else
@@ -362,18 +349,18 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???B???");}
         getPrenotazioni(req);
     }
-    public void remPrenotazioni(HttpServletRequest req){
+    public static void remPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
         Prenotazione p=null;
         try{
-            switch (model.getUtente(username).getPermission()){
+            switch (Model.getUtente(username).getPermission()){
                 case "user":
-                    p =model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    p =Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
                     if(p!=null){
-                        if(p.getIdUtente()==model.getIdUtente(username)){
-                            model.remPrenotazione(p);
+                        if(p.getIdUtente()==Model.getIdUtente(username)){
+                            Model.remPrenotazione(p);
                             notifica(s, "prenotazione rimossa");
                         }else
                             notifica(s, "prenotazione non tua");
@@ -382,9 +369,9 @@ public class Controller extends HttpServlet {
                         notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
-                    p =model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    p =Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
                     if(p!=null){
-                        model.remPrenotazione(p);
+                        Model.remPrenotazione(p);
                         notifica(s, "prenotazione rimossa");
                     }
                     else
@@ -396,6 +383,11 @@ public class Controller extends HttpServlet {
             }
         }catch(SQLException e){notifica(s,"???B???");}
         getPrenotazioni(req);
+    }
+    
+    public static void notifica(HttpSession s,String txt){
+        s.setAttribute("message",txt);
+        System.out.println(txt);
     }
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -442,9 +434,5 @@ public class Controller extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    public void notifica(HttpSession s,String txt){
-        s.setAttribute("message",txt);
-        System.out.println(txt);
-    }
-
+    
 }

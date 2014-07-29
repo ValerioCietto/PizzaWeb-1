@@ -1,25 +1,14 @@
 package mvc;
 
 import components.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import javax.servlet.http.*;
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
-public class Model {
-    private final DBManager dbman;
-    
-
-////////////////////////////////////////////////////////////////////////////////
-// COSTRUTTORE
-    
-    public Model() throws SQLException{
-        dbman = new DBManager();
-    }
-    
+public final class Model {
     
 ////////////////////////////////////////////////////////////////////////////////
 // CREATORI DI OGGETTI
@@ -34,7 +23,7 @@ public class Model {
      * @throws SQLException 
      */
     
-    public boolean creaUtente(String username, String password) throws SQLException{
+    public static boolean creaUtente(String username, String password) throws SQLException{
         if (getIdUtente(username)<0){
             Utente user = new Utente(username, password, "user");
             addUtente(user);
@@ -54,7 +43,7 @@ public class Model {
      * @throws SQLException 
      */
     
-    public boolean creaPizza(String nome, String ingredienti, double prezzo) throws SQLException{
+    public static boolean creaPizza(String nome, String ingredienti, double prezzo) throws SQLException{
         if (getIdPizza(nome)<0){
             Pizza pizza = new Pizza(nome, ingredienti, prezzo);
             addPizza(pizza);
@@ -76,7 +65,7 @@ public class Model {
      * @throws SQLException 
      */
     
-    public boolean creaPrenotazione(int idUtente, int idPizza, int quantita, String data) throws SQLException{
+    public static boolean creaPrenotazione(int idUtente, int idPizza, int quantita, String data) throws SQLException{
         if (getIdPrenotazione(idUtente, idPizza, data) < 0){
             Prenotazione prenotazione = new Prenotazione(idUtente, idPizza, quantita, data);
             addPrenotazione(prenotazione);
@@ -101,7 +90,7 @@ public class Model {
      * @throws SQLException 
      */
     
-    public boolean login(String username, String password, HttpSession s) throws SQLException{
+    public static boolean login(String username, String password, HttpSession s) throws SQLException{
         Utente login = checkLogin(username, password);
         if (login!=null) {
             s.setAttribute("username", login.getUsername());
@@ -125,18 +114,23 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public Utente checkLogin(String username, String password) throws SQLException{
-        Utente tmp = null;  
+    public static Utente checkLogin(String username, String password) throws SQLException{
+        Utente tmp = null;
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            if(dbman.checkLogin(username, password) > 0){
-            dbman.openConnection();
-            ResultSet rs = dbman.getUser(username);
-            if(rs.next()){
-                tmp = new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
-            }
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            if(DBManager.checkLogin(username, password, st) > 0){
+                DBManager.openConnection();
+                ResultSet rs = DBManager.getUser(username, st);
+                if(rs.next()){
+                    tmp = new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
+                }
             }
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return tmp;
     }
@@ -146,12 +140,16 @@ public class Model {
      * @throws SQLException 
      */
     
-    public void drop() throws SQLException{
-        dbman.openConnection();
+    public static void drop() throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.drop();
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            DBManager.drop(st);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }
     
@@ -169,13 +167,17 @@ public class Model {
     
     protected ArrayList<Utente> getListaUtenti() throws SQLException{
         ArrayList<Utente> listaUtenti = new ArrayList(); 
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            ResultSet rs = dbman.query("SELECT * FROM UTENTI");
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.query("SELECT * FROM UTENTI",st);
             while(rs.next())
                listaUtenti.add(new Utente(rs.getInt("IDUSER"),rs.getString("USERNAME"),rs.getString("PASSWORD"), rs.getString("PERMISSION")));            
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return listaUtenti;
     }
@@ -188,15 +190,19 @@ public class Model {
      * @throws java.sql.SQLException 
      */
     
-    public ArrayList<Pizza> getCatalogo() throws SQLException{
+    public static ArrayList<Pizza> getCatalogo() throws SQLException{
         ArrayList<Pizza> listaPizze = new ArrayList(); 
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            ResultSet rs = dbman.query("SELECT * FROM PIZZE");
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.query("SELECT * FROM PIZZE",st);
             while(rs.next())
                listaPizze.add(new Pizza(rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO")));            
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return listaPizze;
     }
@@ -209,15 +215,19 @@ public class Model {
      * @throws java.sql.SQLException 
      */
     
-    public ArrayList<Prenotazione> getListaPrenotazioni() throws SQLException{
-        ArrayList<Prenotazione> listaPrenotazioni = new ArrayList(); 
+    public static ArrayList<Prenotazione> getListaPrenotazioni() throws SQLException{
+        ArrayList<Prenotazione> listaPrenotazioni = new ArrayList();
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            ResultSet rs = dbman.query("SELECT * FROM PRENOTAZIONI");
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.query("SELECT * FROM PRENOTAZIONI",st);
             while(rs.next())
                listaPrenotazioni.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA")));            
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return listaPrenotazioni;
     }
@@ -232,15 +242,19 @@ public class Model {
      * @throws java.sql.SQLException 
      */
     
-    public ArrayList<Prenotazione> getListaPrenotazioni(int idUtente) throws SQLException{
+    public static ArrayList<Prenotazione> getListaPrenotazioni(int idUtente) throws SQLException{
         ArrayList<Prenotazione> listaPrenotazioni = new ArrayList(); 
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            ResultSet rs = dbman.query("SELECT * FROM PRENOTAZIONI WHERE IDUTENTE="+idUtente);
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.query("SELECT * FROM PRENOTAZIONI WHERE IDUTENTE="+idUtente,st);
             while(rs.next())
                listaPrenotazioni.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA")));            
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return listaPrenotazioni;
     }
@@ -259,12 +273,15 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    protected void addUtente(Utente u) throws SQLException{
+    protected static void addUtente(Utente u) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            if(dbman.getIdUser(u.getUsername()) < 0){
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            if(DBManager.getIdUser(u.getUsername(), st) < 0){
                 //aggiungi utente
-                int tmp = dbman.addUser(u.getUsername(), u.getPassword(), u.getPermission());
+                int tmp = DBManager.addUser(u.getUsername(), u.getPassword(), u.getPermission(),st);
                 if(tmp >= 0){
                     u.setId(tmp);
                 }
@@ -272,7 +289,8 @@ public class Model {
             else
                 System.out.println("Username non valido");
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }
     
@@ -284,12 +302,15 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    protected void addPizza(Pizza p) throws SQLException {
+    protected static void addPizza(Pizza p) throws SQLException {
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            if(dbman.getIdPizza(p.getNome()) < 0){
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            if(DBManager.getIdPizza(p.getNome(),st) < 0){
                 //aggiungi pizza
-                int tmp = dbman.addPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
+                int tmp = DBManager.addPizza(p.getNome(), p.getIngredinti(), p.getPrezzo(),st);
                 if(tmp >= 0){
                     p.setId(tmp);
                 }
@@ -297,7 +318,8 @@ public class Model {
             else
                 System.out.println("Pizza già presente");
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }      
     
@@ -309,12 +331,15 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    protected void addPrenotazione(Prenotazione p) throws SQLException{
+    protected static void addPrenotazione(Prenotazione p) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            if(dbman.getIdPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getData()) < 0){
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            if(DBManager.getIdPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getData(), st) < 0){
                 //aggiungi prenotazione
-                int tmp = dbman.addPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getQuantita(), p.getData());
+                int tmp = DBManager.addPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getQuantita(), p.getData(),st);
                 if(tmp >= 0){
                     p.setIdPrenotazione(tmp);
                 }
@@ -322,7 +347,8 @@ public class Model {
             else
                 System.out.println("Prenotazione non valida");
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }
     
@@ -338,14 +364,18 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public void remUtente(Utente u) throws SQLException{
+    public static void remUtente(Utente u) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
             //rimuovi utente
-            dbman.remUser(u.getId());
+            DBManager.remUser(u.getId(),st);
             u.setId(-1);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }
    
@@ -357,14 +387,18 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public void remPizza(Pizza p) throws SQLException{
+    public static void remPizza(Pizza p) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
             //rimuovi pizza
-            dbman.remPizza(p.getId());
+            DBManager.remPizza(p.getId(),st);
             p.setId(-1);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }   
     
@@ -376,13 +410,17 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public void remPrenotazione(Prenotazione p) throws SQLException{
+    public static void remPrenotazione(Prenotazione p) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            dbman.remPrenotazione(p.getIdPrenotazione());
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            DBManager.remPrenotazione(p.getIdPrenotazione(),st);
             p.setIdPrenotazione(-1);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }
     
@@ -398,12 +436,16 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public void modUtente(Utente u) throws SQLException{
+    public static void modUtente(Utente u) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            dbman.modUser(u.getUsername(), u.getPassword(), u.getPermission());
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            DBManager.modUser(u.getUsername(), u.getPassword(), u.getPermission(),st);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }
     
@@ -415,12 +457,16 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public void modPizza(Pizza p) throws SQLException{
+    public static void modPizza(Pizza p) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            dbman.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo());
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            DBManager.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo(), st);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }
     
@@ -432,12 +478,16 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public void modPrenotazione(Prenotazione p) throws SQLException{
+    public static void modPrenotazione(Prenotazione p) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            dbman.modPrenotazione(p.getIdPrenotazione(), p.getQuantita(), p.getData());
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            DBManager.modPrenotazione(p.getIdPrenotazione(), p.getQuantita(), p.getData(), st);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
     }
 
@@ -455,13 +505,17 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public int getIdUtente(String username) throws SQLException{
+    public static int getIdUtente(String username) throws SQLException{
         int tmp = -1;
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            tmp = dbman.getIdUser(username);
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            tmp = DBManager.getIdUser(username, st);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return tmp;
     }
@@ -476,13 +530,17 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public int getIdPizza(String nome) throws SQLException{
+    public static int getIdPizza(String nome) throws SQLException{
         int tmp = -1;
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            tmp = dbman.getIdPizza(nome);
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            tmp = DBManager.getIdPizza(nome, st);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return tmp;
     }    
@@ -499,13 +557,17 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public int getIdPrenotazione(int username, int pizza, String  data) throws SQLException{
+    public static int getIdPrenotazione(int username, int pizza, String  data) throws SQLException{
         int tmp = -1;
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            tmp = dbman.getIdPrenotazione(username, pizza, data);
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            tmp = DBManager.getIdPrenotazione(username, pizza, data, st);
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return tmp;
     }
@@ -524,15 +586,19 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public Utente getUtente(String name) throws SQLException{
+    public static Utente getUtente(String name) throws SQLException{
         Utente tmp = null;
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            ResultSet rs = dbman.getUser(name);
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.getUser(name, st);
             if(rs.next())
                 tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return tmp;
     }
@@ -547,15 +613,19 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public Utente getUtente(int id) throws SQLException{
+    public static Utente getUtente(int id) throws SQLException{
         Utente tmp = null;  
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            ResultSet rs = dbman.getUser(id);
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.getUser(id, st);
             if(rs.next())
                 tmp = new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return tmp;
     }
@@ -570,15 +640,19 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public Pizza getPizza(String name) throws SQLException {
+    public static Pizza getPizza(String name) throws SQLException {
         Pizza result = null;
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            ResultSet rs = dbman.getPizza(name);
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.getPizza(name,st);
             if(rs.next())
                 result = new Pizza( rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO"));
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return result;
     }
@@ -593,15 +667,19 @@ public class Model {
      * @throws java.sql.SQLException
      */
     
-    public Prenotazione getPrenotazione(int id) throws SQLException{
+    public static Prenotazione getPrenotazione(int id) throws SQLException{
         Prenotazione tmp = null;  
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
         try{
-            dbman.openConnection();
-            ResultSet rs = dbman.getPrenotazione(id);
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.getPrenotazione(id, st);
             if(rs.next())
                 tmp= new Prenotazione(rs.getInt("IDPRENOTAZIONE"), rs.getInt("IDUTENTE"), rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA"));
         }finally{
-            dbman.closeConnection();
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
         }
         return tmp;
     }
