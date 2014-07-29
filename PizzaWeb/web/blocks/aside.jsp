@@ -14,7 +14,7 @@
                 <%if(ruoloA==null || ruoloA.equals("")){%>
                     <tr>
                         <td>
-                            <form action="/PizzaWeb/Servlet" method="get" >
+                            <form action="/PizzaWeb/Servlet" method="post" >
                                 <p>Login</p>
                                 <input type ="text" name="login" required>
                                 <p>Password</p>
@@ -32,7 +32,7 @@
                  <%}else{%>
                     <tr>
                         <td>
-                            <form action="/PizzaWeb/Servlet" method="get">
+                            <form action="/PizzaWeb/Servlet" method="post">
                                 <input type="submit" name= "action" value= "logout">
                             </form>
                         </td>

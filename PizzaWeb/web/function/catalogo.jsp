@@ -1,5 +1,5 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="mypackage.*"%>
+<%@page import="mvc.*" import="components.*"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

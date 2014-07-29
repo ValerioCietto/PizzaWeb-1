@@ -1,8 +1,4 @@
-<%-- 
-    Document   : modpizza
-    Created on : May 22, 2014, 2:46:02 PM
-    Author     : anna
---%>
+<%@page import="mvc.*" import="components.*"%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

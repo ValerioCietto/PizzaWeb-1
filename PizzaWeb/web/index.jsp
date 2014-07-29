@@ -1,27 +1,24 @@
-<%@page import="mypackage.*"%>
+<%@page import="mvc.*" import="components.*"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <link rel="stylesheet" href="pizzacss.css" type="text/css"> 
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Pizzeria</title>
-    </head>
+    <%@include file="blocks/header.jsp" %>
     <body>
-        <% DBManager.inizializza();%>
         <header><h1>PIZZERIA ONLINE</h1></header>
-        <%@include file="nav.jsp"%>
-        <%@include file="aside.jsp"%>
+        <%@include file="blocks/nav.jsp"%>
+        <%@include file="blocks/aside.jsp"%>
         <%
         String view=(String)(request.getSession()).getAttribute("view");
         if(view==null || view.equals("")){%>
             <article><p>home</p></article>
         <%}else if(view.equals("catalogo")){%>
-            <%@include file="catalogo.jsp"%>
+            <%@include file="function/catalogo.jsp"%>
         <%}else if(view.equals("loginManager")){%>
-            <%@include file="loginmanager.jsp"%>
+            <%@include file="function/loginmanager.jsp"%>
         <%}else if(view.equals("prenotazioni")){%>
-            <%@include file="prenotazioni.jsp"%>    
+            <%@include file="function/prenotazioni.jsp"%>    
         <%}else{ //non ancora pronto%>
             <article><p>non ancora pronto</p></article>
         <%}%>

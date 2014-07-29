@@ -12,11 +12,13 @@ import javax.xml.ws.handler.MessageContext;
 
 public class Tester {
     public static void main(String[]args) throws SQLException{
-        //Connection conn = DBManager.openConnection();
-        //Statement st = DBManager.openStatement(conn);
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
+        DBManager.creaTabelle(st);
+        DBManager.inizializza(st);
         //testDBManager(true,true,true,true, st);
-        //DBManager.closeStatement(st);
-        //DBManager.closeConnection(conn);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
         //testModel();
         //dropDB();
     }

@@ -1,7 +1,5 @@
+<%@page import="mvc.*" import="components.*"%>
 
-<%@page import="java.util.ArrayList"%>
-<%@page import="mypackage.*"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <link rel="stylesheet" href="pizzacss.css" type="text/css"> 

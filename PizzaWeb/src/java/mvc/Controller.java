@@ -34,23 +34,23 @@ public class Controller extends HttpServlet {
                     logout(request);
                     break;
                 case "addPizza":
-                    //Model.addPizza(request);
+                    addPizza(request);
                     aggPage(request);
                     break;
                 case "remPizza":
-                    //Model.remPizza(request);
+                    remPizza(request);
                     aggPage(request);
                     break;
                 case "modPizza":
-                    //Model.modPizza(request);
+                    modPizza(request);
                     aggPage(request);
                     break;
                 case "registration":
-                    //Model.addUtente(request);
+                    register(request);
                     break;
                 case "addPrenotaz":
-                     //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
-                    //Model.addPrenotazione(request);
+                    //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
+                    addPrenotazioni(request);
                    // Logger.getGlobal().info("sono nel controller in addprenotaz");
                     aggPage(request);
                     break;
