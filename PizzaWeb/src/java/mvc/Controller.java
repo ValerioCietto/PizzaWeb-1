@@ -94,10 +94,7 @@ public class Controller extends HttpServlet {
                 System.out.println();
                 break;
             case "prenotazioni":
-                if (ruolo.equals("user"))
-                    System.out.println();
-                else
-                    System.out.println();
+                getPrenotazioni(req);
                 break;
         }
     }
@@ -187,22 +184,23 @@ public class Controller extends HttpServlet {
             }else
                 notifica(s, "non hai i permessi");
         }catch(SQLException e){notifica(s,"???A???");}
-        getCatalogo(req);
     }
   
     /**
      * Permette a TUTTI di visualizzare il catalogo pizze
      * 
      * @param req 
+     * @return  
      */
     
-    public static void getCatalogo(HttpServletRequest req){
+    public static String getCatalogo(HttpServletRequest req){
         HttpSession s = req.getSession();
         ArrayList<Pizza> listaPizze=null;
         try{
              listaPizze= Model.getCatalogo();
+             notifica(s,"catalogo ottenuto");
         }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
-        View.visualizzaCatalogo(listaPizze ,req,res);
+        return View.visualizzaCatalogo(listaPizze ,req);
     }
     
     /**
@@ -234,7 +232,6 @@ public class Controller extends HttpServlet {
             }else
                 notifica(s, "non hai i permessi");
         }catch(SQLException e){notifica(s,"???A???");}
-        getCatalogo(req);
     }
     
     /**
@@ -257,7 +254,6 @@ public class Controller extends HttpServlet {
             }else
                 notifica(s, "non hai i permessi");
         }catch(SQLException e){notifica(s,"???B???");}
-        getCatalogo(req);
     }
 
     
@@ -270,7 +266,7 @@ public class Controller extends HttpServlet {
      * @param req 
      */
     
-    public static void getPrenotazioni(HttpServletRequest req){
+    public static String getPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getParameter("username");
@@ -278,21 +274,21 @@ public class Controller extends HttpServlet {
         try{
             listaPrenotazioni = new ArrayList();
             Utente u=Model.getUtente(username);
-            switch (u.getPermission()){
-                case "user":
-                    listaPrenotazioni=Model.getListaPrenotazioni(u.getId());
-                    notifica(s, "Caricate Proprie Prenotazioni");
-                    break;
-                case "admin":
-                    listaPrenotazioni=Model.getListaPrenotazioni();
-                    notifica(s, "Caricate Tutte Prenotazioni");
-                    break;
-                default:
-                    notifica(s, "non hai i permessi");
-                    break;
+            if(u != null){
+                if (u.getPermission().equals("user")){
+                        listaPrenotazioni=Model.getListaPrenotazioni(u.getId());
+                        notifica(s, "Caricate Proprie Prenotazioni");
+                }
+                else{
+                        listaPrenotazioni=Model.getListaPrenotazioni();
+                        notifica(s, "Caricate Tutte Prenotazioni");
+                }
+            }
+            else{
+                notifica(s, "non hai i permessi");
             }
         }catch(SQLException e){notifica(s,"Impossibile ottenere il catalogo");}
-        View.visualizzaPrenotazioni(listaPrenotazioni, req);
+        return View.visualizzaPrenotazioni(listaPrenotazioni, req);
     }
     
     /**
@@ -340,7 +336,6 @@ public class Controller extends HttpServlet {
                     break;
             }
         }catch(SQLException e){notifica(s,"???B???");}
-        getPrenotazioni(req);
     }
     
     /**
@@ -387,22 +382,27 @@ public class Controller extends HttpServlet {
                 case "admin":
                     p=Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
                     if(p!=null){
+                        
                         //gestione cliente
                         int cliente=Integer.parseInt(req.getParameter("clientePrenotaz"));
                         if(cliente>0)
                             p.setIdUtente(cliente);
+                        
                         //gestione pizza
                         int pizza=Integer.parseInt(req.getParameter("pizzaPrenotaz"));
                         if(pizza>0)
                             p.setIdPizza(pizza);
+                        
                         //gestione quantità
                         int quantita=Integer.parseInt(req.getParameter("quantitaPrenotaz"));
                         if(quantita>0)
                             p.setIdPizza(quantita);
+                        
                         //gestione data
                         String data=req.getParameter("dataPrenotaz");
                         if(data!=null && !data.equals(""))
                             p.setData(data);
+                        
                         //gestione stato
                         String stato=req.getParameter("statoPrenotaz");
                         if(stato!=null && !stato.equals(""))
@@ -419,7 +419,6 @@ public class Controller extends HttpServlet {
                     break;
             }
         }catch(SQLException e){notifica(s,"???B???");}
-        getPrenotazioni(req);
     }
     
     /**
@@ -448,7 +447,7 @@ public class Controller extends HttpServlet {
                         notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
-                    p =Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    p = Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
                     if(p!=null){
                         Model.remPrenotazione(p);
                         notifica(s, "prenotazione rimossa");
@@ -461,7 +460,6 @@ public class Controller extends HttpServlet {
                     break;
             }
         }catch(SQLException e){notifica(s,"???B???");}
-        getPrenotazioni(req);
     }
     
     /**
@@ -473,7 +471,7 @@ public class Controller extends HttpServlet {
      */
     
     public static void notifica(HttpSession s,String txt){
-        s.setAttribute("message",txt);
+        s.setAttribute("message",txt+"<p>"+s.getAttribute("message")+"</p>");
         System.out.println(txt);
     }
 

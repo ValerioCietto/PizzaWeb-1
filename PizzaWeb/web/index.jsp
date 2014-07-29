@@ -11,8 +11,8 @@
     <body>
         <%@include file="blocks/header.jsp" %>
         <%@include file="blocks/nav.jsp"%>
-        <%@include file="blocks/aside.jsp"%>
         <%@include file="blocks/article.jsp"%>
+        <%@include file="blocks/aside.jsp"%>
         <%@include file="blocks/footer.jsp"%>
     </body>
 </html>

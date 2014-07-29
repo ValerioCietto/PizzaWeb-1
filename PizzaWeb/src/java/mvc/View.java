@@ -10,28 +10,42 @@ import javax.servlet.http.*;
 
 
 public class View {
-    public static void visualizzaCatalogo(ArrayList<Pizza>al,HttpServletRequest req,HttpServletResponse response){
+    
+    public static String visualizzaCatalogo(ArrayList<Pizza>al,HttpServletRequest req){
+        req.getSession().setAttribute("View", "catalogo");
+        String html = "";
         if(al==null)
-            visualizzaFallimento(req);
-        response.setContentType("text/html;charset=UTF-8");
-        
-        try {
-        PrintWriter out;out = response.getWriter();
-        out.println("<html>");
-        out.println("<head><title>FirstServlet!!</title></head>");
-        out.println("<body>");
-        out.println("<h2>Ciao: sono FirstServlet</h2>");
-        out.println("<h2>Context path:" + req.getContextPath() + "</h2>");
-        out.println("</body>");
-        out.println("</html>");
-        out.close();
-        }catch(IOException e){
-        } finally {}
-        
+            return visualizzaFallimento(req);
+        else{
+            for(int i=0;i<al.size();i++){
+                html += "<div class='pizza'>";
+                html += "<span class='nome'>"+al.get(i).getNome()+"</span>";
+                html += "<span class='ingredienti'>"+al.get(i).getIngredinti()+"</span>";
+                html += "<span class='prezzo'>"+al.get(i).getPrezzo()+"</span>";
+                html += "</div>";
+            }
+        }
+        return html;
     }
-    public static void visualizzaPrenotazioni(ArrayList<Prenotazione>al,HttpServletRequest req){
+    public static String visualizzaPrenotazioni(ArrayList<Prenotazione>al,HttpServletRequest req){
+        req.getSession().setAttribute("View", "prenotazioni");
+        String html="";
         if(al==null)
-            visualizzaFallimento(req);
+            return visualizzaFallimento(req);
+        else{
+            for(int i=0;i<al.size();i++){
+                html += "<div class='prenotazione'>";
+                html += "<span class='nome'>"+al.get(i).toString()+"</span>";
+                html += "</div>";
+            }
+        
+        }
+        return html;
     }
-    public static void visualizzaFallimento(HttpServletRequest req){}
+    
+    public static String visualizzaFallimento(HttpServletRequest req){
+        String html = "";
+        html += "Errore" + req.getAttribute("message");
+        return html;
+    }
 }

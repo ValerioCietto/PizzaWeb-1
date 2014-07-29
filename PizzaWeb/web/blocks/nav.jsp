@@ -15,11 +15,11 @@
             
             
             <div>
-                    <form action="/PizzaWeb/Servlet" method="get">
-                                <input type="hidden" name="action" value="switch">
-                                <input type="submit" name="name" value="prenotazioni">
-                            </form>
-                       </div>
+                <form action="/PizzaWeb/Servlet" method="get">
+                    <input type="hidden" name="action" value="switch">
+                    <input type="submit" name="name" value="prenotazioni">
+                </form>
+           </div>
             
             
             
