@@ -451,7 +451,13 @@ public class Tester {
     public static void dropDB() throws SQLException{
         Model.drop();
     }
-
+    
+    /**
+     * Testa l'interazione tra le jsp e i controller
+     * 
+     * @param req 
+     */
+    
     public static void testController(HttpServletRequest req){
         String username="username";
         String password="password";
