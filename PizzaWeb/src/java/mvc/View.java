@@ -86,9 +86,18 @@ public class View {
     
     public static String login(HttpServletRequest req){
         req.getSession().setAttribute("View", "login");
-        String html = "";
-        html += "Benvenuto " + req.getParameter("username");
+        String html = "Benvenuto " + req.getParameter("username");
         return html;
+    }
+    
+    /**
+     * Visualizza pagina Registrazione
+     * 
+     * @param req
+     */
+    
+    public static void paginaRegistrazione(HttpServletRequest req){
+        req.getSession().setAttribute("View", "Register");
     }
 
 

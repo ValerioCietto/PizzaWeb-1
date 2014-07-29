@@ -36,12 +36,17 @@ public class Controller extends HttpServlet {
                 case "switch":
                     switchPage(request);
                     break;
+                //////////////////////////////////////
+                case "register":
+                    register(request);
+                    break;
                 case "login":
                     login(request);
                     break;
                 case "logout":
                     logout(request);
                     break;
+                //////////////////////////////////////
                 case "addPizza":
                     addPizza(request);
                     aggiornaPagina(request);
@@ -53,9 +58,6 @@ public class Controller extends HttpServlet {
                 case "modPizza":
                     modPizza(request);
                     aggiornaPagina(request);
-                    break;
-                case "registration":
-                    register(request);
                     break;
                 case "addPrenotaz":
                     //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
@@ -108,6 +110,9 @@ public class Controller extends HttpServlet {
             case "prenotazioni":
                 getPrenotazioni(req);
                 break;
+            case "Registrati":
+                getRegistration(req);
+                break;
             
         }
     }
@@ -121,9 +126,7 @@ public class Controller extends HttpServlet {
     /**
      * Gestisce il login
      * 
-     * @param req 
-     * 
-     * @return  
+     * @param req
      */
     
     public static void login(HttpServletRequest req){
@@ -165,7 +168,6 @@ public class Controller extends HttpServlet {
     /**
      * Controlla se è stato effettuato il login
      * 
-     * @param s
      * @param req 
      * 
      * @return  
@@ -194,7 +196,6 @@ public class Controller extends HttpServlet {
     public static void logout(HttpServletRequest req) {
         req.removeAttribute("username");
         req.removeAttribute("password");
-        req.removeAttribute("View");
         notifica(req.getSession(), "logout effettuato");
     }
     
@@ -524,6 +525,17 @@ public class Controller extends HttpServlet {
         }
         
         return View.visualizzaPrenotazioni(listaPrenotazioni, req);
+    }
+    
+    /**
+     * Permette ad un user di registrarsi
+     * 
+     * @param req 
+     * @return  
+     */
+    
+    public static void getRegistration(HttpServletRequest req){        
+        View.paginaRegistrazione(req);
     }
         
 

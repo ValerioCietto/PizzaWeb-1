@@ -1,21 +1,23 @@
 
 <!DOCTYPE html>
 <html>
-    
-    <head>
-        <link rel="stylesheet" type="text/css" href="pizzacss.css"> 
-        <title>Registration</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width">
-    </head> 
-    <body> 
-        <form id="myForm" action="/PizzaWeb/Servlet" method="get">  
-        <p>Username: <input id="field_username" type="text" required pattern="\w+" name="username"></p>
-        <p>Password: <input id="field_pwd1" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="pwd1"></p>
-        <p>Confirm Password: <input id="field_pwd2" type="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}" name="pwd2"></p>
-        <p><input type="submit" name="action" value= "registration"></p>
+    <aside>
+        <form id='myForm' action='/PizzaWeb/Servlet' method='post'>
+            <div>
+                Username: <input id='field_username' type='text' required pattern='\w+' name='username'>
+            </div>
+            <div>
+                Password: <input id='field_pwd1' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='pwd1'>
+           </div>
+            <div>
+                Confirm Password: <input id='field_pwd2' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='pwd2'>
+            </div>
+            <div>
+            <input type='submit' name='action' value= 'register'>
+            </div>
         </form>
-        
+    </aside>
+    
         <script type="text/javascript"> 
             document.addEventListener("DOMContentLoaded", function() {
                 var checkPassword = function(str) {
@@ -98,5 +100,4 @@
                  }, false);
                 
             </script>
-    </body>
 </html>
