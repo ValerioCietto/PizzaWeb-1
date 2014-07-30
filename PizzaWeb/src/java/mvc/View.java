@@ -168,7 +168,15 @@ public class View {
                     html += "<input type='hidden' name='id' value='"+al.get(i).getIdPrenotazione()+"'>";
                     html += "<input type='hidden' name='action' value='modPrenotazione'>";
                     html += "<input type='submit' value='Modifica'>";
-                html += "</form></div>"; 
+                html += "</form>";
+                
+
+                html += "<form action='/PizzaWeb/Servlet' method='post' >";
+                    html += "<input type='hidden' name='prenotazione' value='"+al.get(i).getIdPrenotazione()<s+"'>";
+                    html += "<input type='hidden' name='action' value='remPrenotazione'>";
+                    html += "<input type='submit' value='Rimuovi'>";
+                html += "</form>"; 
+                html += "</div>"; 
             }
         
         }
