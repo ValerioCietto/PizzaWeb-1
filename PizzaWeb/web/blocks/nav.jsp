@@ -1,12 +1,11 @@
 <%@page import="mvc.Controller"%>
 <%@page import="mvc.Model"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page session = "true" contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <body>
         <nav>
             <h1>Operazioni disponibili</h1>
-            
             <div>
                 <form action="/PizzaWeb/Servlet" method="get">
                 <input type="hidden" name="action" value="switch">

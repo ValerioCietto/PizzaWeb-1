@@ -34,6 +34,8 @@ public class View {
                 html += "</div>";
             }
         }
+        Controller.notifica(req.getSession(),"user2:"+ req.getSession().getAttribute("username"));
+        Controller.notifica(req.getSession(),"password2:"+ req.getSession().getAttribute("password"));
         return html;
     }
     
@@ -86,7 +88,10 @@ public class View {
     
     public static String login(HttpServletRequest req){
         req.getSession().setAttribute("view", "login");
-        String html = "Benvenuto " + req.getParameter("username");
+       // Controller.notifica(req.getSession(),"user:"+ req.getSession().getAttribute("username"));
+        //Controller.notifica(req.getSession(),"user:"+ req.getSession().getAttribute("username"));
+        String html = "Benvenuto " + req.getSession().getAttribute("username");
+        
         return html;
     }
     

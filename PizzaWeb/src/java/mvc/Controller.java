@@ -27,9 +27,11 @@ public class Controller extends HttpServlet {
      */
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
-        response.setContentType("text/html;charset=UTF-8");
-        String action= request.getParameter("action");
         request.getSession().setAttribute("message", "");
+        response.setContentType("text/html;charset=UTF-8");
+        Controller.notifica(request.getSession(),"user1:"+ request.getSession().getAttribute("username"));
+        Controller.notifica(request.getSession(),"password1:"+ request.getSession().getAttribute("password"));
+        String action= request.getParameter("action");
         
         if(action!=null){
             switch (action) {
@@ -131,20 +133,22 @@ public class Controller extends HttpServlet {
     
     public static void login(HttpServletRequest req){
         HttpSession s = req.getSession();
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        try{
-            if(Model.login(username, password)){
-                View.login(req);
+        String username = ""+req.getParameter("username");
+        String password = ""+req.getParameter("password");
+        try {
+            if(!checkLogin(req) && Model.login(username, password)){
+                
                 s.setAttribute("username", username);
                 s.setAttribute("password", password);
+                View.login(req);
+                
                 notifica(s, "Login ok!");
             }
             else{
-                notifica(req.getSession(), "Login error!");            
+                notifica(req.getSession(), "Login error!");
             }
-        }catch(SQLException e){
-            notifica(req.getSession(), "SQL error!");
+        } catch (SQLException ex) {
+            notifica(req.getSession(), "Login exception!");
         }
     }
     
@@ -174,15 +178,18 @@ public class Controller extends HttpServlet {
      */
     
     public static boolean checkLogin(HttpServletRequest req){
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        
+        String username = ""+req.getSession().getAttribute("username");
+        String password = ""+req.getSession().getAttribute("password");
         try{
-            if(Model.checkLogin(username, password)!=null){
+            if(Model.login(username, password)){
+                notifica(req.getSession(),"checkT"+username+"!"+password+"!");
                 return true;
             }
         }catch(SQLException e){
                 req.getSession().setAttribute("message", "SQL error!");   
         }
+        notifica(req.getSession(),"checkF"+username+"!"+password+"!");
         return false;
     }
     
@@ -195,9 +202,12 @@ public class Controller extends HttpServlet {
     
     public static void logout(HttpServletRequest req) {
         HttpSession s = req.getSession();
-        s.invalidate();
-        s = req.getSession();
-        notifica(req.getSession(), "logout effettuato");
+        if(checkLogin(req)){
+            s.invalidate();
+            s = req.getSession();
+            notifica(req.getSession(), "logout effettuato");
+        }else
+            notifica(req.getSession(), "logout impossibile");
     }
     
     
@@ -467,7 +477,7 @@ public class Controller extends HttpServlet {
      */
     
     public static void notifica(HttpSession s,String txt){
-        s.setAttribute("message",txt+"<p>"+s.getAttribute("message")+"</p>");
+        s.setAttribute("message",s.getAttribute("message")+"//"+txt);
     }
 
       
