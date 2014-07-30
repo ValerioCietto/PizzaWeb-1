@@ -4,10 +4,11 @@
 <html>
     <body>
         <aside>
-            <% if(request.getSession().getAttribute("View").equals("Register")){ %>
+            <% //if(request.getSession().getAttribute("View").equals("Register")){ %>
                 <%@include file='/function/inputCheck.jsp' %>
                 <% request.getSession().setAttribute("View", "");%>
-            <% }else if(!Controller.checkLogin(request)){ %>
+            <% //}else
+                if(!Controller.checkLogin(request)){ %>
                 <div>
                     <form action="/PizzaWeb/Servlet" method="post" >
                         <p>Username</p>
