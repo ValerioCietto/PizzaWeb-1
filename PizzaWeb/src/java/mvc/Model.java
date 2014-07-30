@@ -147,19 +147,20 @@ public final class Model {
     /**
      * Fornisce la lista di tutti gli utenti
      * 
+     * @param id
      * @return 
      * 
      * @throws java.sql.SQLException 
      */
     
-    protected ArrayList<Utente> getListaUtenti() throws SQLException{
+    public static ArrayList<Utente> getListaUtenti(int id) throws SQLException{
         ArrayList<Utente> listaUtenti = new ArrayList(); 
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
             conn = DBManager.openConnection();
             st = DBManager.openStatement(conn);
-            ResultSet rs = DBManager.query("SELECT * FROM UTENTI",st);
+            ResultSet rs = DBManager.query("SELECT * FROM UTENTI WHERE IDUSER <> "+id+"",st);
             while(rs.next())
                listaUtenti.add(new Utente(rs.getInt("IDUSER"),rs.getString("USERNAME"),rs.getString("PASSWORD"), rs.getString("PERMISSION")));            
         }finally{

@@ -20,7 +20,6 @@ public class View {
     
     public static String visualizzaCatalogo(ArrayList<Pizza>al, HttpServletRequest req){
         
-        req.getSession().setAttribute("view", "catalogo");
         String html = "";
         
         if(al==null)
@@ -49,7 +48,6 @@ public class View {
      */
     
     public static String visualizzaPrenotazioni(ArrayList<Prenotazione>al,HttpServletRequest req){
-        req.getSession().setAttribute("view", "prenotazioni");
         String html="";
         if(al==null)
             return visualizzaFallimento(req);
@@ -61,6 +59,33 @@ public class View {
             }
         
         }
+        return html;
+    }
+    
+    /**
+     * Ritorna una stringa che fornisce i dati per costruire l'article
+     * 
+     * @param al
+     * @param req
+     * 
+     * @return 
+     */
+    
+    public static String visualizzaUtenti(ArrayList<Utente>al, HttpServletRequest req){
+        String html = "";
+        if(al==null)
+            return visualizzaFallimento(req);
+        else{
+            for(int i=0;i<al.size();i++){
+                html += "<div class='utente'>";
+                html += "<span class='username'>"+al.get(i).getUsername()+"</span>";
+                html += "<span class='password'>"+al.get(i).getPassword()+"</span>";
+                html += "<span class='permission'>"+al.get(i).getPermission()+"</span>";
+                html += "</div>";
+            }
+        }
+        Controller.notifica(req.getSession(),"user2:"+ req.getSession().getAttribute("username"));
+        Controller.notifica(req.getSession(),"password2:"+ req.getSession().getAttribute("password"));
         return html;
     }
     
@@ -88,22 +113,10 @@ public class View {
     
     public static String login(HttpServletRequest req){
         req.getSession().setAttribute("view", "login");
-       // Controller.notifica(req.getSession(),"user:"+ req.getSession().getAttribute("username"));
-        //Controller.notifica(req.getSession(),"user:"+ req.getSession().getAttribute("username"));
         String html = "Benvenuto " + req.getSession().getAttribute("username");
-        
         return html;
     }
-    
-    /**
-     * Visualizza pagina Registrazione
-     * 
-     * @param req
-     */
-    
-    public static void paginaRegistrazione(HttpServletRequest req){
-        req.getSession().setAttribute("view", "register");
-    }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////    
 }

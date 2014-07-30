@@ -9,7 +9,9 @@
                 <%= Controller.getCatalogo(request)%>
             <%}else if(view.equals("prenotazioni")){%>
                 <%= Controller.getPrenotazioni(request)%>
-            <%}else if(view.equals("registrazione")){%>
+            <%}else if(view.equals("utenti")){%>
+                <%= Controller.getUtenti(request)%>
+            <%}else if(view.equals("registration")){%>
                 <%= Controller.getCatalogo(request)%>
             <%}else{%>
                 <%= "<div class='welcome'>BENVENUTI!</div>"%>

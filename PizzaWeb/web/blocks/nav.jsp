@@ -19,6 +19,14 @@
                         <input type="submit" name="name" value="prenotazioni">
                     </form>
                 </div>
+                <%if(Controller.checkAdmin(request)){ %>
+                    <div>
+                    <form action="/PizzaWeb/Servlet" method="post">
+                        <input type="hidden" name="action" value="switch">
+                        <input type="submit" name="name" value="utenti">
+                    </form>
+                    </div>
+               <% }%>
             <%} %>
         </nav>   
     </body>

@@ -104,13 +104,20 @@ public class Controller extends HttpServlet {
         
         switch (page) {
             case "catalogo":
-                getCatalogo(req);
+                //getCatalogo(req);
+                req.getSession().setAttribute("view", "catalogo");
                 break;
             case "prenotazioni":
-                getPrenotazioni(req);
+                //getPrenotazioni(req);
+                req.getSession().setAttribute("view", "prenotazioni");
+                break;
+            case "utenti":
+                //getUtenti(req);
+                req.getSession().setAttribute("view", "utenti");
                 break;
             case "Registrati":
-                getRegistration(req);
+                //getRegistration(req);
+                req.getSession().setAttribute("view", "registrati");
                 break;
             case "back":
                 goBack(req);
@@ -187,6 +194,30 @@ public class Controller extends HttpServlet {
         String password = ""+req.getSession().getAttribute("password");
         try{
             if(Model.login(username, password)){
+                notifica(req.getSession(),"checkT"+username+"!"+password+"!");
+                return true;
+            }
+        }catch(SQLException e){
+                req.getSession().setAttribute("message", "SQL error!");   
+        }
+        notifica(req.getSession(),"checkF"+username+"!"+password+"!");
+        return false;
+    }
+    
+    /**
+     * Controlla se è stato effettuato il login
+     * 
+     * @param req 
+     * 
+     * @return  
+     */
+    
+    public static boolean checkAdmin(HttpServletRequest req){
+        
+        String username = ""+req.getSession().getAttribute("username");
+        String password = ""+req.getSession().getAttribute("password");
+        try{
+            if(Model.checkLogin(username, password).getPermission().equals("admin")){
                 notifica(req.getSession(),"checkT"+username+"!"+password+"!");
                 return true;
             }
@@ -543,13 +574,42 @@ public class Controller extends HttpServlet {
     }
     
     /**
+     * Permette ad un user di visualizzare le sue prenotazioni ed all'admin di visualizzarle tutte
+     * 
+     * @param req 
+     * @return  
+     */
+    
+    public static String getUtenti(HttpServletRequest req){
+        String username = req.getSession().getAttribute("username")+"";
+        ArrayList<Utente> listaUtenti= null;
+        
+        try{
+            listaUtenti = new ArrayList();
+            Utente u = Model.getUtente(username);
+            
+            if(u != null && u.getPermission().equals("admin")){
+                listaUtenti = Model.getListaUtenti(u.getId());
+                notifica(req.getSession(), "Caricate tutti gli utenti");
+            }
+            else{
+                notifica(req.getSession(), "non hai i permessi");
+            }
+        }catch(SQLException e){
+            notifica(req.getSession(),"Impossibile ottenere il catalogo");
+        }
+        
+        return View.visualizzaUtenti(listaUtenti, req);
+    }
+    
+    /**
      * Permette ad un user di registrarsi
      * 
      * @param req 
      */
     
-    public static void getRegistration(HttpServletRequest req){        
-        View.paginaRegistrazione(req);
+    public static void getRegistration(HttpServletRequest req){
+        req.getSession().setAttribute("view", "register");
     }
         
     /**
@@ -557,6 +617,7 @@ public class Controller extends HttpServlet {
      * 
      * @param req 
      */
+    
     public static void goBack(HttpServletRequest req){
         req.getSession().setAttribute("view", "");
         req.getSession().setAttribute("name", "");
