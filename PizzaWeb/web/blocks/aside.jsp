@@ -5,8 +5,7 @@
     <body>
         <aside>
             <%if(!Controller.checkLogin(request)){ %>
-                <%String checkView = request.getSession().getAttribute("view")+""; 
-                Controller.notifica(request.getSession(), "view:" + checkView);
+                <%String checkView = request.getSession().getAttribute("view")+"";
                 if(checkView!=null && !checkView.equals("register")){%>
                     <div>
                         <form action="/PizzaWeb/Servlet" method="post" >
@@ -34,8 +33,6 @@
                 <%}
             }else{ %>
                 <%= View.login(request) %>
-                <% Controller.notifica(request.getSession(),"user:"+ request.getSession().getAttribute("username"));
-                   Controller.notifica(request.getSession(),"password:"+ request.getSession().getAttribute("password")); %>
                 <div>
                     <form action="/PizzaWeb/Servlet" method="get">
                         <input type="submit" name="action" value="logout">

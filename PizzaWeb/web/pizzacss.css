@@ -55,6 +55,8 @@ article {
     position: absolute;
     background-color: bisque;
     
+    overflow-y: scroll;
+    
     margin-left: 20%;
     width: 60%;
     min-width: 480px;
