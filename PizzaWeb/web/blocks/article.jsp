@@ -4,7 +4,7 @@
 <html>
     <body>
         <article>
-            <%String view=""+request.getSession().getAttribute("View");%>
+            <%String view=""+request.getSession().getAttribute("view");%>
             <%if(view.equals("catalogo")){%>
                 <%= Controller.getCatalogo(request)%>
             <%}else if(view.equals("prenotazioni")){%>

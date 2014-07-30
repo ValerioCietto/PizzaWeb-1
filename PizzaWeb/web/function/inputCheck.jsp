@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
     <aside>
+        <div>
         <form id='myForm' action='/PizzaWeb/Servlet' method='post'>
             <div>
                 Username: <input id='field_username' type='text' required pattern='\w+' name='username'>
@@ -16,6 +17,7 @@
             <input type='submit' name='action' value= 'register'>
             </div>
         </form>
+        </div>
     </aside>
     
         <script type="text/javascript"> 

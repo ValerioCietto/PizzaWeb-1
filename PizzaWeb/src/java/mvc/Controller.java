@@ -87,7 +87,7 @@ public class Controller extends HttpServlet {
     
     public static void switchPage(HttpServletRequest req){
         String page = req.getParameter("name");
-        if(page!=null)
+        if(page!=null && !page.equals(""))
             req.getSession().setAttribute("view",page);
         else
             req.getSession().setAttribute("view","");
@@ -111,9 +111,9 @@ public class Controller extends HttpServlet {
                 getPrenotazioni(req);
                 break;
             case "Registrati":
-                getRegistration(req);
+                /*getRegistration(req);*/
                 break;
-            
+                
         }
     }
 
@@ -130,20 +130,21 @@ public class Controller extends HttpServlet {
      */
     
     public static void login(HttpServletRequest req){
+        HttpSession s = req.getSession();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         try{
             if(Model.login(username, password)){
                 View.login(req);
-                req.setAttribute("username", username);
-                req.setAttribute("password", password);
-                req.getSession().setAttribute("message", "Login ok!");
+                s.setAttribute("username", username);
+                s.setAttribute("password", password);
+                notifica(s, "Login ok!");
             }
             else{
-                req.getSession().setAttribute("message", "Login error!");            
+                notifica(req.getSession(), "Login error!");            
             }
         }catch(SQLException e){
-            req.getSession().setAttribute("message", "SQL error!");
+            notifica(req.getSession(), "SQL error!");
         }
     }
     
@@ -154,13 +155,12 @@ public class Controller extends HttpServlet {
      */
     
     public static void register(HttpServletRequest req){
-        HttpSession s = req.getSession();
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         try{
             Model.creaUtente(username, password);
         }catch(SQLException e){
-            System.out.println("Registrazione fallita!");
+            notifica(req.getSession(),"Registrazione fallita!");
         }
     }
     
@@ -194,8 +194,9 @@ public class Controller extends HttpServlet {
      */
     
     public static void logout(HttpServletRequest req) {
-        req.removeAttribute("username");
-        req.removeAttribute("password");
+        HttpSession s = req.getSession();
+        s.invalidate();
+        s = req.getSession();
         notifica(req.getSession(), "logout effettuato");
     }
     
@@ -534,9 +535,9 @@ public class Controller extends HttpServlet {
      * @return  
      */
     
-    public static void getRegistration(HttpServletRequest req){        
-        View.paginaRegistrazione(req);
-    }
+    /*public static String getRegistration(HttpServletRequest req){        
+        return View.paginaRegistrazione(req);
+    }*/
         
 
 ////////////////////////////////////////////////////////////////////////////////

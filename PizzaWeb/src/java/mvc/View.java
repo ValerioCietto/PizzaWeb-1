@@ -20,7 +20,7 @@ public class View {
     
     public static String visualizzaCatalogo(ArrayList<Pizza>al, HttpServletRequest req){
         
-        req.getSession().setAttribute("View", "catalogo");
+        req.getSession().setAttribute("view", "catalogo");
         String html = "";
         
         if(al==null)
@@ -47,7 +47,7 @@ public class View {
      */
     
     public static String visualizzaPrenotazioni(ArrayList<Prenotazione>al,HttpServletRequest req){
-        req.getSession().setAttribute("View", "prenotazioni");
+        req.getSession().setAttribute("view", "prenotazioni");
         String html="";
         if(al==null)
             return visualizzaFallimento(req);
@@ -85,7 +85,7 @@ public class View {
      */
     
     public static String login(HttpServletRequest req){
-        req.getSession().setAttribute("View", "login");
+        req.getSession().setAttribute("view", "login");
         String html = "Benvenuto " + req.getParameter("username");
         return html;
     }
@@ -96,9 +96,9 @@ public class View {
      * @param req
      */
     
-    public static void paginaRegistrazione(HttpServletRequest req){
-        req.getSession().setAttribute("View", "Register");
-    }
+    /*public static String paginaRegistrazione(HttpServletRequest req){
+        return "restriamoci";
+    }*/
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////    
