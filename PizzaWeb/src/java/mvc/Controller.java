@@ -64,6 +64,10 @@ public class Controller extends HttpServlet {
                     addPrenotazioni(request);
                     aggiornaPagina(request);
                     break;
+                case "modPrenotazione":
+                    modPrenotazioni(request);
+                    aggiornaPagina(request);
+                    break;
                 case "remPrenotaz":
                     aggiornaPagina(request);
                     break;
@@ -176,7 +180,6 @@ public class Controller extends HttpServlet {
         }
     }
     
-    
     /**
      * Controlla se è stato effettuato il login
      * 
@@ -220,7 +223,6 @@ public class Controller extends HttpServlet {
         return false;
     }
     
-    
     /**
      * Gestisce la disconnessione
      * 
@@ -236,6 +238,18 @@ public class Controller extends HttpServlet {
         }else
             notifica(req.getSession(), "logout impossibile");
     }
+    
+    /**
+     * Permette di assegnegnare una stringa ad un attributo della sessione
+     * 
+     * @param s
+     * @param txt
+     */
+    
+    public static void notifica(HttpSession s,String txt){
+        s.setAttribute("message",s.getAttribute("message")+"//"+txt);
+    }
+
     
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -363,30 +377,26 @@ public class Controller extends HttpServlet {
     public static void modPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
-        String username = req.getParameter("username");
+        String username = req.getSession().getAttribute("username")+"";
         Prenotazione p;
         try{
             switch (Model.getUtente(username).getPermission()){
                 case "user":
-                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
                     if(p!=null){
                         if(p.getIdUtente()==Model.getIdUtente(username)){
-                            //gestione pizza
-                            int pizza=Integer.parseInt(req.getParameter("pizzaPrenotaz"));
-                            if(pizza>0)
-                                p.setIdPizza(pizza);
                             //gestione quantità
-                            int quantita=Integer.parseInt(req.getParameter("quantitaPrenotaz"));
+                            int quantita=Integer.parseInt(req.getParameter("quantita"));
                             if(quantita>0)
-                                p.setIdPizza(quantita);
+                                p.setQuantita(quantita);
                             //gestione data
-                            String data=req.getParameter("dataPrenotaz");
+                            String data=req.getParameter("data");
                             if(data!=null && !data.equals(""))
                                 p.setData(data);
                             //gestione stato
-                            String stato=req.getParameter("statoPrenotaz");
+                            String stato=req.getParameter("stato");
                             if(stato!=null && !stato.equals(""))
-                                p.setData(stato);
+                                p.setStato(stato);
 
                             Model.modPrenotazione(p);
                             notifica(s, "prenotazione aggiornata");
@@ -396,34 +406,44 @@ public class Controller extends HttpServlet {
                         notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
-                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
                     if(p!=null){
                         
                         //gestione cliente
-                        int cliente=Integer.parseInt(req.getParameter("clientePrenotaz"));
-                        if(cliente>0)
-                            p.setIdUtente(cliente);
+                        if(req.getParameter("utente")!=null){
+                            int utente=Model.getIdUtente(req.getParameter("utente"));
+                            if(utente>0)
+                                p.setIdUtente(utente);
+                        }
                         
                         //gestione pizza
-                        int pizza=Integer.parseInt(req.getParameter("pizzaPrenotaz"));
-                        if(pizza>0)
-                            p.setIdPizza(pizza);
+                        if(req.getParameter("pizza")!=null){
+                            int pizza=Model.getIdPizza(req.getParameter("pizza"));
+                            if(pizza>0)
+                                p.setIdPizza(pizza);
+                        }
                         
                         //gestione quantità
-                        int quantita=Integer.parseInt(req.getParameter("quantitaPrenotaz"));
-                        if(quantita>0)
-                            p.setIdPizza(quantita);
+                        if(req.getParameter("quantita")!=null){
+                            int quantita=Integer.parseInt(req.getParameter("quantita"));
+                            if(quantita>0)
+                                p.setQuantita(quantita);
+                        }
                         
                         //gestione data
-                        String data=req.getParameter("dataPrenotaz");
-                        if(data!=null && !data.equals(""))
-                            p.setData(data);
+                        if(req.getParameter("data")!=null){
+                            String data=req.getParameter("data");
+                            if(data!=null && !data.equals(""))
+                                p.setData(data);
+                        }
                         
                         //gestione stato
-                        String stato=req.getParameter("statoPrenotaz");
-                        if(stato!=null && !stato.equals(""))
-                            p.setData(stato);
-
+                        if(req.getParameter("stato")!=null){
+                            String stato=req.getParameter("stato");
+                            if(stato!=null && !stato.equals(""))
+                                p.setStato(stato);
+                        }
+                        
                         Model.modPrenotazione(p);
                         notifica(s, "prenotazione aggiornata");
                         
@@ -477,17 +497,6 @@ public class Controller extends HttpServlet {
             }
         }catch(SQLException e){notifica(s,"???B???");}
     }
-    
-    /**
-     * Permette di assegnegnare una stringa ad un attributo della sessione
-     * 
-     * @param s
-     * @param txt
-     */
-    
-    public static void notifica(HttpSession s,String txt){
-        s.setAttribute("message",s.getAttribute("message")+"//"+txt);
-    }
 
       
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -523,15 +532,18 @@ public class Controller extends HttpServlet {
      * 
      * @param req 
      * @return  
+     * @throws java.sql.SQLException  
      */
     
-    public static String getPrenotazioni(HttpServletRequest req){
+    public static String getPrenotazioni(HttpServletRequest req) throws SQLException{
         String username = req.getSession().getAttribute("username")+"";
         ArrayList<Prenotazione> listaPrenotazioni = null;
         
+        Utente u = null;
+        
         try{
             listaPrenotazioni = new ArrayList();
-            Utente u = Model.getUtente(username);
+            u = Model.getUtente(username);
             
             if (u != null && u.getPermission().equals("user")){
                 listaPrenotazioni = Model.getListaPrenotazioni(u.getId());
@@ -548,7 +560,7 @@ public class Controller extends HttpServlet {
             notifica(req.getSession(),"Impossibile ottenere il catalogo");
         }
         
-        return View.visualizzaPrenotazioni(listaPrenotazioni, req);
+        return View.visualizzaPrenotazioni(listaPrenotazioni, u, req);
     }
     
     /**

@@ -3,6 +3,7 @@ package mvc;
 ////////////////////////////////////////////////////////////////////////////////
 
 import components.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.http.*;
 
@@ -107,20 +108,67 @@ public class View {
      * Ritorna una stringa che fornisce i dati per costruire l'article
      * 
      * @param al
+     * @param u
      * @param req
      * 
      * @return 
+     * @throws java.sql.SQLException 
      */
     
-    public static String visualizzaPrenotazioni(ArrayList<Prenotazione>al,HttpServletRequest req){
+    public static String visualizzaPrenotazioni(ArrayList<Prenotazione>al, Utente u, HttpServletRequest req) throws SQLException{
         String html="";
         if(al==null)
             return visualizzaFallimento(req);
-        else{
+        
+        else if(u.getPermission().equals("user")){
             for(int i=0;i<al.size();i++){
                 html += "<div class='prenotazione'>";
-                html += "<span class='nome'>"+al.get(i).toString()+"</span>";
-                html += "</div>";
+                html += "<span></br>ID:  </span>";
+                html += "<span class='id'>"+"</br>"+al.get(i).getIdPrenotazione()+"</br>"+"</span>";
+                html += "<span></br>Pizza:  </span>";
+                html += "<span class='pizza'>"+Model.getPizza(al.get(i).getIdPizza()).getNome()+"</span>";
+                html += "<span></br>Quantità:  </span>";
+                html += "<span class='quantità'>"+Model.getPrenotazione(al.get(i).getIdPizza()).getQuantita()+"</span>";
+                html += "<span></br>Data:  </span>";
+                html += "<span class='data'>"+Model.getPrenotazione(al.get(i).getIdPizza()).getData()+"</span>";
+                
+                html += "<form action='/PizzaWeb/Servlet' method='post' >";
+                    html += "<span>Quantità:  </span>";
+                    html += "<input type ='number' name='quantita' min='1' max='100' require>";
+                    html += "<span>  Data:  </span>";
+                    html += "<input type ='date' name='data' require>";
+                    html += "<input type='hidden' name='id' value='"+al.get(i).getIdPrenotazione()+"'>";
+                    html += "<input type='hidden' name='action' value='modPrenotazione'>";
+                    html += "<input type='submit' value='Modifica'>";
+                html += "</form></div>"; 
+            }
+        }else if(u.getPermission().equals("admin")){
+            for(int i=0;i<al.size();i++){
+                html += "<div class='prenotazione'>";
+                html += "<span></br>ID:  </span>";
+                html += "<span class='id'>"+al.get(i).getIdPrenotazione()+"</span>";
+                html += "<span></br>Utente:  </span>";
+                html += "<span class='quantità'>"+Model.getUtente(al.get(i).getIdUtente()).getUsername()+"</span>";
+                html += "<span></br>Pizza:  </span>";
+                html += "<span class='pizza'>"+Model.getPizza(al.get(i).getIdPizza()).getNome()+"</span>";
+                html += "<span></br>Quantità:  </span>";
+                html += "<span class='quantità'>"+Model.getPrenotazione(al.get(i).getIdPizza()).getQuantita()+"</span>";
+                html += "<span></br>Data:  </span>";
+                html += "<span class='data'>"+Model.getPrenotazione(al.get(i).getIdPizza()).getData()+"</span>";
+                
+                html += "<form action='/PizzaWeb/Servlet' method='post' >";
+                    html += "<span> Utente: </span>";
+                    html += "<input type ='text' name='utente'>";
+                    html += "<span'> Pizza: </span>";
+                    html += "<input type ='text' name='pizza'>";
+                    html += "<span> Quantità:  </span>";
+                    html += "<input type ='number' name='quantita' min='1' max='100' require>";
+                    html += "<span>  Data:  </span>";
+                    html += "<input type ='date' name='data'require>";
+                    html += "<input type='hidden' name='id' value='"+al.get(i).getIdPrenotazione()+"'>";
+                    html += "<input type='hidden' name='action' value='modPrenotazione'>";
+                    html += "<input type='submit' value='Modifica'>";
+                html += "</form></div>"; 
             }
         
         }

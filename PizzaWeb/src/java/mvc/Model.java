@@ -645,6 +645,33 @@ public final class Model {
         return result;
     }
     
+     /**
+     * Ritorna un oggetto Pizza partendo dal nome
+     * 
+     * @param id
+     * 
+     * @return          ritorna un Oggetto contenente il risultato della query
+     * 
+     * @throws java.sql.SQLException
+     */
+    
+    public static Pizza getPizza(int id) throws SQLException {
+        Pizza result = null;
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
+        try{
+            conn = DBManager.openConnection();
+            st = DBManager.openStatement(conn);
+            ResultSet rs = DBManager.getPizza(id,st);
+            if(rs.next())
+                result = new Pizza( rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO"));
+        }finally{
+            DBManager.closeStatement(st);
+            DBManager.closeConnection(conn);
+        }
+        return result;
+    }
+    
     /**
      * Ritorna un oggetto Prenotazione partendo dall'ID
      * 
