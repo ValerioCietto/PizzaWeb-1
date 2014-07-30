@@ -101,10 +101,9 @@ public class View {
      * @param req
      */
     
-    /*public static String paginaRegistrazione(HttpServletRequest req){
-        return "restriamoci";
-    }*/
-
+    public static void paginaRegistrazione(HttpServletRequest req){
+        req.getSession().setAttribute("view", "register");
+    }
 
 ///////////////////////////////////////////////////////////////////////////////////////////    
 }

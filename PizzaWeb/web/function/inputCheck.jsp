@@ -8,13 +8,13 @@
                 Username: <input id='field_username' type='text' required pattern='\w+' name='username'>
             </div>
             <div>
-                Password: <input id='field_pwd1' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='pwd1'>
+                Password: <input id='field_pwd1' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password1'>
            </div>
             <div>
-                Confirm Password: <input id='field_pwd2' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='pwd2'>
+                Confirm Password: <input id='field_pwd2' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password2'>
             </div>
             <div>
-            <input type='submit' name='action' value= 'register'>
+                <input type='submit' name='action' value= 'register'>
             </div>
         </form>
         </div>

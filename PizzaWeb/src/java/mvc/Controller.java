@@ -62,13 +62,10 @@ public class Controller extends HttpServlet {
                     aggiornaPagina(request);
                     break;
                 case "addPrenotaz":
-                    //Logger.getGlobal().info("sono nel controller in addprenotaz prima di addpren");
                     addPrenotazioni(request);
-                   // Logger.getGlobal().info("sono nel controller in addprenotaz");
                     aggiornaPagina(request);
                     break;
                 case "remPrenotaz":
-                    //Model.remPrenotazione(request);
                     aggiornaPagina(request);
                     break;
    
@@ -113,7 +110,10 @@ public class Controller extends HttpServlet {
                 getPrenotazioni(req);
                 break;
             case "Registrati":
-                /*getRegistration(req);*/
+                getRegistration(req);
+                break;
+            case "back":
+                goBack(req);
                 break;
                 
         }
@@ -160,9 +160,13 @@ public class Controller extends HttpServlet {
     
     public static void register(HttpServletRequest req){
         String username = req.getParameter("username");
-        String password = req.getParameter("password");
+        String password1 = req.getParameter("password1");
+        String password2 = req.getParameter("password2");
         try{
-            Model.creaUtente(username, password);
+            if(password1.equals(password2))
+                Model.creaUtente(username, password1);
+            else
+                notifica(req.getSession(),"password diverse");
         }catch(SQLException e){
             notifica(req.getSession(),"Registrazione fallita!");
         }
@@ -513,7 +517,7 @@ public class Controller extends HttpServlet {
      */
     
     public static String getPrenotazioni(HttpServletRequest req){
-        String username = req.getParameter("username");
+        String username = req.getSession().getAttribute("username")+"";
         ArrayList<Prenotazione> listaPrenotazioni = null;
         
         try{
@@ -542,13 +546,22 @@ public class Controller extends HttpServlet {
      * Permette ad un user di registrarsi
      * 
      * @param req 
-     * @return  
      */
     
-    /*public static String getRegistration(HttpServletRequest req){        
-        return View.paginaRegistrazione(req);
-    }*/
+    public static void getRegistration(HttpServletRequest req){        
+        View.paginaRegistrazione(req);
+    }
         
+    /**
+     * Reinizializza gli attributi "name" e "view"
+     * 
+     * @param req 
+     */
+    public static void goBack(HttpServletRequest req){
+        req.getSession().setAttribute("view", "");
+        req.getSession().setAttribute("name", "");
+        notifica(req.getSession(), req.getSession().getAttribute("view")+"");
+    }
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
