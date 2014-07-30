@@ -411,14 +411,14 @@ public class Controller extends HttpServlet {
                         
                         //gestione cliente
                         if(req.getParameter("utente")!=null){
-                            int utente=Model.getIdUtente(req.getParameter("utente"));
+                            int utente=Model.getIdUtente(req.getParameter("utente")+"");
                             if(utente>0)
                                 p.setIdUtente(utente);
                         }
                         
                         //gestione pizza
                         if(req.getParameter("pizza")!=null){
-                            int pizza=Model.getIdPizza(req.getParameter("pizza"));
+                            int pizza=Model.getIdPizza(req.getParameter("pizza")+"");
                             if(pizza>0)
                                 p.setIdPizza(pizza);
                         }
