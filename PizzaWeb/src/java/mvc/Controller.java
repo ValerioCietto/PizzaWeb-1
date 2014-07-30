@@ -411,30 +411,43 @@ public class Controller extends HttpServlet {
                         
                         //gestione cliente
                         if(req.getParameter("utente")!=null){
-                            int utente=Model.getIdUtente(req.getParameter("utente")+"");
-                            if(utente>0)
-                                p.setIdUtente(utente);
+                            String nome=req.getParameter("utente")+"";
+                            if(nome.equals(""))
+                                notifica(s,"nome vuoto");
+                            else{
+                                int i=Model.getIdUtente(nome);
+                                if(i>0){
+                                    p.setIdUtente(i);
+                                    notifica(s,"modificato idNome");
+                                }
+                            }
                         }
                         
                         //gestione pizza
                         if(req.getParameter("pizza")!=null){
                             int pizza=Model.getIdPizza(req.getParameter("pizza")+"");
-                            if(pizza>0)
+                            if(pizza>0){
                                 p.setIdPizza(pizza);
+                                notifica(s,"modificato id");
+                            }
                         }
                         
                         //gestione quantità
                         if(req.getParameter("quantita")!=null){
                             int quantita=Integer.parseInt(req.getParameter("quantita"));
-                            if(quantita>0)
+                            if(quantita>0){
                                 p.setQuantita(quantita);
+                                notifica(s,"modificato id");
+                            }
                         }
                         
                         //gestione data
                         if(req.getParameter("data")!=null){
                             String data=req.getParameter("data");
-                            if(data!=null && !data.equals(""))
+                            if(data!=null && !data.equals("")){
                                 p.setData(data);
+                                notifica(s,"modificato id");
+                            }
                         }
                         
                         //gestione stato

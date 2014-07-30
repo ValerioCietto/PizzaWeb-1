@@ -472,7 +472,7 @@ public final class Model {
         try{
             conn = DBManager.openConnection();
             st = DBManager.openStatement(conn);
-            DBManager.modPrenotazione(p.getIdPrenotazione(), p.getQuantita(), p.getData(), st);
+            DBManager.modPrenotazione(p.getIdPrenotazione(),p.getIdUtente(),p.getIdPizza(), p.getQuantita(), p.getData(), st);
         }finally{
             DBManager.closeStatement(st);
             DBManager.closeConnection(conn);

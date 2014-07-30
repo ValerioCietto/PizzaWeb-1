@@ -363,8 +363,8 @@ public final class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public static boolean modPrenotazione(int idPrenotazione,int quantita, String data, Statement st) throws SQLException{
-        return esegui("UPDATE PRENOTAZIONI SET QUANTITA=" + quantita+ ", DATA='" +data+"' WHERE IDPRENOTAZIONE =" +idPrenotazione, st);
+    public static boolean modPrenotazione(int idPrenotazione,int idUtente,int idPizza,int quantita, String data, Statement st) throws SQLException{
+        return esegui("UPDATE PRENOTAZIONI SET IDUTENTE="+idUtente+", IDPIZZA="+idPizza+", QUANTITA=" + quantita+ ", DATA='" +data+"' WHERE IDPRENOTAZIONE =" +idPrenotazione, st);
     }
     
     
