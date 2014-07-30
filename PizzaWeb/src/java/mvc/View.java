@@ -66,12 +66,9 @@ public class View {
                     html += "<span class='ingredienti'> Ingredienti: </span>";
                     html += "<input type ='text' name='ingredienti'>";
                     html += "<span class='prezzo'> Prezzo: </span>";
-                    html += "<input type='double' name='prezzo'></br>";
-                    
-                    
-                    
-                        html += "<input type='hidden' name='action' value='addPizza'>";
-                        html += "<input type='submit' value='Aggiungi'>";
+                    html += "<input type='double' name='prezzo'></br>";                    
+                    html += "<input type='hidden' name='action' value='addPizza'>";
+                    html += "<input type='submit' value='Aggiungi'>";
                     html += "</form>";
                 html += "</div></br></br>"; 
                 
