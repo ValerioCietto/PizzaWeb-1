@@ -184,8 +184,11 @@ public class Controller extends HttpServlet {
         String password1 = req.getParameter("password1");
         String password2 = req.getParameter("password2");
         try{
-            if(password1.equals(password2))
+            if(password1.equals(password2)){
                 Model.creaUtente(username, password1);
+            req.getSession().setAttribute("view", "back");
+                    aggiornaPagina(req);
+            }
             else
                 notifica(req.getSession(),"password diverse");
         }catch(SQLException e){
@@ -288,6 +291,8 @@ public class Controller extends HttpServlet {
                     Pizza p = new Pizza(nome,ingredienti,prezzo);
                     Model.addPizza(p);
                     notifica(s, "pizza aggiunta");
+                    s.setAttribute("view", "catalogo");
+                    aggiornaPagina(req);
                 }else
                     notifica(s, "pizza non aggiunta");
             }else
@@ -323,6 +328,8 @@ public class Controller extends HttpServlet {
                     //applica modifiche
                     Model.modPizza(p);
                     notifica(s, "pizza aggiornata");
+                    s.setAttribute("view", "catalogo");
+                    aggiornaPagina(req);
                 }else
                     notifica(s, "pizza non trovata");
             }else
@@ -345,6 +352,8 @@ public class Controller extends HttpServlet {
                 if(p!=null){
                     Model.remPizza(p);
                     notifica(s, "pizza rimossa");
+                    req.getSession().setAttribute("view", "catalogo");
+                    aggiornaPagina(req);
                 }else
                     notifica(s, "pizza non trovata");
             }else
@@ -376,6 +385,8 @@ public class Controller extends HttpServlet {
                     Prenotazione p = new Prenotazione(idUser,idPizza,quantita,data);
                     Model.addPrenotazione(p);
                     notifica(s, "prenotazione aggiunta");
+                    req.getSession().setAttribute("view", "catalogo");
+                    aggiornaPagina(req);
                 }else
                     notifica(s,"prenotazione non aggiunta");
             }
@@ -417,6 +428,8 @@ public class Controller extends HttpServlet {
                             
                             Model.modPrenotazione(p);
                             notifica(s, "prenotazione aggiornata");
+                            req.getSession().setAttribute("view", "prenotazioni");
+                            aggiornaPagina(req);
                         }else
                             notifica(s, "prenotazione non tua");
                     }else
@@ -479,6 +492,8 @@ public class Controller extends HttpServlet {
                         Model.modStatoPrenotazione(p);
                         Model.modPrenotazione(p);
                         notifica(s, "prenotazione aggiornata");
+                        req.getSession().setAttribute("view", "prenotazioni");
+                        aggiornaPagina(req);
                         
                     }else
                         notifica(s, "prenotazione non trovata");
@@ -504,6 +519,8 @@ public class Controller extends HttpServlet {
                             p.setStato("Consegnato");
                             Model.modStatoPrenotazione(p);
                             notifica(s, "prenotazione aggiornata");
+                            req.getSession().setAttribute("view", "prenotazioni");
+                            aggiornaPagina(req);
                         }else
                             notifica(s, "prenotazione non tua");
                     break;
@@ -519,6 +536,8 @@ public class Controller extends HttpServlet {
                         }
                         Model.modStatoPrenotazione(p); 
                         notifica(s, "prenotazione aggiornata");
+                        req.getSession().setAttribute("view", "prenotazioni");
+                        aggiornaPagina(req);
                         
                     }else
                         notifica(s, "prenotazione non trovata");
@@ -549,6 +568,8 @@ public class Controller extends HttpServlet {
                         if(p.getIdUtente()==Model.getIdUtente(username)){
                             Model.remPrenotazione(p);
                             notifica(s, "prenotazione rimossa");
+                            req.getSession().setAttribute("view", "prenotazioni");
+                            aggiornaPagina(req);
                         }else
                             notifica(s, "prenotazione non tua");
                     }
@@ -561,6 +582,8 @@ public class Controller extends HttpServlet {
                     if(p!=null){
                         Model.remPrenotazione(p);
                         notifica(s, "prenotazione rimossa");
+                        req.getSession().setAttribute("view", "prenotazioni");
+                        aggiornaPagina(req);
                     }
                     else
                         notifica(s, "prenotazione non trovata");
@@ -617,6 +640,8 @@ public class Controller extends HttpServlet {
 
                         Model.modUtente(username,u);
                         notifica(s, "utente aggiornato");
+                        req.getSession().setAttribute("view", "utenti");
+                        aggiornaPagina(req);
                     break;
                 default:
                     notifica(s, "non hai i permessi");
@@ -645,6 +670,8 @@ public class Controller extends HttpServlet {
                     if(u!=null){
                         Model.remUtente(u);
                         notifica(s, "utente rimosso");
+                        req.getSession().setAttribute("view", "utenti");
+                        aggiornaPagina(req);
                     }
                     else
                         notifica(s, "utente non trovato");
