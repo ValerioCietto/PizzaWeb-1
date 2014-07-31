@@ -309,13 +309,17 @@ public class Controller extends HttpServlet {
                 Pizza p=Model.getPizza(req.getParameter("pizza"));
                 if(p!=null){
                     //gestione prezzo
-                    double prezzo=Double.parseDouble(req.getParameter("prezzo"));
-                    if(prezzo>0)
-                        p.setPrezzo(prezzo);
+                    String prezzoS =req.getParameter("prezzo")+"";
+                    if(!prezzoS.equals("")){
+                        double prezzo=Double.parseDouble(prezzoS);
+                        if(prezzo>0 )
+                            p.setPrezzo(prezzo);
+                    }
                     //gestione ingrediente
                     String ingredienti=req.getParameter("ingredienti");
                     if(ingredienti!=null && !ingredienti.equals(""))
                         p.setIngredienti(ingredienti);
+                    
                     //applica modifiche
                     Model.modPizza(p);
                     notifica(s, "pizza aggiornata");
