@@ -130,14 +130,9 @@ public final class Model {
     public static void drop() throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            DBManager.drop(st);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        DBManager.drop(st);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
     }
     
     
@@ -158,8 +153,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.query("SELECT * FROM UTENTI WHERE IDUSER <> "+id+"",st);
             while(rs.next())
                listaUtenti.add(new Utente(rs.getInt("IDUSER"),rs.getString("USERNAME"),rs.getString("PASSWORD"), rs.getString("PERMISSION")));            
@@ -183,8 +176,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.query("SELECT * FROM PIZZE",st);
             while(rs.next())
                listaPizze.add(new Pizza(rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO")));            
@@ -208,8 +199,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.query("SELECT * FROM PRENOTAZIONI",st);
             while(rs.next())
                listaPrenotazioni.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA")));            
@@ -235,8 +224,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.query("SELECT * FROM PRENOTAZIONI WHERE IDUTENTE="+idUtente,st);
             while(rs.next())
                listaPrenotazioni.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA")));            
@@ -265,8 +252,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             if(DBManager.getIdUser(u.getUsername(), st) < 0){
                 //aggiungi utente
                 int tmp = DBManager.addUser(u.getUsername(), u.getPassword(), u.getPermission(),st);
@@ -294,8 +279,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             if(DBManager.getIdPizza(p.getNome(),st) < 0){
                 //aggiungi pizza
                 int tmp = DBManager.addPizza(p.getNome(), p.getIngredinti(), p.getPrezzo(),st);
@@ -323,8 +306,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             if(DBManager.getIdPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getData(), st) < 0){
                 //aggiungi prenotazione
                 int tmp = DBManager.addPrenotazione(p.getIdUtente(), p.getIdPizza(), p.getQuantita(), p.getData(),st);
@@ -355,16 +336,11 @@ public final class Model {
     public static void remUtente(Utente u) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            //rimuovi utente
-            DBManager.remUser(u.getId(),st);
-            u.setId(-1);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        //rimuovi utente
+        DBManager.remUser(u.getId(),st);
+        u.setId(-1);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
     }
    
     /**
@@ -378,16 +354,11 @@ public final class Model {
     public static void remPizza(Pizza p) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            //rimuovi pizza
-            DBManager.remPizza(p.getId(),st);
-            p.setId(-1);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        //rimuovi pizza
+        DBManager.remPizza(p.getId(),st);
+        p.setId(-1);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
     }   
     
     /**
@@ -401,15 +372,10 @@ public final class Model {
     public static void remPrenotazione(Prenotazione p) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            DBManager.remPrenotazione(p.getIdPrenotazione(),st);
-            p.setIdPrenotazione(-1);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        DBManager.remPrenotazione(p.getIdPrenotazione(),st);
+        p.setIdPrenotazione(-1);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
     }
     
     
@@ -427,14 +393,9 @@ public final class Model {
     public static void modUtente(Utente u) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            DBManager.modUser(u.getUsername(), u.getPassword(), u.getPermission(),st);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        DBManager.modUser(u.getUsername(), u.getPassword(), u.getPermission(),st);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
     }
     
     /**
@@ -448,14 +409,9 @@ public final class Model {
     public static void modPizza(Pizza p) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            DBManager.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo(), st);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        DBManager.modPizza(p.getNome(), p.getIngredinti(), p.getPrezzo(), st);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
     }
     
     /**
@@ -469,14 +425,10 @@ public final class Model {
     public static void modPrenotazione(Prenotazione p) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            DBManager.modPrenotazione(p.getIdPrenotazione(),p.getIdUtente(),p.getIdPizza(), p.getQuantita(), p.getData(), st);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        DBManager.modPrenotazione(p.getIdPrenotazione(),p.getIdUtente(),p.getIdPizza(), p.getQuantita(), p.getData(), st);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
+
     }
 
     
@@ -497,14 +449,9 @@ public final class Model {
         int tmp = -1;
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            tmp = DBManager.getIdUser(username, st);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        tmp = DBManager.getIdUser(username, st);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
         return tmp;
     }
     
@@ -522,14 +469,9 @@ public final class Model {
         int tmp = -1;
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            tmp = DBManager.getIdPizza(nome, st);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        tmp = DBManager.getIdPizza(nome, st);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
         return tmp;
     }    
     
@@ -549,14 +491,9 @@ public final class Model {
         int tmp = -1;
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
-            tmp = DBManager.getIdPrenotazione(username, pizza, data, st);
-        }finally{
-            DBManager.closeStatement(st);
-            DBManager.closeConnection(conn);
-        }
+        tmp = DBManager.getIdPrenotazione(username, pizza, data, st);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
         return tmp;
     }
 
@@ -579,8 +516,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.getUser(name, st);
             if(rs.next())
                 tmp= new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
@@ -606,8 +541,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.getUser(id, st);
             if(rs.next())
                 tmp = new Utente(rs.getInt("IDUSER"), rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("PERMISSION"));
@@ -633,8 +566,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.getPizza(name,st);
             if(rs.next())
                 result = new Pizza( rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO"));
@@ -660,8 +591,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.getPizza(id,st);
             if(rs.next())
                 result = new Pizza( rs.getInt("IDPIZZA"), rs.getString("NOME"), rs.getString("INGREDIENTI"), rs.getDouble("PREZZO"));
@@ -687,8 +616,6 @@ public final class Model {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
-            conn = DBManager.openConnection();
-            st = DBManager.openStatement(conn);
             ResultSet rs = DBManager.getPrenotazione(id, st);
             if(rs.next())
                 tmp= new Prenotazione(rs.getInt("IDPRENOTAZIONE"), rs.getInt("IDUTENTE"), rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA"));

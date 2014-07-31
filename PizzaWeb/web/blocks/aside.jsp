@@ -6,7 +6,7 @@
         <aside>
             <%if(!Controller.checkLogin(request)){ %>
                 <%String checkView = request.getSession().getAttribute("view")+"";
-                if(checkView!=null && !checkView.equals("register")){%>
+                if(checkView!=null && !checkView.equals("Registrati")){%>
                     <div>
                         <form action="/PizzaWeb/Servlet" method="post" >
                             <p>Username</p>
@@ -22,7 +22,7 @@
                         <input type="submit" name="name"   value="Registrati">
                         </form>
                     </div>
-                <%}else {%>
+                <%}else{%>
                     <%@include file="/function/inputCheck.jsp" %>
                 <div>
                         <form action="/PizzaWeb/Servlet" method="get">

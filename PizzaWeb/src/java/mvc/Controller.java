@@ -68,7 +68,13 @@ public class Controller extends HttpServlet {
                     modPrenotazioni(request);
                     aggiornaPagina(request);
                     break;
-                case "remPrenotaz":
+                case "remPrenotazione":
+                    remPrenotazioni(request);
+                    aggiornaPagina(request);
+                    break;
+                    
+                case "modUtente":
+                    modUtente(request);
                     aggiornaPagina(request);
                     break;
    
@@ -120,7 +126,7 @@ public class Controller extends HttpServlet {
                 break;
             case "Registrati":
                 //getRegistration(req);
-                req.getSession().setAttribute("view", "registrati");
+                req.getSession().setAttribute("view", "Registrati");
                 break;
             case "back":
                 goBack(req);
@@ -372,22 +378,26 @@ public class Controller extends HttpServlet {
      * Permette ad un user di modificare le sue prenotazioni ed all'admin di modificarle tutte
      * 
      * @param req 
+     * @throws java.sql.SQLException 
      */
     
     public static void modPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
         String username = req.getSession().getAttribute("username")+"";
-        Prenotazione p;
         try{
+        Prenotazione p;
+        Utente u = Model.getUtente(username);
             switch (Model.getUtente(username).getPermission()){
                 case "user":
                     p=Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
+                    
                     if(p!=null){
-                        if(p.getIdUtente()==Model.getIdUtente(username)){
+                        if(p.getIdUtente() == u.getId()){
+                            
                             //gestione quantità
-                            int quantita=Integer.parseInt(req.getParameter("quantita"));
-                            if(quantita>0)
+                            int quantita = 0 + Integer.parseInt(req.getParameter("quantita"));
+                            if(quantita > 0)
                                 p.setQuantita(quantita);
                             //gestione data
                             String data=req.getParameter("data");
@@ -434,7 +444,7 @@ public class Controller extends HttpServlet {
                         
                         //gestione quantità
                         if(req.getParameter("quantita")!=null){
-                            int quantita=Integer.parseInt(req.getParameter("quantita"));
+                            int quantita=0+Integer.parseInt(req.getParameter("quantita"));
                             if(quantita>0){
                                 p.setQuantita(quantita);
                                 notifica(s,"modificato id");
@@ -479,12 +489,12 @@ public class Controller extends HttpServlet {
     public static void remPrenotazioni(HttpServletRequest req){
         
         HttpSession s = req.getSession();
-        String username = req.getParameter("username");
+        String username = req.getSession().getAttribute("username")+"";
         Prenotazione p;
         try{
             switch (Model.getUtente(username).getPermission()){
                 case "user":
-                    p =Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    p =Model.getPrenotazione(Integer.parseInt(req.getParameter("prenotazione")));
                     if(p!=null){
                         if(p.getIdUtente()==Model.getIdUtente(username)){
                             Model.remPrenotazione(p);
@@ -496,7 +506,8 @@ public class Controller extends HttpServlet {
                         notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
-                    p = Model.getPrenotazione(Integer.parseInt(req.getParameter("idPrenotaz")));
+                    
+                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("prenotazione")));
                     if(p!=null){
                         Model.remPrenotazione(p);
                         notifica(s, "prenotazione rimossa");
@@ -626,6 +637,64 @@ public class Controller extends HttpServlet {
         req.getSession().setAttribute("name", "");
         notifica(req.getSession(), req.getSession().getAttribute("view")+"");
     }
+    
+    
+    
+    public static void modUtente(HttpServletRequest req){
+        
+        HttpSession s = req.getSession();
+        String nomeutente = req.getParameter("nomeutente");
+         
+        try{
+            notifica(s, nomeutente);
+        Utente u = Model.getUtente(nomeutente);
+            if(u!=null){
+                
+                ///modifica utente
+                
+                if (req.getParameter("name")!=null){
+                    String name = req.getParameter("name");
+                    if(name != null && !name.equals("")){
+                        u.setUsername(name);
+                        notifica(s, "nome modificato"+name);
+                    }
+                }
+
+                ///modifica password
+                if (req.getParameter("password")!=null){
+                    String password=req.getParameter("password");
+                    if(password != null && !password.equals("")){
+                        u.setPwd(password);
+                        notifica(s, "password modificato"+password);
+                    }
+                }
+
+                ///modifica permission
+
+                if (req.getParameter("permission")!=null){
+                    String permission=req.getParameter("permission");
+                    if(permission != null && !permission.equals("")){
+                        u.setPermission(permission);
+                        notifica(s, "permesso modificato"+permission);
+                    }
+                }
+
+                 Model.modUtente(u);
+                 notifica(s, "      utente aggiornato");
+
+             }else
+                 notifica(s, "utente non trovato");
+
+
+    
+                            
+        }catch(SQLException e){notifica(s,"???B???");}
+    }
+    
+    
+    
+    
+    
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////

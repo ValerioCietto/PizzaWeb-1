@@ -361,11 +361,11 @@ public class Tester {
             // PRENOTAZIONI
             
             //test modPrenotazione
-            DBManager.modPrenotazione(1, quantita+9, data+"1",st);
+            //DBManager.modPrenotazione(1, quantita+9, data+"1",st);
             System.out.println("OK");
             
             //test modPrenotazione con user inesistente
-            DBManager.modPrenotazione(999999, quantita+9999, data+"1",st);
+            //DBManager.modPrenotazione(999999, quantita+9999, data+"1",st);
             System.out.println("KO prenotazione");
         }
         DBManager.drop(st);
