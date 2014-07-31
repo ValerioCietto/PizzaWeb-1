@@ -172,7 +172,7 @@ public class View {
                 
 
                 html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                    html += "<input type='hidden' name='prenotazione' value='"+al.get(i).getIdPrenotazione()<s+"'>";
+                    html += "<input type='hidden' name='prenotazione' value='"+al.get(i).getIdPrenotazione()+"'>";
                     html += "<input type='hidden' name='action' value='remPrenotazione'>";
                     html += "<input type='submit' value='Rimuovi'>";
                 html += "</form>"; 
