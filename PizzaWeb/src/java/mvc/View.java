@@ -1,5 +1,10 @@
 package mvc;
 
+/**
+ * Classe dell'oggetto Pizza
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ */
+
 ////////////////////////////////////////////////////////////////////////////////
 
 import components.*;

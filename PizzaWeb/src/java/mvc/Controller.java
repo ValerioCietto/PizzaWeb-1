@@ -8,6 +8,11 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
+/**
+ * Classe dell'oggetto Pizza
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ */
+
 
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
 

@@ -2,10 +2,13 @@ package mvc;
 
 import components.*;
 import java.sql.*;
-import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.handler.MessageContext;
+
+/**
+ * Classe dell'oggetto Pizza
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ */
 
 ////////////////////////////////////////////////////////////////////////////////
 // MAIN

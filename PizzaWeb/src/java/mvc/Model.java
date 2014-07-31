@@ -4,6 +4,11 @@ import components.*;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Classe dell'oggetto Pizza
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ */
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
