@@ -262,7 +262,7 @@ public final class DBManager {
     
     public static int addPrenotazione(int cliente, int pizza, int quantita, String data, Statement st) throws SQLException{
         int id = -1;
-        esegui("INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ("+cliente+", "+pizza+", "+quantita+", '"+data+"', 'ordinato')", st);
+        esegui("INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ("+cliente+", "+pizza+", "+quantita+", '"+data+"', 'Ordinato')", st);
         ResultSet rs = st.executeQuery("SELECT IDPRENOTAZIONE FROM PRENOTAZIONI WHERE IDUTENTE="+cliente+" AND IDPIZZA="+pizza+" AND DATA ='"+data+"'");
         rs.next();
         id = rs.getInt("IDPRENOTAZIONE");
