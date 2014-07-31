@@ -218,7 +218,7 @@ public final class DBManager {
      */
     
     public static int addUser(String nome, String password, String ruolo, Statement st) throws SQLException{
-        int id = -1;
+        int id;
         esegui("INSERT INTO UTENTI (USERNAME, PASSWORD, PERMISSION) VALUES ('"+nome+"', '"+password+"', '"+ruolo+"')", st);
         ResultSet rs = st.executeQuery("SELECT IDUSER FROM UTENTI WHERE USERNAME='"+nome+"'");
         rs.next();
@@ -239,7 +239,7 @@ public final class DBManager {
      */
     
     public static int addPizza(String nome, String ingr, double prezzo, Statement st) throws SQLException{
-        int id = -1;
+        int id;
         esegui("INSERT INTO PIZZE (NOME, INGREDIENTI, PREZZO) VALUES ('"+nome+"', '"+ingr+"', "+prezzo+")", st);
         ResultSet rs = st.executeQuery("SELECT IDPIZZA FROM PIZZE WHERE NOME='"+nome+"'");
         rs.next();
@@ -261,7 +261,7 @@ public final class DBManager {
      */
     
     public static int addPrenotazione(int cliente, int pizza, int quantita, String data, Statement st) throws SQLException{
-        int id = -1;
+        int id;
         esegui("INSERT INTO PRENOTAZIONI(IDUTENTE,IDPIZZA,QUANTITA,DATA,STATO) VALUES ("+cliente+", "+pizza+", "+quantita+", '"+data+"', 'Ordinato')", st);
         ResultSet rs = st.executeQuery("SELECT IDPRENOTAZIONE FROM PRENOTAZIONI WHERE IDUTENTE="+cliente+" AND IDPIZZA="+pizza+" AND DATA ='"+data+"'");
         rs.next();

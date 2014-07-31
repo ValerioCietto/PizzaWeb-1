@@ -26,35 +26,34 @@ public class View {
             return visualizzaFallimento(req);
         else{
             if(u == null){
-                for(int i=0;i<al.size();i++){
-                html += "<div class='pizza'>";
-                html += "<span class='nome'>"+"</br>"+al.get(i).getNome()+"</br>"+"</span>";
-                html += "<span></br>Ingredienti:  </span>";
-                html += "<span class='ingredienti'>"+al.get(i).getIngredinti()+"</span>";
-                html += "<span></br>Prezzo:  </span>";
-                html += "<span class='prezzo'>"+al.get(i).getPrezzo()+"</span>";
+                for (Pizza al1 : al) {
+                    html += "<div class='pizza'>";
+                    html += "<span class='nome'>"+"</br>" + al1.getNome() + "</br>" + "</span>";
+                    html += "<span></br>Ingredienti:  </span>";
+                    html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span>";
+                    html += "<span></br>Prezzo:  </span>";
+                    html += "<span class='prezzo'>" + al1.getPrezzo() + "</span>";
                 }
             }
             else if(u.getPermission().equals("user")){
                 
-                for(int i=0;i<al.size();i++){
-                html += "<div class='pizza'>";
-                html += "<span class='nome'>"+"</br>"+al.get(i).getNome()+"</br>"+"</span>";
-                html += "<span></br>Ingredienti:  </span>";
-                html += "<span class='ingredienti'>"+al.get(i).getIngredinti()+"</span>";
-                html += "<span></br>Prezzo:  </span>";
-                html += "<span class='prezzo'>"+al.get(i).getPrezzo()+"</span>";
-                
-                html += "<form action='/PizzaWeb/Servlet' method='post' >";
+                for (Pizza al1 : al) {
+                    html += "<div class='pizza'>";
+                    html += "<span class='nome'>"+"</br>" + al1.getNome() + "</br>" + "</span>";
+                    html += "<span></br>Ingredienti:  </span>";
+                    html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span>";
+                    html += "<span></br>Prezzo:  </span>";
+                    html += "<span class='prezzo'>" + al1.getPrezzo() + "</span>";
+                    html += "<form action='/PizzaWeb/Servlet' method='post' >";
                     html += "<span>Quantità:  </span>";
                     html += "<input type ='number' name='quantita' min='0' max='100'value = '0' required>";
                     html += "<span>  Data:  </span>";
                     html += "<input type ='date' name='data' required>";
-                    html += "<input type='hidden' name='pizza' value='"+al.get(i).getNome()+"'>";
+                    html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
                     html += "<input type='hidden' name='action' value='addPrenotazione'>";
                     html += "<input type='submit' value='Prenota'>";
-                html += "</form>"; 
-                html += "</div></br>";
+                    html += "</form>";
+                    html += "</div></br>";
                 }
             }
             else if(u.getPermission().equals("admin")){
@@ -72,32 +71,30 @@ public class View {
                     html += "</form>";
                 html += "</div></br></br>"; 
                 
-                for(int i=0;i<al.size();i++){
-                html += "<div class='pizza'>";
-                html += "<span class='nome'>"+"</br>"+al.get(i).getNome()+"</br>"+"</span>";
-                html += "<span></br>Ingredienti:  </span>";
-                html += "<span class='ingredienti'>"+al.get(i).getIngredinti()+"</span>";
-                html += "<span></br>Prezzo:  </span>";
-                html += "<span class='prezzo'>"+al.get(i).getPrezzo()+"</span>";
-                html += "<span>";
-                html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                html += "<span></br>Ingredienti:  </span>";
-                html += "<input type ='text' name='ingredienti'>";
-                html += "<span></br>Prezzo:  </span>";
-                html += "<input type ='text' name='prezzo'></br>";
-                        html += "<input type='hidden' name='pizza' value='"+al.get(i).getNome()+"'>";
-                        html += "<input type='hidden' name='action' value='modPizza'>";
-                        html += "<input type='submit' value='Modifica'>";
-                    html += "</form>"; 
-
+                for (Pizza al1 : al) {
+                    html += "<div class='pizza'>";
+                    html += "<span class='nome'>"+"</br>" + al1.getNome() + "</br>" + "</span>";
+                    html += "<span></br>Ingredienti:  </span>";
+                    html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span>";
+                    html += "<span></br>Prezzo:  </span>";
+                    html += "<span class='prezzo'>" + al1.getPrezzo() + "</span>";
+                    html += "<span>";
                     html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                        html += "<input type='hidden' name='pizza' value='"+al.get(i).getNome()+"'>";
-                        html += "<input type='hidden' name='action' value='remPizza'>";
-                        html += "<input type='submit' value='Rimuovi'>";
-                    html += "</form>"; 
-                html += "</span>";
-                
-                html += "</div></br>";
+                    html += "<span></br>Ingredienti:  </span>";
+                    html += "<input type ='text' name='ingredienti'>";
+                    html += "<span></br>Prezzo:  </span>";
+                    html += "<input type ='text' name='prezzo'></br>";
+                    html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
+                    html += "<input type='hidden' name='action' value='modPizza'>";
+                    html += "<input type='submit' value='Modifica'>";
+                    html += "</form>";
+                    html += "<form action='/PizzaWeb/Servlet' method='post' >";
+                    html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
+                    html += "<input type='hidden' name='action' value='remPizza'>";
+                    html += "<input type='submit' value='Rimuovi'>";
+                    html += "</form>";
+                    html += "</span>";
+                    html += "</div></br>";
                 }
             }
         }
@@ -121,85 +118,78 @@ public class View {
             return visualizzaFallimento(req);
         
         else if(u.getPermission().equals("user")){
-            for(int i=0;i<al.size();i++){
+            for (Prenotazione al1 : al) {
                 html += "<div class='prenotazione'>";
                 html += "<span></br>Pizza:  </span>";
-                html += "<span class='pizza'>"+Model.getPizza(al.get(i).getIdPizza()).getNome()+"</span>";
+                html += "<span class='pizza'>" + Model.getPizza(al1.getIdPizza()).getNome() + "</span>";
                 html += "<span></br>Quantità:  </span>";
-                html += "<span class='quantità'>"+al.get(i).getQuantita()+"</span>";
+                html += "<span class='quantità'>" + al1.getQuantita() + "</span>";
                 html += "<span></br>Data:  </span>";
-                html += "<span class='data'>"+al.get(i).getData()+"</span>";
+                html += "<span class='data'>" + al1.getData() + "</span>";
                 html += "<span></br>Stato:  </span>";
-                html += "<span class='stato'>"+al.get(i).getStato()+"</span>";
-                
-                
-                if(!al.get(i).getStato().equals("Consegnato")){
+                html += "<span class='stato'>" + al1.getStato() + "</span>";
+                if (!al1.getStato().equals("Consegnato")) {
                     html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                        html += "<span>Quantità:  </span>";
-                        html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
-                        html += "<span>  Data:  </span>";
-                        html += "<input type ='date' name='data'>";
-                        html += "<input type='hidden' name='id' value="+al.get(i).getIdPrenotazione()+">";
-                        html += "<input type='hidden' name='action' value='modPrenotazione'>";
-                        html += "<input type='submit' value='Modifica'>";
+                    html += "<span>Quantità:  </span>";
+                    html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
+                    html += "<span>  Data:  </span>";
+                    html += "<input type ='date' name='data'>";
+                    html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
+                    html += "<input type='hidden' name='action' value='modPrenotazione'>";
+                    html += "<input type='submit' value='Modifica'>";
                     html += "</form>";
-
                     html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                        html += "<input type='hidden' name='id' value="+al.get(i).getIdPrenotazione()+">";
-                        html += "<input type='hidden' name='action' value='modStatoPrenotazione'>";
-                        html += "<input type='submit' value='pizza consegnata'>";
+                    html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
+                    html += "<input type='hidden' name='action' value='modStatoPrenotazione'>";
+                    html += "<input type='submit' value='pizza consegnata'>";
                     html += "</form>"; 
                 }
                 html += "</div>"; 
             }
         }else if(u.getPermission().equals("admin")){
-            for(int i=0;i<al.size();i++){
+            for (Prenotazione al1 : al) {
                 html += "<div class='prenotazione'>";
                 html += "<span></br>ID:  </span>";
-                html += "<span class='id'>"+al.get(i).getIdPrenotazione()+"</span>";
+                html += "<span class='id'>" + al1.getIdPrenotazione() + "</span>";
                 html += "<span></br>Utente:  </span>";
-                html += "<span class='quantità'>"+Model.getUtente(al.get(i).getIdUtente()).getUsername()+"</span>";
+                html += "<span class='quantità'>" + Model.getUtente(al1.getIdUtente()).getUsername() + "</span>";
                 html += "<span></br>Pizza:  </span>";
-                html += "<span class='pizza'>"+Model.getPizza(al.get(i).getIdPizza()).getNome()+"</span>";
+                html += "<span class='pizza'>" + Model.getPizza(al1.getIdPizza()).getNome() + "</span>";
                 html += "<span></br>Quantità:  </span>";
-                html += "<span class='quantità'>"+al.get(i).getQuantita()+"</span>";
+                html += "<span class='quantità'>" + al1.getQuantita() + "</span>";
                 html += "<span></br>Data:  </span>";
-                html += "<span class='data'>"+al.get(i).getData()+"</span>";
+                html += "<span class='data'>" + al1.getData() + "</span>";
                 html += "<span></br>Stato:  </span>";
-                html += "<span class='stato'>"+al.get(i).getStato()+"</span>";
+                html += "<span class='stato'>" + al1.getStato() + "</span>";
                 html += "<span>";
                 html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                    html += "<span> Utente: </span>";
-                    html += "<input type ='text' name='utente'>";
-                    html += "<span'> Pizza: </span>";
-                    html += "<input type ='text' name='pizza'>";
-                    html += "<span> Quantità:  </span>";
-                    html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
-                    html += "<span>  Data:  </span>";
-                    html += "<input type ='date' name='data'>";
-                    
-                    html += "<input type='hidden' name='id' value="+al.get(i).getIdPrenotazione()+">";
-                    html += "<input type='hidden' name='action' value='modPrenotazione'>";
-                    html += "<input type='submit' value='Modifica ordine'>";
+                html += "<span> Utente: </span>";
+                html += "<input type ='text' name='utente'>";
+                html += "<span'> Pizza: </span>";
+                html += "<input type ='text' name='pizza'>";
+                html += "<span> Quantità:  </span>";
+                html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
+                html += "<span>  Data:  </span>";
+                html += "<input type ='date' name='data'>";
+                html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
+                html += "<input type='hidden' name='action' value='modPrenotazione'>";
+                html += "<input type='submit' value='Modifica ordine'>";
                 html += "</form>";
                 html += "<form>";
-                    html += "<select name = 'stato'>";
-                        html += "<option value = 'Ordinato'> Ordinato </option>";
-                        html += "<option value = 'Consegnato' selected> Consegnato </option>";
-                    html += "</select>";                    
-                    html += "<input type='hidden' name='id' value="+al.get(i).getIdPrenotazione()+">";
-                    html += "<input type='hidden' name='action' value='modPrenotazione'>";
-                    html += "<input type='submit' value='Modifica stato'>";
+                html += "<select name = 'stato'>";
+                html += "<option value = 'Ordinato'> Ordinato </option>";
+                html += "<option value = 'Consegnato' selected> Consegnato </option>";
+                html += "</select>";
+                html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
+                html += "<input type='hidden' name='action' value='modPrenotazione'>";
+                html += "<input type='submit' value='Modifica stato'>";
                 html += "</form>";
                 html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                    html += "<input type='hidden' name='prenotazione' value="+al.get(i).getIdPrenotazione()+">";
-                    html += "<input type='hidden' name='action' value='remPrenotazione'>";
-                    html += "<input type='submit' value='Rimuovi'>";
+                html += "<input type='hidden' name='prenotazione' value=" + al1.getIdPrenotazione() + ">";
+                html += "<input type='hidden' name='action' value='remPrenotazione'>";
+                html += "<input type='submit' value='Rimuovi'>";
                 html += "</form>";
                 html += "</span>";
-               
-
-                
                 html += "</div>"; 
             }
         
@@ -221,36 +211,29 @@ public class View {
         if(al==null)
             return visualizzaFallimento(req);
         else{
-            for(int i=0;i<al.size();i++){
+            for (Utente al1 : al) {
                 html += "<div class='utente'>";
-                html += "<span class='username  '>"+al.get(i).getUsername()+"</span>";
-                html += "<span class='   password   '>"+al.get(i).getPassword()+"</span>";
-                html += "<span class='   permission   '>"+al.get(i).getPermission()+"</span>";
-                
+                html += "<span class='username  '>" + al1.getUsername() + "</span>";
+                html += "<span class='   password   '>" + al1.getPassword() + "</span>";
+                html += "<span class='   permission   '>" + al1.getPermission() + "</span>";
                 html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                    html += "<span>username:  </span>";
-                    html += "<input type ='text' name='name'>";
-                    html += "<span>  password:  </span>";
-                    html += "<input type ='text' name='password'>";                    
-                    
-                    html += "<select name = 'permission'>";
-                        html += "<option value = 'admin'> admin </option>";
-                        html += "<option value = 'user' selected> user </option>";
-                    html += "</select>";
-                
-                    html += "<input type='hidden' name='id' value='"+al.get(i).getUsername()+"'>";
-                    html += "<input type='hidden' name='action' value='modUtente'>";
-                    html += "<input type='submit' value='Modifica'>";
-                html += "</form>"; 
-                
-                html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                    html += "<input type='hidden' name='id' value="+al.get(i).getId()+">";
-                    html += "<input type='hidden' name='action' value='remUtente'>";
-                    html += "<input type='submit' value='Rimuovi'>";
+                html += "<span>username:  </span>";
+                html += "<input type ='text' name='name'>";
+                html += "<span>  password:  </span>";
+                html += "<input type ='text' name='password'>";
+                html += "<select name = 'permission'>";
+                html += "<option value = 'admin'> admin </option>";
+                html += "<option value = 'user' selected> user </option>";
+                html += "</select>";
+                html += "<input type='hidden' name='id' value='" + al1.getUsername() + "'>";
+                html += "<input type='hidden' name='action' value='modUtente'>";
+                html += "<input type='submit' value='Modifica'>";
                 html += "</form>";
-                
-                
-                
+                html += "<form action='/PizzaWeb/Servlet' method='post' >";
+                html += "<input type='hidden' name='id' value=" + al1.getId() + ">";
+                html += "<input type='hidden' name='action' value='remUtente'>";
+                html += "<input type='submit' value='Rimuovi'>";
+                html += "</form>";
                 html += "</div>";
             }
         }

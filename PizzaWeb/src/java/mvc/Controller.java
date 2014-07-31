@@ -249,7 +249,6 @@ public class Controller extends HttpServlet {
         HttpSession s = req.getSession();
         if(checkLogin(req)){
             s.invalidate();
-            s = req.getSession();
             notifica(req.getSession(), "logout effettuato");
         }else
             notifica(req.getSession(), "logout impossibile");
@@ -400,7 +399,6 @@ public class Controller extends HttpServlet {
      * Permette ad un user di modificare le sue prenotazioni ed all'admin di modificarle tutte
      * 
      * @param req 
-     * @throws java.sql.SQLException 
      */
     
     public static void modPrenotazioni(HttpServletRequest req){

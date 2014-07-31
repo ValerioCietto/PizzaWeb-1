@@ -90,10 +90,7 @@ public final class Model {
     
     public static boolean login(String username, String password) throws SQLException{
         Utente login = checkLogin(username, password);
-        if(login!=null)
-            return true;
-        else
-            return false;
+        return login!=null;
     }
     
     /**
@@ -456,7 +453,7 @@ public final class Model {
      */
     
     public static int getIdUtente(String username) throws SQLException{
-        int tmp = -1;
+        int tmp;
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         tmp = DBManager.getIdUser(username, st);
@@ -476,7 +473,7 @@ public final class Model {
      */
     
     public static int getIdPizza(String nome) throws SQLException{
-        int tmp = -1;
+        int tmp;
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         tmp = DBManager.getIdPizza(nome, st);
@@ -498,7 +495,7 @@ public final class Model {
      */
     
     public static int getIdPrenotazione(int username, int pizza, String  data) throws SQLException{
-        int tmp = -1;
+        int tmp;
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         tmp = DBManager.getIdPrenotazione(username, pizza, data, st);
