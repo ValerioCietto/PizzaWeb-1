@@ -35,6 +35,26 @@ public class Prenotazione {
     }
     
     /**
+     * Crea la prenotazione conoscendo l'ID
+     *
+     * @param id
+     * @param idU
+     * @param idP
+     * @param iQuantita
+     * @param iData
+     * @param stato
+    */
+    
+    public Prenotazione(int id, int idU, int idP, int iQuantita, String iData, String stato) {
+        this.idPrenotazione = id;
+        this.idUtente = idU;
+        this.idPizza = idP;
+        this.quantita = iQuantita;
+        this.data = iData;
+        this.stato = stato;
+    }
+    
+    /**
      * Crea la prenotazione senza conoscere l'ID
      *
      * @param idU

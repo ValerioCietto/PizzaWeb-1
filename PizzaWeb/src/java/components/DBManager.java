@@ -357,6 +357,8 @@ public final class DBManager {
      * 
      * 
      * @param idPrenotazione
+     * @param idUtente
+     * @param idPizza
      * @param quantita
      * @param data
      * @param st
@@ -366,6 +368,10 @@ public final class DBManager {
     
     public static boolean modPrenotazione(int idPrenotazione,int idUtente,int idPizza,int quantita, String data, Statement st) throws SQLException{
         return esegui("UPDATE PRENOTAZIONI SET IDUTENTE="+idUtente+", IDPIZZA="+idPizza+", QUANTITA=" + quantita+ ", DATA='" +data+"' WHERE IDPRENOTAZIONE =" +idPrenotazione, st);
+    }
+    
+    public static boolean modStatoPrenotazione(int idPrenotazione, String stato, Statement st) throws SQLException{
+        return esegui("UPDATE PRENOTAZIONI SET STATO='"+stato+"' WHERE IDPRENOTAZIONE =" +idPrenotazione, st);
     }
     
     

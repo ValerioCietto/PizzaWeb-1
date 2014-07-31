@@ -431,6 +431,15 @@ public final class Model {
         DBManager.closeConnection(conn);
 
     }
+    
+    public static void modStatoPrenotazione(Prenotazione p) throws SQLException{
+        Connection conn = DBManager.openConnection();
+        Statement st = DBManager.openStatement(conn);
+        DBManager.modStatoPrenotazione(p.getIdPrenotazione(), p.getStato(), st);
+        DBManager.closeStatement(st);
+        DBManager.closeConnection(conn);
+
+    }
 
     
 ////////////////////////////////////////////////////////////////////////////////
@@ -619,7 +628,7 @@ public final class Model {
         try{
             ResultSet rs = DBManager.getPrenotazione(id, st);
             if(rs.next())
-                tmp= new Prenotazione(rs.getInt("IDPRENOTAZIONE"), rs.getInt("IDUTENTE"), rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA"));
+                tmp= new Prenotazione(rs.getInt("IDPRENOTAZIONE"), rs.getInt("IDUTENTE"), rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA"), rs.getString("STATO"));
         }finally{
             DBManager.closeStatement(st);
             DBManager.closeConnection(conn);

@@ -68,13 +68,20 @@ public class Controller extends HttpServlet {
                     modPrenotazioni(request);
                     aggiornaPagina(request);
                     break;
+                case "modStatoPrenotazione":
+                    modStatoPrenotazione(request);
+                    aggiornaPagina(request);
+                    break;
                 case "remPrenotazione":
                     remPrenotazioni(request);
                     aggiornaPagina(request);
                     break;
-                    
                 case "modUtente":
                     modUtente(request);
+                    aggiornaPagina(request);
+                    break;
+                case "remUtente":
+                    remUtente(request);
                     aggiornaPagina(request);
                     break;
    
@@ -405,10 +412,12 @@ public class Controller extends HttpServlet {
                                 p.setData(data);
                             //gestione stato
                             String stato=req.getParameter("stato");
-                            if(stato!=null && !stato.equals(""))
+                            if(stato!=null && !stato.equals("") && !stato.equals("avvenuta consegna")){
                                 p.setStato(stato);
-
+                            } else {notifica(s, "non puoi aggiornare la prenotazione");}
+                            
                             Model.modPrenotazione(p);
+                            Model.modStatoPrenotazione(p); 
                             notifica(s, "prenotazione aggiornata");
                         }else
                             notifica(s, "prenotazione non tua");
@@ -468,6 +477,56 @@ public class Controller extends HttpServlet {
                         }
                         
                         Model.modPrenotazione(p);
+                        Model.modStatoPrenotazione(p); 
+                        notifica(s, "prenotazione aggiornata");
+                        
+                    }else
+                        notifica(s, "prenotazione non trovata");
+                    break;
+                default:
+                    notifica(s, "non hai i permessi");
+                    break;
+            }
+        }catch(SQLException e){notifica(s,"???B???");}
+    }
+    
+    public static void modStatoPrenotazione(HttpServletRequest req){
+        
+        HttpSession s = req.getSession();
+        String username = req.getSession().getAttribute("username")+"";
+        try{
+        Prenotazione p;
+        Utente u = Model.getUtente(username);
+            switch (Model.getUtente(username).getPermission()){
+                case "user":
+                    p = Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
+                    
+                            notifica(s, p.getIdPrenotazione()+"");
+                            notifica(s, p.getStato());
+                        if(p.getIdUtente() == u.getId()){
+                            //gestione stato
+                            //String stato=req.getParameter("stato");
+                            //if(stato!=null && !stato.equals("") && !stato.equals("avvenuta consegna")){
+                            p.setStato("Consegnato");
+                            //} else {
+                            //    notifica(s, "non puoi aggiornare la prenotazione");
+                            //}
+                            Model.modStatoPrenotazione(p); 
+                            notifica(s, "prenotazione aggiornata");
+                        }else
+                            notifica(s, "prenotazione non tua");
+                    break;
+                case "admin":
+                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
+                    if(p!=null){
+                        
+                        //gestione stato
+                        if(req.getParameter("stato")!=null){
+                            String stato=req.getParameter("stato");
+                            if(stato!=null && !stato.equals(""))
+                                p.setStato(stato);
+                        }
+                        Model.modStatoPrenotazione(p); 
                         notifica(s, "prenotazione aggiornata");
                         
                     }else
@@ -535,52 +594,86 @@ public class Controller extends HttpServlet {
     public static void modUtente(HttpServletRequest req){
         
         HttpSession s = req.getSession();
-        String nomeutente = req.getParameter("nomeutente");
+        int idUtente = Integer.parseInt(req.getParameter("id"));
          
         try{
-            notifica(s, nomeutente);
-        Utente u = Model.getUtente(nomeutente);
-            if(u!=null){
-                
-                ///modifica utente
-                
-                if (req.getParameter("name")!=null){
-                    String name = req.getParameter("name");
-                    if(name != null && !name.equals("")){
-                        u.setUsername(name);
-                        notifica(s, "nome modificato"+name);
-                    }
-                }
+            switch (Model.getUtente(idUtente).getPermission()){
+                case "admin":
+                    Utente u = Model.getUtente(idUtente);
+                    if(u!=null){
+                        String username = u.getUsername();
+                        ///modifica utente
 
-                ///modifica password
-                if (req.getParameter("password")!=null){
-                    String password=req.getParameter("password");
-                    if(password != null && !password.equals("")){
-                        u.setPwd(password);
-                        notifica(s, "password modificato"+password);
-                    }
-                }
+                        if (req.getParameter("name")!=null){
+                            String name = req.getParameter("name");
+                            if(name != null && !name.equals("")){
+                                u.setUsername(name);
+                            }
+                        }
 
-                ///modifica permission
+                        ///modifica password
+                        if (req.getParameter("password")!=null){
+                            String password=req.getParameter("password");
+                            if(password != null && !password.equals("")){
+                                u.setPwd(password);
+                            }
+                        }
 
-                if (req.getParameter("permission")!=null){
-                    String permission=req.getParameter("permission");
-                    if(permission != null && !permission.equals("")){
-                        u.setPermission(permission);
-                        notifica(s, "permesso modificato"+permission);
-                    }
-                }
-                
-                notifica(s, u.getUsername()+u.getPassword()+u.getPermission()+"");
-                
-                Model.modUtente(nomeutente,u);
-                notifica(s, "utente aggiornato");
+                        ///modifica permission
 
-             }else
-                 notifica(s, "utente non trovato");
+                        if (req.getParameter("permission")!=null){
+                            String permission=req.getParameter("permission");
+                            if(permission != null && !permission.equals("")){
+                                u.setPermission(permission);
+                            }
+                        }
+
+                        notifica(s, u.getUsername()+u.getPassword()+u.getPermission()+"");
+
+                        Model.modUtente(username,u);
+                        notifica(s, "utente aggiornato");
+
+                        }else
+                            notifica(s, "utente non trovato");
+                    break;
+                default:
+                    notifica(s, "non hai i permessi");
+                    break;
+            }
         }catch(SQLException e){notifica(s,e.getMessage());}
     }
     
+    
+    /**
+     * Permette ad un admin di rimuovere un  utente
+     * 
+     * @param req 
+     */
+    
+    public static void remUtente(HttpServletRequest req){
+        
+        HttpSession s = req.getSession();
+        String username = req.getSession().getAttribute("username")+"";
+        int idUtente = Integer.parseInt(req.getParameter("id"));
+        try{
+            switch (Model.getUtente(username).getPermission()){
+                case "admin":
+                    
+                    Utente u = Model.getUtente(idUtente);
+                    if(u!=null){
+                        Model.remUtente(u);
+                        notifica(s, "utente rimosso");
+                    }
+                    else
+                        notifica(s, "utente non trovato");
+                    break;
+                default:
+                    notifica(s, "non hai i permessi");
+                    break;
+            }
+        }catch(SQLException e){notifica(s,"???B???");}
+    }
+
     
     
 ///////////////////////////////////////////////////////////////////////////////////////////
