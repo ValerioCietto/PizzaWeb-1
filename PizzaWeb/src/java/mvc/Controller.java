@@ -583,49 +583,40 @@ public class Controller extends HttpServlet {
      */
     
     public static void modUtente(HttpServletRequest req){
-        
         HttpSession s = req.getSession();
-        int idUtente = Integer.parseInt(req.getParameter("id"));
-         
+        String user = req.getSession().getAttribute("username")+"";
         try{
-            switch (Model.getUtente(idUtente).getPermission()){
+        Utente u = Model.getUtente(user);
+            switch (u.getPermission()){
                 case "admin":
-                    Utente u = Model.getUtente(idUtente);
-                    if(u!=null){
-                        String username = u.getUsername();
+                        req.getParameter("id");
+                        String username = req.getParameter("id")+"";
+                        u = Model.getUtente(username);
                         ///modifica utente
-
-                        if (req.getParameter("name")!=null){
-                            String name = req.getParameter("name");
-                            if(name != null && !name.equals("")){
-                                u.setUsername(name);
-                            }
+                        
+                        String name = req.getParameter("name")+"";
+                        if (name!=null && !name.equals("")){
+                            u.setUsername(name);
                         }
 
                         ///modifica password
-                        if (req.getParameter("password")!=null){
-                            String password=req.getParameter("password");
-                            if(password != null && !password.equals("")){
-                                u.setPwd(password);
-                            }
+                        String password = req.getParameter("password")+"";
+                        if (password != null && !password.equals("")){
+                            u.setPwd(password);
                         }
 
                         ///modifica permission
 
-                        if (req.getParameter("permission")!=null){
-                            String permission=req.getParameter("permission");
-                            if(permission != null && !permission.equals("")){
-                                u.setPermission(permission);
-                            }
+                        String permission=req.getParameter("permission");
+                        if(permission != null && !permission.equals("")){
+                            u.setPermission(permission);
                         }
+                        
 
                         notifica(s, u.getUsername()+u.getPassword()+u.getPermission()+"");
 
                         Model.modUtente(username,u);
                         notifica(s, "utente aggiornato");
-
-                        }else
-                            notifica(s, "utente non trovato");
                     break;
                 default:
                     notifica(s, "non hai i permessi");

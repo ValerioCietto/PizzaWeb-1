@@ -47,7 +47,7 @@ public class View {
                 
                 html += "<form action='/PizzaWeb/Servlet' method='post' >";
                     html += "<span>Quantità:  </span>";
-                    html += "<input type ='number' name='quantita' min='1' max='100'value = '0' required>";
+                    html += "<input type ='number' name='quantita' min='0' max='100'value = '0' required>";
                     html += "<span>  Data:  </span>";
                     html += "<input type ='date' name='data' required>";
                     html += "<input type='hidden' name='pizza' value='"+al.get(i).getNome()+"'>";
@@ -136,7 +136,7 @@ public class View {
                 if(!al.get(i).getStato().equals("Consegnato")){
                     html += "<form action='/PizzaWeb/Servlet' method='post' >";
                         html += "<span>Quantità:  </span>";
-                        html += "<input type ='number' name='quantita' min='1' max='100' value = '0'>";
+                        html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
                         html += "<span>  Data:  </span>";
                         html += "<input type ='date' name='data'>";
                         html += "<input type='hidden' name='id' value="+al.get(i).getIdPrenotazione()+">";
@@ -174,7 +174,7 @@ public class View {
                     html += "<span'> Pizza: </span>";
                     html += "<input type ='text' name='pizza'>";
                     html += "<span> Quantità:  </span>";
-                    html += "<input type ='number' name='quantita' min='1' max='100' value = '0'>";
+                    html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
                     html += "<span>  Data:  </span>";
                     html += "<input type ='date' name='data'>";
                     
@@ -238,7 +238,7 @@ public class View {
                         html += "<option value = 'user' selected> user </option>";
                     html += "</select>";
                 
-                    html += "<input type='hidden' name='id' value="+al.get(i).getId()+">";
+                    html += "<input type='hidden' name='id' value='"+al.get(i).getUsername()+"'>";
                     html += "<input type='hidden' name='action' value='modUtente'>";
                     html += "<input type='submit' value='Modifica'>";
                 html += "</form>"; 
