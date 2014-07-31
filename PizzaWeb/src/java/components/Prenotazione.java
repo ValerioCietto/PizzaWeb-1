@@ -31,7 +31,7 @@ public class Prenotazione {
         this.idPizza = idP;
         this.quantita = iQuantita;
         this.data = iData;
-        this.stato = "Ordinata";
+        this.stato = "Ordinato";
     }
     
     /**

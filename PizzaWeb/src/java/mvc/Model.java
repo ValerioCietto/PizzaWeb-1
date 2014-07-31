@@ -201,7 +201,7 @@ public final class Model {
         try{
             ResultSet rs = DBManager.query("SELECT * FROM PRENOTAZIONI",st);
             while(rs.next())
-               listaPrenotazioni.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA")));            
+               listaPrenotazioni.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA"), rs.getString("STATO")));            
         }finally{
             DBManager.closeStatement(st);
             DBManager.closeConnection(conn);
@@ -226,7 +226,7 @@ public final class Model {
         try{
             ResultSet rs = DBManager.query("SELECT * FROM PRENOTAZIONI WHERE IDUTENTE="+idUtente,st);
             while(rs.next())
-               listaPrenotazioni.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA")));            
+               listaPrenotazioni.add(new Prenotazione(rs.getInt("IDPRENOTAZIONE"),rs.getInt("IDUTENTE"),rs.getInt("IDPIZZA"), rs.getInt("QUANTITA"), rs.getString("DATA"),rs.getString("STATO")));            
         }finally{
             DBManager.closeStatement(st);
             DBManager.closeConnection(conn);

@@ -143,11 +143,9 @@ public class View {
                     html += "<input type='submit' value='Modifica'>";
                 html += "</form>";
                 
-                Controller.notifica(req.getSession(), al.get(i).getStato());
                 if(!al.get(i).getStato().equals("Consegnato")){
                     html += "<form action='/PizzaWeb/Servlet' method='post' >";
                         html += "<input type='hidden' name='id' value="+al.get(i).getIdPrenotazione()+">";
-                        //html += "<input type='hidden' name='stato' value='"+al.get(i).getStato()+"'>";
                         html += "<input type='hidden' name='action' value='modStatoPrenotazione'>";
                         html += "<input type='submit' value='pizza consegnata'>";
                     html += "</form>"; 
@@ -169,7 +167,7 @@ public class View {
                 html += "<span class='data'>"+al.get(i).getData()+"</span>";
                 html += "<span></br>Stato:  </span>";
                 html += "<span class='stato'>"+al.get(i).getStato()+"</span>";
-                
+                html += "<span>";
                 html += "<form action='/PizzaWeb/Servlet' method='post' >";
                     html += "<span> Utente: </span>";
                     html += "<input type ='text' name='utente'>";
@@ -182,15 +180,23 @@ public class View {
                     
                     html += "<input type='hidden' name='id' value="+al.get(i).getIdPrenotazione()+">";
                     html += "<input type='hidden' name='action' value='modPrenotazione'>";
-                    html += "<input type='submit' value='Modifica'>";
+                    html += "<input type='submit' value='Modifica ordine'>";
                 html += "</form>";
-                
-
+                html += "<form>";
+                    html += "<select name = 'stato'>";
+                        html += "<option value = 'Ordinato'> Ordinato </option>";
+                        html += "<option value = 'Consegnato' selected> Consegnato </option>";
+                    html += "</select>";                    
+                    html += "<input type='hidden' name='id' value="+al.get(i).getIdPrenotazione()+">";
+                    html += "<input type='hidden' name='action' value='modPrenotazione'>";
+                    html += "<input type='submit' value='Modifica stato'>";
+                html += "</form>";
                 html += "<form action='/PizzaWeb/Servlet' method='post' >";
                     html += "<input type='hidden' name='prenotazione' value="+al.get(i).getIdPrenotazione()+">";
                     html += "<input type='hidden' name='action' value='remPrenotazione'>";
                     html += "<input type='submit' value='Rimuovi'>";
-                html += "</form>"; 
+                html += "</form>";
+                html += "</span>";
                
 
                 

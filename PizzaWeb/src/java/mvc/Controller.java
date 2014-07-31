@@ -410,14 +410,8 @@ public class Controller extends HttpServlet {
                             String data=req.getParameter("data");
                             if(data!=null && !data.equals(""))
                                 p.setData(data);
-                            //gestione stato
-                            String stato=req.getParameter("stato");
-                            if(stato!=null && !stato.equals("") && !stato.equals("avvenuta consegna")){
-                                p.setStato(stato);
-                            } else {notifica(s, "non puoi aggiornare la prenotazione");}
                             
                             Model.modPrenotazione(p);
-                            Model.modStatoPrenotazione(p); 
                             notifica(s, "prenotazione aggiornata");
                         }else
                             notifica(s, "prenotazione non tua");
@@ -456,7 +450,7 @@ public class Controller extends HttpServlet {
                             int quantita=0+Integer.parseInt(req.getParameter("quantita"));
                             if(quantita>0){
                                 p.setQuantita(quantita);
-                                notifica(s,"modificato id");
+                                notifica(s,"modificata quantità");
                             }
                         }
                         
@@ -465,19 +459,21 @@ public class Controller extends HttpServlet {
                             String data=req.getParameter("data");
                             if(data!=null && !data.equals("")){
                                 p.setData(data);
-                                notifica(s,"modificato id");
+                                notifica(s,"modificata data");
                             }
                         }
                         
                         //gestione stato
                         if(req.getParameter("stato")!=null){
                             String stato=req.getParameter("stato");
-                            if(stato!=null && !stato.equals(""))
+                            if(stato!=null && !stato.equals("")){
                                 p.setStato(stato);
+                                notifica(s,"modificato stato");
+                            }
                         }
                         
+                        Model.modStatoPrenotazione(p);
                         Model.modPrenotazione(p);
-                        Model.modStatoPrenotazione(p); 
                         notifica(s, "prenotazione aggiornata");
                         
                     }else
@@ -500,18 +496,9 @@ public class Controller extends HttpServlet {
             switch (Model.getUtente(username).getPermission()){
                 case "user":
                     p = Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
-                    
-                            notifica(s, p.getIdPrenotazione()+"");
-                            notifica(s, p.getStato());
                         if(p.getIdUtente() == u.getId()){
-                            //gestione stato
-                            //String stato=req.getParameter("stato");
-                            //if(stato!=null && !stato.equals("") && !stato.equals("avvenuta consegna")){
                             p.setStato("Consegnato");
-                            //} else {
-                            //    notifica(s, "non puoi aggiornare la prenotazione");
-                            //}
-                            Model.modStatoPrenotazione(p); 
+                            Model.modStatoPrenotazione(p);
                             notifica(s, "prenotazione aggiornata");
                         }else
                             notifica(s, "prenotazione non tua");
@@ -790,13 +777,7 @@ public class Controller extends HttpServlet {
         req.getSession().setAttribute("name", "");
         notifica(req.getSession(), req.getSession().getAttribute("view")+"");
     }
-    
-    
-    
-    
-    
-    
-    
+
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
