@@ -323,6 +323,7 @@ public final class DBManager {
      * Modifica un utente nella tabella UTENTI
      * 
      * @param nome      nome attuale dell'utente
+     * @param nNome
      * @param nPassword nuova password dell'utente
      * @param nRuolo    nuovi permessi dell'utente;
      * @param st
@@ -331,8 +332,8 @@ public final class DBManager {
      * @throws java.sql.SQLException
      */
     
-    public static boolean modUser(String nome, String nPassword, String nRuolo, Statement st) throws SQLException{
-        return esegui("UPDATE UTENTI SET PASSWORD='" +nPassword+"', PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'", st);
+    public static boolean modUser(String nome, String nNome, String nPassword, String nRuolo, Statement st) throws SQLException{
+        return esegui("UPDATE UTENTI SET USERNAME ='"+nNome+"', PASSWORD='" +nPassword+"', PERMISSION ='" +nRuolo+"' WHERE USERNAME = '"+ nome +"'", st);
     }
     
     /**

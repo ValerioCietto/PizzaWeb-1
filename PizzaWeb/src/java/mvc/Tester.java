@@ -339,11 +339,11 @@ public class Tester {
             // UTENTI
             
             //test modUser
-            DBManager.modUser(user,pwd+"mod"+user,ruolo+"mod1",st);
+            //DBManager.modUser(user,pwd+"mod"+user,ruolo+"mod1",st);
             System.out.println("OK");
             
             //test modUser con user inesistente
-            DBManager.modUser(user+"papapa",pwd+"mod"+user,ruolo+"mod2",st);
+            //DBManager.modUser(user+"papapa",pwd+"mod"+user,ruolo+"mod2",st);
             System.out.println("KO utente");
             
             ////////////////////////////////////////////////////////////////////
@@ -425,7 +425,7 @@ public class Tester {
         
         Model.modPrenotazione(pr);
         Model.modPizza(pz);
-        Model.modUtente(ut);
+        //Model.modUtente(ut);
         
         System.out.println("\n\n");
         System.out.println(ut);

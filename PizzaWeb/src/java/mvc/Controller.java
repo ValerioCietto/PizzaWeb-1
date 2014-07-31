@@ -522,7 +522,67 @@ public class Controller extends HttpServlet {
         }catch(SQLException e){notifica(s,"???B???");}
     }
 
-      
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// METODI SU UTENTI
+    
+    /**
+     * Modifica user, password o permessi
+     * 
+     * @param req 
+     */
+    
+    public static void modUtente(HttpServletRequest req){
+        
+        HttpSession s = req.getSession();
+        String nomeutente = req.getParameter("nomeutente");
+         
+        try{
+            notifica(s, nomeutente);
+        Utente u = Model.getUtente(nomeutente);
+            if(u!=null){
+                
+                ///modifica utente
+                
+                if (req.getParameter("name")!=null){
+                    String name = req.getParameter("name");
+                    if(name != null && !name.equals("")){
+                        u.setUsername(name);
+                        notifica(s, "nome modificato"+name);
+                    }
+                }
+
+                ///modifica password
+                if (req.getParameter("password")!=null){
+                    String password=req.getParameter("password");
+                    if(password != null && !password.equals("")){
+                        u.setPwd(password);
+                        notifica(s, "password modificato"+password);
+                    }
+                }
+
+                ///modifica permission
+
+                if (req.getParameter("permission")!=null){
+                    String permission=req.getParameter("permission");
+                    if(permission != null && !permission.equals("")){
+                        u.setPermission(permission);
+                        notifica(s, "permesso modificato"+permission);
+                    }
+                }
+                
+                notifica(s, u.getUsername()+u.getPassword()+u.getPermission()+"");
+                
+                Model.modUtente(nomeutente,u);
+                notifica(s, "utente aggiornato");
+
+             }else
+                 notifica(s, "utente non trovato");
+        }catch(SQLException e){notifica(s,e.getMessage());}
+    }
+    
+    
+    
 ///////////////////////////////////////////////////////////////////////////////////////////
 // METODI DI GET
     
@@ -639,57 +699,6 @@ public class Controller extends HttpServlet {
     }
     
     
-    
-    public static void modUtente(HttpServletRequest req){
-        
-        HttpSession s = req.getSession();
-        String nomeutente = req.getParameter("nomeutente");
-         
-        try{
-            notifica(s, nomeutente);
-        Utente u = Model.getUtente(nomeutente);
-            if(u!=null){
-                
-                ///modifica utente
-                
-                if (req.getParameter("name")!=null){
-                    String name = req.getParameter("name");
-                    if(name != null && !name.equals("")){
-                        u.setUsername(name);
-                        notifica(s, "nome modificato"+name);
-                    }
-                }
-
-                ///modifica password
-                if (req.getParameter("password")!=null){
-                    String password=req.getParameter("password");
-                    if(password != null && !password.equals("")){
-                        u.setPwd(password);
-                        notifica(s, "password modificato"+password);
-                    }
-                }
-
-                ///modifica permission
-
-                if (req.getParameter("permission")!=null){
-                    String permission=req.getParameter("permission");
-                    if(permission != null && !permission.equals("")){
-                        u.setPermission(permission);
-                        notifica(s, "permesso modificato"+permission);
-                    }
-                }
-
-                 Model.modUtente(u);
-                 notifica(s, "      utente aggiornato");
-
-             }else
-                 notifica(s, "utente non trovato");
-
-
-    
-                            
-        }catch(SQLException e){notifica(s,"???B???");}
-    }
     
     
     

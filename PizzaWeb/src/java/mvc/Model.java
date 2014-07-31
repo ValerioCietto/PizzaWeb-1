@@ -385,15 +385,16 @@ public final class Model {
     /**
      * Modifica un utente nella tabella UTENTI e ricrea la lista
      * 
+     * @param user
      * @param u
      * 
      * @throws java.sql.SQLException
      */
     
-    public static void modUtente(Utente u) throws SQLException{
+    public static void modUtente(String user, Utente u) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
-        DBManager.modUser(u.getUsername(), u.getPassword(), u.getPermission(),st);
+        DBManager.modUser(user, u.getUsername(), u.getPassword(), u.getPermission(),st);
         DBManager.closeStatement(st);
         DBManager.closeConnection(conn);
     }
