@@ -1,6 +1,9 @@
 package components;
 
-
+/**
+ * Classe dell'oggetto Pizza
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ */
 ////////////////////////////////////////////////////////////////////////////////
 
 public class Pizza {
@@ -15,14 +18,12 @@ public class Pizza {
 // COSTRUTTORE
     
     /**
-     * Controlla che gli input non siano nulli o non accettabili In caso di non riuscita i parametri sono nulli Altrimenti carica i dati nell'oggetto
-     *
-     * @param id
-     * @param iNome
-     * @param iIngredienti
-     * @param iPrezzo
-     *
-     * NB: i controlli in input vanno fatti PRIMA DELLA CREAZIONE DELL'OGGETTO
+     * Costruttore dell'oggetto Pizza comprensivo di id;
+     * 
+     * @param id indica l'id della pizza;
+     * @param iNome indica il nome della pizza;
+     * @param iIngredienti indica gli ingredienti della pizza;
+     * @param iPrezzo indica il prezzo della pizza
      */
     
     public Pizza(int id, String iNome, String iIngredienti, double iPrezzo) {
@@ -31,6 +32,14 @@ public class Pizza {
         this.nome = iNome;
         this.prezzo = iPrezzo;
     }
+    
+    /**
+     * Costruttore dell'oggetto Pizza senza id;
+     * 
+     * @param iNome indica il nome della pizza;
+     * @param iIngredienti indica gli ingredienti della pizza;
+     * @param iPrezzo indica il prezzo della pizza
+     */
     
     public Pizza(String iNome, String iIngredienti, double iPrezzo) {
         this.ingredienti = iIngredienti;
@@ -54,9 +63,9 @@ public class Pizza {
 // METODI DI GET
     
     /**
-     * Restituisce l'ID della pizza
+     * Restituisce l'ID della pizza;
      *
-     * @return nome pizza
+     * @return l'id della pizza;
      */
     
     public int getId() {
@@ -64,9 +73,9 @@ public class Pizza {
     }
 
     /**
-     * Restituisce il nome della pizza
+     * Restituisce il nome della pizza;
      *
-     * @return nome pizza
+     * @return il nome pizza;
      */
     
     public String getNome() {
@@ -74,9 +83,9 @@ public class Pizza {
     }
 
     /**
-     * Restituisce gli ingredienti della pizza
+     * Restituisce gli ingredienti della pizza;
      *
-     * @return nome pizza
+     * @return gli ingredienti della pizza;
      */
     
     public String getIngredinti() {
@@ -84,9 +93,9 @@ public class Pizza {
     }
 
     /**
-     * Restituisce il prezzo della pizza
+     * Restituisce il prezzo della pizza;
      *
-     * @return prezzo
+     * @return il prezzo della pizza;
      */
     
     public double getPrezzo() {
@@ -98,9 +107,9 @@ public class Pizza {
 // METODI DI SET
     
     /**
-     * Modifica l'id della pizza
+     * Modifica l'id della pizza;
      *
-     * @param newId
+     * @param newId indica il nuovo id da assegnare alla pizza;
      */
     
     public void setId(int newId) {
@@ -108,9 +117,9 @@ public class Pizza {
     }
     
     /**
-     * Modifica il nome della pizza
+     * Modifica il nome della pizza;
      *
-     * @param newNome
+     * @param newNome indica il nuovo nome da assegnare alla pizza;
      */
     
     public void setNome(String newNome) {
@@ -118,9 +127,9 @@ public class Pizza {
     }
 
     /**
-     * Modifica gli ingredienti della pizza
+     * Modifica gli ingredienti della pizza;
      *
-     * @param newIngredienti
+     * @param newIngredienti indica i nuovi ingredienti da assegnare alla pizza;
      */
     
     public void setIngredienti(String newIngredienti) {
@@ -128,9 +137,9 @@ public class Pizza {
     }
 
     /**
-     * Modifica il prezzo della pizza
+     * Modifica il prezzo della pizza;
      *
-     * @param newPrezzo
+     * @param newPrezzo indica il nuovo prezzo da assegnare alla pizza;
      */
     
     public void setPrezzo(double newPrezzo) {

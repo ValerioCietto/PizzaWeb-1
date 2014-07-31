@@ -1,5 +1,9 @@
 package components;
 
+/**
+ * Classe dell'oggetto Prenotazione
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ */
 ////////////////////////////////////////////////////////////////////////////////
 
 public class Prenotazione {
@@ -16,13 +20,13 @@ public class Prenotazione {
 // COSTRUTTORE
     
     /**
-     * Crea la prenotazione conoscendo l'ID
-     *
-     * @param id
-     * @param idU
-     * @param idP
-     * @param iQuantita
-     * @param iData
+     * Costruttore dell'oggetto Prenotazione comprensivo di id;
+     * 
+     * @param id indica l'id della prenotazione;
+     * @param idU indica l'id dell'utente che ha effettuato la prenotazione;
+     * @param idP indica l'id della pizza prenotata;
+     * @param iQuantita indica la quantità di pizze prenotate;
+     * @param iData indica la data della prenotazione;
     */
     
     public Prenotazione(int id, int idU, int idP, int iQuantita, String iData) {
@@ -35,14 +39,14 @@ public class Prenotazione {
     }
     
     /**
-     * Crea la prenotazione conoscendo l'ID
+     * Costruttore dell'oggetto Prenotaqzione comprensivo di id e stato;
      *
-     * @param id
-     * @param idU
-     * @param idP
-     * @param iQuantita
-     * @param iData
-     * @param stato
+     * @param id indica l'id della prenotazione;
+     * @param idU indica l'id dell'utente che ha effettuato la prenotazione;
+     * @param idP indica l'id della pizza prenotata;
+     * @param iQuantita indica la quantità di pizze prenotate;
+     * @param iData indica la data della prenotazione;
+     * @param stato indica lo stato di gestione della prenotazione;
     */
     
     public Prenotazione(int id, int idU, int idP, int iQuantita, String iData, String stato) {
@@ -55,12 +59,12 @@ public class Prenotazione {
     }
     
     /**
-     * Crea la prenotazione senza conoscere l'ID
+     * Costruttore dell'oggetto Prenotazione senza conoscere id e stato;
      *
-     * @param idU
-     * @param idP
-     * @param iQuantita
-     * @param iData
+     * @param idU indica l'id dell'utente che ha effettuato la prenotazione;
+     * @param idP indica l'id della pizza prenotata;
+     * @param iQuantita indica la quantità di pizze prenotate;
+     * @param iData indica la data della prenotazione;
     */
     
     public Prenotazione(int idU, int idP, int iQuantita, String iData) {
@@ -87,9 +91,9 @@ public class Prenotazione {
 // METODI DI GET
 
     /**
-     * Restituisce l'ID della prenotazione
+     * Restituisce l'ID della prenotazione;
      *
-     * @return idPrenotazione
+     * @return l'id della prenotazione;
      */
     
     public int getIdPrenotazione() {
@@ -97,9 +101,9 @@ public class Prenotazione {
     }
 
     /**
-     * Restituisce l'ID dell'utente che ha effettuato la prenotazione
+     * Restituisce l'ID dell'utente che ha effettuato la prenotazione;
      *
-     * @return idUtente
+     * @return l'id dell'utente che ha effettuato la prenotazione;
      */
     
     public int getIdUtente() {
@@ -107,9 +111,9 @@ public class Prenotazione {
     }
 
     /**
-     * Restituisce l'ID della pizza prenotata
+     * Restituisce l'ID della pizza prenotata;
      *
-     * @return idPizza
+     * @return l'id della pizza prenotata;
      */
     
     public int getIdPizza() {
@@ -117,9 +121,9 @@ public class Prenotazione {
     }
 
     /**
-     * Restituisce la quantità di pizze prenotate
+     * Restituisce la quantità di pizze prenotate;
      *
-     * @return quantita
+     * @return la quantità di pizze prenotate;
      */
     
     public int getQuantita() {
@@ -127,9 +131,9 @@ public class Prenotazione {
     }
 
     /**
-     * Restituisce la data della prenotazione
+     * Restituisce la data della prenotazione;
      *
-     * @return data
+     * @return la data di prenotazione;
      */
     
     public String getData() {
@@ -137,9 +141,9 @@ public class Prenotazione {
     }
 
     /**
-     * Restituisce lo stato della prenotazione
+     * Restituisce lo stato della prenotazione;
      *
-     * @return stato
+     * @return lo stato di gestione della prenotazione;
      */
     
     public String getStato() {
@@ -151,9 +155,9 @@ public class Prenotazione {
 // METODI DI SET
     
     /**
-     * Imposta l'id prenotazione
+     * Imposta l'id prenotazione;
      *
-     * @param q
+     * @param q indica il nuovo id della prenotazione;
      */
     
     public void setIdPrenotazione(int q) {
@@ -161,9 +165,9 @@ public class Prenotazione {
     }
     
     /**
-     * Imposta l'id utente
+     * Imposta l'id utente;
      *
-     * @param q
+     * @param q indica il nuovo id dell'utente che effettua la prenotazione;
      */
     
     public void setIdUtente(int q) {
@@ -171,9 +175,9 @@ public class Prenotazione {
     }
     
     /**
-     * Imposta l'id pizza
+     * Imposta l'id pizza;
      *
-     * @param q
+     * @param q indica il nuovo id della pizza prenotata;
      */
     
     public void setIdPizza(int q) {
@@ -181,9 +185,9 @@ public class Prenotazione {
     }
     
     /**
-     * Imposta la quantità di pizze nell'ordine
+     * Imposta la quantità di pizze nell'ordine;
      *
-     * @param q
+     * @param q indica la nuova quantità di pizze ordinate;
      */
     
     public void setQuantita(int q) {
@@ -191,9 +195,9 @@ public class Prenotazione {
     }
 
     /**
-     * Imposta la data dell'ordine
+     * Imposta la data dell'ordine;
      *
-     * @param d
+     * @param d indica la nuova data di prenotazione;
      */
     
     public void setData(String d) {
@@ -201,9 +205,9 @@ public class Prenotazione {
     }
 
     /**
-     * Imposta lo stato dell'ordine
+     * Imposta lo stato dell'ordine;
      *
-     * @param d
+     * @param d indica il nuovo stato di gestione dell'ordine;
      */
     
     public void setStato(String d) {

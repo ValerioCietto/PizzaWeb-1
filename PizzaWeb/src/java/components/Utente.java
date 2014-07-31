@@ -1,6 +1,9 @@
 package components;
 
-
+/**
+ * Classe dell'oggetto Utente
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ */
 ////////////////////////////////////////////////////////////////////////////////
 
 public class Utente {
@@ -15,12 +18,12 @@ public class Utente {
 // COSTRUTTORE
     
     /**
-     * Crea l'utente conoscendo l'ID
+     * Costruttore dell'oggetto Utente comprensivo di id;
      *
-     * @param id
-     * @param iNome
-     * @param iPwd
-     * @param iRuolo
+     * @param id indica l'id dell'utente;
+     * @param iNome indica il nome dell'utente;
+     * @param iPwd indica la password dell'utente;
+     * @param iRuolo indica il ruolo dell'utente;
      */
     
     public Utente(int id, String iNome, String iPwd, String iRuolo) {
@@ -31,11 +34,11 @@ public class Utente {
     }
     
     /**
-     * Crea l'utente senza conoscere l'ID
+     * Costruttore dell'oggetto Utente senza conoscere l'id;
      *
-     * @param iNome
-     * @param iPwd
-     * @param iRuolo
+     * @param iNome indica il nome dell'utente;
+     * @param iPwd indica la password dell'utente;
+     * @param iRuolo indica il ruolo dell'utente;
      */
     
     public Utente(String iNome, String iPwd, String iRuolo) {
@@ -60,9 +63,9 @@ public class Utente {
 // METODI DI GET   
     
     /**
-     * Restituisce l'ID dell'utente
+     * Restituisce l'id dell'utente;
      *
-     * @return nome Pizza
+     * @return l'id dell'utente;
      */
     
     public int getId() {
@@ -70,9 +73,9 @@ public class Utente {
     }
 
     /**
-     * Restituisce il nome dell'utente
+     * Restituisce il nome dell'utente;
      *
-     * @return nome Pizza
+     * @return il nome dell'utente;
      */
     
     public String getUsername() {
@@ -80,9 +83,9 @@ public class Utente {
     }
 
     /**
-     * Restituisce la password dell'utente
+     * Restituisce la password dell'utente;
      *
-     * @return 
+     * @return  la password dell'utente;
      */
     
     public String getPassword() {
@@ -90,9 +93,9 @@ public class Utente {
     }
 
     /**
-     * Restituisce il ruolo dell'utente
+     * Restituisce il ruolo dell'utente;
      *
-     * @return 
+     * @return il ruolo dell'utente;
      */
     
     public String getPermission() {
@@ -104,9 +107,9 @@ public class Utente {
 // METODI DI SET
     
     /**
-     * Modifica l'id dell'utente
+     * Modifica l'id dell'utente;
      *
-     * @param id
+     * @param id indica il nuovo id dell'utente;
      */
     
     public void setId(int id) {
@@ -114,9 +117,9 @@ public class Utente {
     }
     
     /**
-     * Modifica l'id dell'utente
+     * Modifica lo username dell'utente;
      *
-     * @param name
+     * @param name indica il nuovo nome dell'utente;
      */
     
     public void setUsername(String name) {
@@ -124,9 +127,9 @@ public class Utente {
     }
     
     /**
-     * Modifica la password dell'utente
+     * Modifica la password dell'utente;
      *
-     * @param newPwd
+     * @param newPwd indica la nuova password dell'utente;
      */
     
     public void setPwd(String newPwd) {
@@ -134,9 +137,9 @@ public class Utente {
     }
 
     /**
-     * Modifica il ruolo dell'utente
+     * Modifica il ruolo dell'utente;
      *
-     * @param newRuolo
+     * @param newRuolo indica il nuovo ruolo dell'utente;
      */
     
     public void setPermission(String newRuolo) {

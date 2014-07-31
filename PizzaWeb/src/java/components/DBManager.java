@@ -2,20 +2,22 @@ package components;
 
 import java.sql.*;
 
+/**
+ * Classe dell'oggetto Pizza
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ */
+////////////////////////////////////////////////////////////////////////////////
+
 public final class DBManager {
 
-    
-
-    
-    
 ////////////////////////////////////////////////////////////////////////////////
 // CREAZIONE DATABASE
     
     /**
-     * Genera il database creando tre tabelle:
-     * UTENTI, PIZZE e PRENOTAZIONI
-     * @param st
-     * @throws java.sql.SQLException
+     * Genera il database creando tre tabelle: UTENTI, PIZZE e PRENOTAZIONI;
+     * 
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static void creaTabelle(Statement st) throws SQLException{
@@ -47,9 +49,10 @@ public final class DBManager {
     }
     
     /**
-     * Inizializza il database con 4 utenti e 4 pizze
-     * @param st
-     * @throws java.sql.SQLException
+     * Inizializza il database con 4 utenti e 4 pizze;
+     * 
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static void inizializza(Statement st) throws SQLException{
@@ -68,13 +71,12 @@ public final class DBManager {
 // UTILITY DATABASE
     
     /**
-     * Controlla se esiste un utente con quell'username e password
+     * Controlla se esiste un utente con quell'username e password;
      * 
-     * @param usr
-     * @param pwd
-     * @param st
-     * 
-     * @return 
+     * @param usr indica lo username dell'utente da controllare;
+     * @param pwd indica la password dell'utente da controllare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return ,se esiste, l'id dell'utente; altrimenti -1;
      */
     
     public static int checkLogin(String usr,String pwd, Statement st){
@@ -87,10 +89,10 @@ public final class DBManager {
     }
     
     /**
-     * Controlla se esiste il database
+     * Controlla se esiste il database;
      * 
-     * @param st
-     * @return 
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se il database esiste, altrimenti "false";
      */
     
     public static boolean checkDatabase(Statement st){
@@ -100,10 +102,10 @@ public final class DBManager {
     } 
     
     /**
-     * Elimina tutte le tabelle del database
+     * Elimina tutte le tabelle del database;
      * 
-     * @param st
-     * @throws SQLException 
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static void drop(Statement st) throws SQLException{
@@ -115,14 +117,12 @@ public final class DBManager {
     }
         
     /**
-     * Esegue una query SQL ritornando un booleano
+     * Esegue una query SQL ritornando un booleano;
      * 
-     * @param sql
-     * @param st
-     * 
-     * @return
-     * 
-     * @throws SQLException 
+     * @param sql indica il testo di una query SQL;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se la query ha avuto successo;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static boolean esegui(String sql, Statement st) throws SQLException {
@@ -132,14 +132,12 @@ public final class DBManager {
     }
     
     /**
-     * Esegue una query SQL ritornando un ResultSet
+     * Esegue una query SQL ritornando un ResultSet;
      * 
-     * @param sql
-     * @param st
-     * 
-     * @return
-     * 
-     * @throws SQLException 
+     * @param sql indica il testo di una query SQL;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return il resultSet della query eseguita;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static ResultSet query(String sql, Statement st) throws SQLException{
@@ -149,11 +147,11 @@ public final class DBManager {
     }
 
     /**
-     * Apre una Connection con il Database e crea uno Statement
+     * crea uno Statement con il database;
      * 
-     * @param conn
-     * @return 
-     * @throws SQLException 
+     * @param conn indica una connessione disponibile per creare uno Statement;
+     * @return uno Statement aperto;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static Statement openStatement(Connection conn) throws SQLException{
@@ -163,11 +161,10 @@ public final class DBManager {
     }
     
     /**
-     * Apre una connessione
+     * Apre una connessione con il database;
      * 
-     * @return
-     * 
-     * @throws SQLException 
+     * @return una Connessione aperta;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static Connection openConnection() throws SQLException{
@@ -179,9 +176,10 @@ public final class DBManager {
     }
     
     /**
-     * Chiude uno Statement precedentemente creato
-     * @param st
-     * @throws SQLException 
+     * Chiude uno Statement precedentemente creato;
+     * 
+     * @param st indica lo Statement da chiudere;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static void closeStatement(Statement st) throws SQLException{
@@ -189,10 +187,10 @@ public final class DBManager {
     }
     
     /**
-     * Chiude la Connection precedentemente creata
+     * Chiude la Connection precedentemente creata;
      * 
-     * @param conn
-     * @throws SQLException 
+     * @param conn indica la Connessione da chiudere;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static void closeConnection(Connection conn) throws SQLException{
@@ -203,18 +201,17 @@ public final class DBManager {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////    
 ////////////////////////////////////////////////////////////////////////////////      
-// METODI DI INSERIMENTO (OK)
+// METODI DI INSERIMENTO
     
     /**
-     * Inserisce un utente nella tabella UTENTI
+     * Inserisce un utente nella tabella UTENTI;
      * 
-     * @param nome      nome dell'utente
-     * @param password  password dell'utente
-     * @param ruolo     permessi dell'utente
-     * @param st
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param nome indica il nome dell'utente da aggiungere al database;
+     * @param password indica la password dell'utente da aggiungere nel database;
+     * @param ruolo indica i permessi dell'utente;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return l'id dell'utente aggiunto al database;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static int addUser(String nome, String password, String ruolo, Statement st) throws SQLException{
@@ -227,15 +224,14 @@ public final class DBManager {
     }
     
     /**
-     * Aggiunge una pizza nella tabella PIZZE del database
+     * Aggiunge una pizza nella tabella PIZZE del database;
      * 
-     * @param nome      nome della pizza
-     * @param ingr      ingredienti della pizza
-     * @param prezzo    prezzo della pizza
-     * @param st
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param nome indica il nome della pizza da aggiungere al database;
+     * @param ingr indica gli ingredienti della pizza da aggiungere al database;
+     * @param prezzo il prezzo della pizza;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return l'id della pizza aggiunta al database;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static int addPizza(String nome, String ingr, double prezzo, Statement st) throws SQLException{
@@ -250,14 +246,13 @@ public final class DBManager {
     /**
      * Aggiunge una prenotazione ad un cliente
      * 
-     * @param cliente   cliente che effettua la prenotazione
-     * @param data      data della prenotazione
-     * @param pizza     tipo di pizza prenotata
-     * @param quantita  quantità di pizze prenotate
-     * @param st
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param cliente indica l'id dell'utente che effettua la prenotazione;
+     * @param pizza indica l'id della pizza prenotata;
+     * @param quantita indica la quantità di pizze prenotate;
+     * @param data indica la data della prenotazione;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return l'id della prenotazione aggiunta al database;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static int addPrenotazione(int cliente, int pizza, int quantita, String data, Statement st) throws SQLException{
@@ -271,16 +266,15 @@ public final class DBManager {
 
     
 ////////////////////////////////////////////////////////////////////////////////      
-// METODI DI RIMOZIONE (OK)
+// METODI DI RIMOZIONE
     
     /**
-     * Elimina un utente nella tabella UTENTI
+     * Elimina un utente nella tabella UTENTI;
      * 
-     * @param id
-     * @param st
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param id indica l'id dell'utente da rimuovere dal database;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se l'utente viene eliminato, altrimenti "false";
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static boolean remUser(int id, Statement st) throws SQLException{
@@ -288,13 +282,12 @@ public final class DBManager {
     }
        
     /**
-     * Rimuove una pizza dalla tabella PIZZE
+     * Rimuove una pizza dalla tabella PIZZE;
      * 
-     * @param id
-     * @param st
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param id indica l'id della pizza da rimuovere dal database;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se la pizza viene eliminata, altrimenti "false";
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static boolean remPizza(int id, Statement st) throws SQLException{
@@ -302,13 +295,12 @@ public final class DBManager {
     }
        
     /**
-     * Rimuove una prenotazione
+     * Rimuove una prenotazione dalla tabella PRENOTAZIONI;
      * 
-     * @param idP
-     * @param st
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param idP indica l'id della prenotazione da rimuovere dal database;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se la prenotazione viene rimossa, altrimenti "false";
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static boolean remPrenotazione(int idP, Statement st) throws SQLException{
@@ -317,19 +309,18 @@ public final class DBManager {
     
     
 ////////////////////////////////////////////////////////////////////////////////      
-// METODI DI MODIFICA (OK)
+// METODI DI MODIFICA
     
     /**
-     * Modifica un utente nella tabella UTENTI
+     * Modifica un utente nella tabella UTENTI;
      * 
-     * @param nome      nome attuale dell'utente
-     * @param nNome
-     * @param nPassword nuova password dell'utente
-     * @param nRuolo    nuovi permessi dell'utente;
-     * @param st
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param nome indica il nome attuale dell'utente;
+     * @param nNome indica il nuovo nome dell'utente;
+     * @param nPassword indica nuova password dell'utente;
+     * @param nRuolo indica i nuovi permessi dell'utente;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se l'utente viene modificato, altrimenti "false";
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static boolean modUser(String nome, String nNome, String nPassword, String nRuolo, Statement st) throws SQLException{
@@ -337,15 +328,14 @@ public final class DBManager {
     }
     
     /**
-     * Modifica una pizza nella tabella PIZZE
+     * Modifica una pizza nella tabella PIZZE;
      * 
-     * @param nome      nome della pizza
-     * @param nIngr     nuovi ingredienti della pizza
-     * @param nPrezzo   nuovo prezzo della pizza
-     * @param st
-     * 
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param nome indica il nome della pizza da modificare;
+     * @param nIngr indica i nuovi ingredienti della pizza;
+     * @param nPrezzo indica il nuovo prezzo della pizza;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se la pizza viene modificata, altrimenti "false";
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static boolean modPizza(String nome, String nIngr, double nPrezzo, Statement st) throws SQLException{
@@ -353,22 +343,31 @@ public final class DBManager {
     }
         
     /**
-     * Modifica una prenotqazione nella tabella PRENOTAZIONI
+     * Modifica una prenotazione nella tabella PRENOTAZIONI;
      * 
-     * 
-     * @param idPrenotazione
-     * @param idUtente
-     * @param idPizza
-     * @param quantita
-     * @param data
-     * @param st
-     * @return          ritorna un booleano
-     * @throws java.sql.SQLException
+     * @param idPrenotazione indica l'id della prenotazione da modificare;
+     * @param idUtente indica l'id del nuovo utente;
+     * @param idPizza indica l'id della nuova pizza;
+     * @param quantita indica la nuova quantità di pizze prenotate;
+     * @param data indica la nuova data di prenotazione;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se la prenotazione viene modificata, altrimenti "false";
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static boolean modPrenotazione(int idPrenotazione,int idUtente,int idPizza,int quantita, String data, Statement st) throws SQLException{
         return esegui("UPDATE PRENOTAZIONI SET IDUTENTE="+idUtente+", IDPIZZA="+idPizza+", QUANTITA=" + quantita+ ", DATA='" +data+"' WHERE IDPRENOTAZIONE =" +idPrenotazione, st);
     }
+    
+        /**
+     * Modifica lo stato di una prenotazione nella tabella PRENOTAZIONI;
+     * 
+     * @param idPrenotazione indica l'id della prenotazione da modificare;
+     * @param stato indica il nuovo stato di gestione della prenotazione;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return "true" se la prenotazione viene modificata, altrimenti "false";
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
+     */
     
     public static boolean modStatoPrenotazione(int idPrenotazione, String stato, Statement st) throws SQLException{
         return esegui("UPDATE PRENOTAZIONI SET STATO='"+stato+"' WHERE IDPRENOTAZIONE =" +idPrenotazione, st);
@@ -376,15 +375,14 @@ public final class DBManager {
     
     
 ////////////////////////////////////////////////////////////////////////////////      
-// METODI DI GET ID (OK)   
+// METODI DI GET ID  
     
     /**
-     * Prende in input il nome utente e password e restituisce l'ID dell'utente
+     * Prende in input il nome utente e password e restituisce l'ID dell'utente;
      * 
-     * @param username  nome utente
-     * @param st
-     * 
-     * @return          ritorna un valore intero che indica l'ID
+     * @param username indica il nome utente associato all'id da recuperare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return l'id dell'utente;
      */
     
     public static int getIdUser(String username, Statement st){
@@ -398,12 +396,11 @@ public final class DBManager {
     }
 
     /**
-     * Prende in input il nome della pizza e restituisce l'ID della pizza
+     * Prende in input il nome della pizza e restituisce l'ID della pizza;
      * 
-     * @param nome      nome della pizza
-     * @param st
-     * 
-     * @return          ritorna un valore intero che indica l'ID
+     * @param nome indica il nome della pizza associato all'id da recuperare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return l'id della pizza;
      */
     
     public static int getIdPizza(String nome, Statement st){
@@ -416,15 +413,14 @@ public final class DBManager {
     }
 
     /**
-     * Prende in input l'ID utente, l'ID pizza e la data e restituisce l'ID della prenotazione associata
+     * Prende in input l'ID utente, l'ID pizza e la data e restituisce l'ID della prenotazione associata;
      * 
-     * @param username  ID dell'utenteutente
-     * @param pizza     ID della pizza
-     * @param data      Data della prenotazione
-     * @param st
-     * 
-     * @return          ritorna un valore intero che indica l'ID
-     * @throws java.sql.SQLException
+     * @param username indica l'id dell'utente associato all'id della prenotazione da recuperare;
+     * @param pizza indica l'id della pizza associata all'id della prenotazione da recuperare;
+     * @param data indica la data associata all'id della prenotazione da recuperare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return l'id della prenotazione;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static int getIdPrenotazione(int username, int pizza, String  data, Statement st) throws SQLException{
@@ -437,16 +433,15 @@ public final class DBManager {
 
     
 ////////////////////////////////////////////////////////////////////////////////      
-// METODI DI GET (OK)
+// METODI DI GET
     
     /**
-     * Ritorna ResultSet contenente l'utente
+     * Ritorna ResultSet contenente un utente;
      * 
-     * @param usr       nome dell'utente
-     * @param st
-     * 
-     * @return          ritorna una Stringa contenente il risultato della query
-     * @throws java.sql.SQLException
+     * @param usr indica il nome dell'utente da recuperare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return un ResultSet contenente i dati di un Utente;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static ResultSet getUser(String usr, Statement st) throws SQLException{
@@ -454,25 +449,42 @@ public final class DBManager {
         return rs;
     }
     
+    /**
+     * Ritorna ResultSet contenente un utente;
+     * 
+     * @param id indica l'id dell'utente da recuperare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return un ResultSet contenente i dati di un Utente;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
+     */    
+    
     public static ResultSet getUser(int id, Statement st) throws SQLException{
         ResultSet rs = st.executeQuery("SELECT * FROM UTENTI WHERE IDUSER="+ id);
         return rs;
     }
  
     /**
-     * Ritorna un ResultSet contenente la pizza
+     * Ritorna un ResultSet contenente una pizza;
      * 
-     * @param usr       nome della pizza
-     * @param st
-     * 
-     * @return          ritorna una Stringa contenente il risultato della query
-     * @throws java.sql.SQLException
+     * @param nome indica il nome della pizza da recuperare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return un ResultSet contenente i dati di una Pizza;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
-    public static ResultSet getPizza(String usr, Statement st) throws SQLException{
-        ResultSet rs = st.executeQuery("SELECT * FROM PIZZE WHERE NOME='"+usr+"'");
+    public static ResultSet getPizza(String nome, Statement st) throws SQLException{
+        ResultSet rs = st.executeQuery("SELECT * FROM PIZZE WHERE NOME='"+nome+"'");
         return rs;
     }
+
+    /**
+     * Ritorna un ResultSet contenente una pizza;
+     * 
+     * @param id indica l'id della pizza da recuperare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return un ResultSet contenente i dati di una Pizza;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
+     */    
     
     public static ResultSet getPizza(int id, Statement st) throws SQLException{
         ResultSet rs = st.executeQuery("SELECT * FROM PIZZE WHERE IDPIZZA="+ id);
@@ -480,13 +492,12 @@ public final class DBManager {
     }
 
     /**
-     * Ritorna un ResultSet contenente la prenotazione
+     * Ritorna un ResultSet contenente una prenotazione;
      * 
-     * @param id       
-     * @param st       
-     * 
-     * @return          ritorna una Stringa contenente il risultato della query
-     * @throws java.sql.SQLException
+     * @param id indica l'id della prenotazione da recuperare;
+     * @param st indica lo Statement creato per l'interazione con il database;
+     * @return un ResultSet contenente i dati di una Prenotazione;
+     * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
     public static ResultSet getPrenotazione(int id, Statement st) throws SQLException{
