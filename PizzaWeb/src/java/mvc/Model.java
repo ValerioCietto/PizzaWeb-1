@@ -250,7 +250,7 @@ public final class Model {
      * @throws java.sql.SQLException
      */
     
-    protected static void addUtente(Utente u) throws SQLException{
+    public static void addUtente(Utente u) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
@@ -277,7 +277,7 @@ public final class Model {
      * @throws java.sql.SQLException
      */
     
-    protected static void addPizza(Pizza p) throws SQLException {
+    public static void addPizza(Pizza p) throws SQLException {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
@@ -304,7 +304,7 @@ public final class Model {
      * @throws java.sql.SQLException
      */
     
-    protected static void addPrenotazione(Prenotazione p) throws SQLException{
+    public static void addPrenotazione(Prenotazione p) throws SQLException{
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         try{
