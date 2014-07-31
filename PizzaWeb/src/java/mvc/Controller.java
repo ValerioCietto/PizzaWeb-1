@@ -282,7 +282,6 @@ public class Controller extends HttpServlet {
      * 
      * @param req 
      */
-    
     public static void addPizza(HttpServletRequest req){
         HttpSession s = req.getSession();
         String username = s.getAttribute("username")+"";
@@ -290,7 +289,12 @@ public class Controller extends HttpServlet {
             if(Model.getUtente(username).getPermission().equals("admin")){
                 String nome = req.getParameter("nome");
                 String ingredienti = req.getParameter("ingredienti");
-                double prezzo = Double.parseDouble(req.getParameter("prezzo"));
+                String prezzoS=req.getParameter("prezzo");
+                prezzoS=prezzoS.replaceAll(",", ".");
+                double prezzo=-1;
+                try{
+                    prezzo= Double.parseDouble(prezzoS);
+                }catch(NumberFormatException e){notifica(s,prezzoS+" non double");}
                 if(nome != null && ingredienti!=null && !nome.equals("") && !ingredienti.equals("") && prezzo >0){
                     Pizza p = new Pizza(nome,ingredienti,prezzo);
                     Model.addPizza(p);
@@ -319,8 +323,12 @@ public class Controller extends HttpServlet {
                 if(p!=null){
                     //gestione prezzo
                     String prezzoS =req.getParameter("prezzo")+"";
+                    prezzoS=prezzoS.replaceAll(",", ".");
                     if(!prezzoS.equals("")){
-                        double prezzo=Double.parseDouble(prezzoS);
+                        double prezzo=-1;
+                        try{
+                            prezzo=Double.parseDouble(prezzoS);
+                        }catch(NumberFormatException e){notifica(s,prezzoS+" non double");}
                         if(prezzo>0 )
                             p.setPrezzo(prezzo);
                     }
@@ -379,7 +387,10 @@ public class Controller extends HttpServlet {
         HttpSession s = req.getSession();
         String username = s.getAttribute("username")+"";
         String nomePizza = req.getParameter("pizza");
-        int quantita= Integer.parseInt(req.getParameter("quantita"));
+        int quantita=-1;
+        try{
+            quantita=Integer.parseInt(req.getParameter("quantita"));
+        }catch(NumberFormatException e){notifica(s,req.getParameter("quantita")+" non int");}
         String data=req.getParameter("data");
         try{
             if(Model.getUtente(username).getPermission().equals("user")){
@@ -413,15 +424,22 @@ public class Controller extends HttpServlet {
         try{
         Prenotazione p;
         Utente u = Model.getUtente(username);
+        int idpren=-1;
             switch (Model.getUtente(username).getPermission()){
                 case "user":
-                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
+                    try{
+                        idpren=Integer.parseInt(req.getParameter("id"));
+                    }catch(NumberFormatException e){notifica(s,req.getParameter("id")+" non int");}
+                    p=Model.getPrenotazione(idpren);
                     
                     if(p!=null){
                         if(p.getIdUtente() == u.getId()){
                             
                             //gestione quantità
-                            int quantita = 0 + Integer.parseInt(req.getParameter("quantita"));
+                            int quantita = -1;
+                            try{ 
+                                quantita=Integer.parseInt(req.getParameter("quantita"));
+                            }catch(NumberFormatException e){notifica(s,req.getParameter("quantita")+" non int");}
                             if(quantita > 0)
                                 p.setQuantita(quantita);
                             //gestione data
@@ -439,7 +457,10 @@ public class Controller extends HttpServlet {
                         notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
-                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
+                    try{
+                        idpren=Integer.parseInt(req.getParameter("id"));
+                    }catch(NumberFormatException e){notifica(s,req.getParameter("id")+" non int");}
+                    p=Model.getPrenotazione(idpren);
                     if(p!=null){
                         
                         //gestione cliente
@@ -467,7 +488,10 @@ public class Controller extends HttpServlet {
                         
                         //gestione quantità
                         if(req.getParameter("quantita")!=null){
-                            int quantita=0+Integer.parseInt(req.getParameter("quantita"));
+                            int quantita=-1;
+                            try{
+                                quantita=Integer.parseInt(req.getParameter("quantita"));
+                            }catch(NumberFormatException e){notifica(s,req.getParameter("quantita")+" non int");}
                             if(quantita>0){
                                 p.setQuantita(quantita);
                                 notifica(s,"modificata quantità");
@@ -515,9 +539,13 @@ public class Controller extends HttpServlet {
         try{
         Prenotazione p;
         Utente u = Model.getUtente(username);
+        int idpren=-1;
             switch (Model.getUtente(username).getPermission()){
                 case "user":
-                    p = Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
+                    try{
+                        idpren=Integer.parseInt(req.getParameter("id"));
+                    }catch(NumberFormatException e){notifica(s,req.getParameter("id")+" non int");}
+                    p = Model.getPrenotazione(idpren);
                         if(p.getIdUtente() == u.getId()){
                             p.setStato("Consegnato");
                             Model.modStatoPrenotazione(p);
@@ -528,7 +556,10 @@ public class Controller extends HttpServlet {
                             notifica(s, "prenotazione non tua");
                     break;
                 case "admin":
-                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("id")));
+                    try{
+                        idpren=Integer.parseInt(req.getParameter("id"));
+                    }catch(NumberFormatException e){notifica(s,req.getParameter("id")+" non int");}
+                    p = Model.getPrenotazione(idpren);
                     if(p!=null){
                         
                         //gestione stato
@@ -563,10 +594,14 @@ public class Controller extends HttpServlet {
         HttpSession s = req.getSession();
         String username = req.getSession().getAttribute("username")+"";
         Prenotazione p;
+        int idpren=-1;
         try{
             switch (Model.getUtente(username).getPermission()){
                 case "user":
-                    p =Model.getPrenotazione(Integer.parseInt(req.getParameter("prenotazione")));
+                    try{
+                        idpren=Integer.parseInt(req.getParameter("prenotazione"));
+                    }catch(NumberFormatException e){notifica(s,req.getParameter("prenotazione")+" non int");}
+                    p = Model.getPrenotazione(idpren);
                     if(p!=null){
                         if(p.getIdUtente()==Model.getIdUtente(username)){
                             Model.remPrenotazione(p);
@@ -580,8 +615,10 @@ public class Controller extends HttpServlet {
                         notifica(s, "prenotazione non trovata");
                     break;
                 case "admin":
-                    
-                    p=Model.getPrenotazione(Integer.parseInt(req.getParameter("prenotazione")));
+                    try{
+                        idpren=Integer.parseInt(req.getParameter("prenotazione"));
+                    }catch(NumberFormatException e){notifica(s,req.getParameter("prenotazione")+" non int");}
+                    p = Model.getPrenotazione(idpren);
                     if(p!=null){
                         Model.remPrenotazione(p);
                         notifica(s, "prenotazione rimossa");
@@ -664,7 +701,10 @@ public class Controller extends HttpServlet {
         
         HttpSession s = req.getSession();
         String username = req.getSession().getAttribute("username")+"";
-        int idUtente = Integer.parseInt(req.getParameter("id"));
+        int idUtente =-1; 
+        try{
+            idUtente=Integer.parseInt(req.getParameter("id"));
+        }catch(NumberFormatException e){notifica(s,req.getParameter("id")+" non int");}
         try{
             switch (Model.getUtente(username).getPermission()){
                 case "admin":
