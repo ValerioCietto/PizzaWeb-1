@@ -35,7 +35,7 @@ public class View {
             if(u == null){
                 for (Pizza al1 : al) {
                     html += "<div class='pizza'>";
-                    html += "<span class='nome'>"+"</br>" + al1.getNome() + "</br>" + "</span>";
+                    html += "<span class='nome'>" + al1.getNome()  + "</span>";
                     html += "<span></br>Ingredienti:  </span>";
                     html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span>";
                     html += "<span></br>Prezzo:  </span>";
@@ -46,7 +46,7 @@ public class View {
                 
                 for (Pizza al1 : al) {
                     html += "<div class='pizza'>";
-                    html += "<span class='nome'>"+"</br>" + al1.getNome() + "</br>" + "</span>";
+                    html += "<span class='nome'>" + al1.getNome()  + "</span>";
                     html += "<span></br>Ingredienti:  </span>";
                     html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span>";
                     html += "<span></br>Prezzo:  </span>";
@@ -60,12 +60,12 @@ public class View {
                     html += "<input type='hidden' name='action' value='addPrenotazione'>";
                     html += "<input type='submit' value='Prenota'>";
                     html += "</form>";
-                    html += "</div></br>";
+                    html += "</div>";
                 }
             }
             else if(u.getPermission().equals("admin")){
                 
-                html += "<div>";
+                html += "<div class= 'new'>";
                 html += "<form action='/PizzaWeb/Servlet' method='post' >";
                     html += "<span class='nome'>Nome:  </span>";
                     html += "<input type ='text' name='nome'>";
@@ -76,18 +76,18 @@ public class View {
                     html += "<input type='hidden' name='action' value='addPizza'>";
                     html += "<input type='submit' value='Aggiungi'>";
                     html += "</form>";
-                html += "</div></br></br>"; 
+                html += "</div>"; 
                 
                 for (Pizza al1 : al) {
                     html += "<div class='pizza'>";
-                    html += "<span class='nome'>"+"</br>" + al1.getNome() + "</br>" + "</span>";
+                    html += "<span class='nome'>" + al1.getNome()  + "</span>";
                     html += "<span></br>Ingredienti:  </span>";
                     html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span>";
                     html += "<span></br>Prezzo:  </span>";
                     html += "<span class='prezzo'>" + al1.getPrezzo() + "</span>";
                     html += "<span>";
                     html += "<form action='/PizzaWeb/Servlet' method='post' >";
-                    html += "<span></br>Ingredienti:  </span>";
+                    html += "<span>Ingredienti:  </span>";
                     html += "<input type ='text' name='ingredienti'>";
                     html += "<span></br>Prezzo:  </span>";
                     html += "<input type ='text' name='prezzo'></br>";
@@ -101,7 +101,7 @@ public class View {
                     html += "<input type='submit' value='Rimuovi'>";
                     html += "</form>";
                     html += "</span>";
-                    html += "</div></br>";
+                    html += "</div>";
                 }
             }
         }
@@ -129,7 +129,7 @@ public class View {
         else if(u.getPermission().equals("user")){
             for (Prenotazione al1 : al) {
                 html += "<div class='prenotazione'>";
-                html += "<span></br>Pizza:  </span>";
+                html += "<span>Pizza:  </span>";
                 html += "<span class='pizza'>" + Model.getPizza(al1.getIdPizza()).getNome() + "</span>";
                 html += "<span></br>Quantità:  </span>";
                 html += "<span class='quantità'>" + al1.getQuantita() + "</span>";
@@ -158,7 +158,7 @@ public class View {
         }else if(u.getPermission().equals("admin")){
             for (Prenotazione al1 : al) {
                 html += "<div class='prenotazione'>";
-                html += "<span></br>ID:  </span>";
+                html += "<span>ID prenotazione:  </span>";
                 html += "<span class='id'>" + al1.getIdPrenotazione() + "</span>";
                 html += "<span></br>Utente:  </span>";
                 html += "<span class='quantità'>" + Model.getUtente(al1.getIdUtente()).getUsername() + "</span>";
@@ -275,7 +275,7 @@ public class View {
     
     public static String login(HttpServletRequest req){
         req.getSession().setAttribute("view", "login");
-        String html = "Benvenuto " + req.getSession().getAttribute("username");
+        String html = "<h1>Benvenuto " + req.getSession().getAttribute("username")+ "</h1>";
         return html;
     }
 

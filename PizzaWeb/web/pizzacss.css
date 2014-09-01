@@ -55,6 +55,17 @@ article {
     overflow-y: auto;
 }
 
+article span{
+    
+    margin: 0px 10px 0px 10px;
+    
+}
+
+
+article .pizza, article .prenotazione, article .utente{
+    margin: 10px 0px 10px 0px;
+}
+
 aside{
     right:0px;
     width: 20%;
@@ -73,6 +84,7 @@ aside #terminale{
     background-color: black;
     color: greenyellow;
     margin: 1%;
+    width: 98%;
 }
 
 footer {
