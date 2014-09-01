@@ -29,6 +29,8 @@ public class View {
         String html = "";
         if(al==null)
             return visualizzaFallimento(req);
+        else if(al.size()==0)
+            html +="<div>Non ci sono Pizze in catalogo</div>";
         else{
             if(u == null){
                 for (Pizza al1 : al) {
@@ -122,6 +124,8 @@ public class View {
         if(al==null)
             return visualizzaFallimento(req);
         
+        else if(al.size()==0)
+            html +="<div>Non ci sono Prenotazioni in Programma</div>";
         else if(u.getPermission().equals("user")){
             for (Prenotazione al1 : al) {
                 html += "<div class='prenotazione'>";
@@ -215,6 +219,8 @@ public class View {
         String html = "";
         if(al==null)
             return visualizzaFallimento(req);
+        else if(al.size()==0)
+            html +="<div>Non ci sono Login ??? e tu chi sei?</div>";
         else{
             for (Utente al1 : al) {
                 html += "<div class='utente'>";

@@ -267,7 +267,7 @@ public class Controller extends HttpServlet {
      */
     
     public static void notifica(HttpSession s,String txt){
-        s.setAttribute("message",s.getAttribute("message")+"//"+txt);
+        s.setAttribute("message",s.getAttribute("message")+"<p>"+txt+"</p>");
     }
 
     

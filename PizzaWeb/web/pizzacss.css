@@ -2,99 +2,85 @@ root {
     display: block;
 }
 
-html {
-    height: 100%;
+body {
+    margin: 0px;
 }
 
-body {
-    position:fixed;
-    background-color: black;
-    
-    top: -28px;
-    left: -7px;
-    
-    height: 100%;
-    width: 100%;
+h1,p{
+    margin: 0px;
 }
 
 header {
+    margin: 0px;
+    position:absolute;
+    padding: 1%;
+    top: 0px;
+    left:0px;
+    width: 98%;  
+    height: 13%;   
+    
     background-color: red;
-    margin-top: 0px;
-    
-    width: 100%;  
-    min-width: 800px;
-    
-    min-height: 50px;
-    height: 10%;
-    
     text-align: center;
 }
 
+nav,article,aside{
+    position:absolute;
+    padding: 1%;
+    top:15%;
+    height: 78%;
+}
 nav {
-    float:left;
+    left:0px;
+    width: 18%;
+    
     background-color: orange;
-    
-    width: 20%;
-    min-width: 160px;
-    
-    min-height: 500px;
-    height: 80%;
-    
     text-align: center;    
 } 
 
-nav>div{
-    margin-left: 5%;
-    margin-right:5%;
+nav div{
+    padding: 1%;
     width: 90%;
     color: black;
 }
 
 article {
-    clear:both;
-    position: absolute;
+    left:20%;
+    width: 58%;
+    
     background-color: bisque;
-    
     overflow-y: scroll;
-    
-    margin-left: 20%;
-    width: 60%;
-    min-width: 480px;
-    
-    min-height: 500px;
-    height: 80%;
-    
     text-align: center;
 }
 
 aside{
-    float:right;
+    right:0px;
+    width: 18%;
+    
     background-color: orange;
-    
-    width: 20%;
-    min-width: 160px;
-    
-    min-height: 500px;
-    height: 80%;
-    
     text-align: center;
 }
 
-aside>div{
+aside div{
     margin-left: 5%;
     margin-right:5%;
     width: 90%;
     color: black;
 }
+aside #terminale{
+    background-color: black;
+    color: greenyellow;
+    padding: 1%;
+    margin: 1%;
+}
 
 footer {
-    clear: both;
+    position:absolute;
+    padding: 1%;
+    bottom: 0px;
+    left:0px;
+    width: 98%;
+    height: 3%;
+    
     background-color: pink;
-    
-    bottom: 0;
-    width: 100%;
-    height: 10%;
-    min-height: 50px;
-    
     text-align: center;
 }

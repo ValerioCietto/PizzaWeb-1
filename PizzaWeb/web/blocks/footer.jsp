@@ -1,12 +1,5 @@
-<%@page import="mvc.Controller"%>
 <%@page session = "true" contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <footer>
-        <%if(Controller.checkAdmin(request)){ %>
-            <%=request.getSession().getAttribute("message")%>
-            
-        <%}%>
-        <%request.getSession().setAttribute("message","");%>
-    </footer>
-</html>
+<footer>
+    <p>Per info non contattateci in quanto siamo una truffa...le pizze non arriveranno mai</p>
+</footer>
