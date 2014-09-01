@@ -12,6 +12,6 @@
     <%}else if(view.equals("registration")){%>
         <%= Controller.getCatalogo(request)%>
     <%}else{%>
-        <%= "<div class='welcome'>BENVENUTI!</div>"%>
+        <%= "<h1>BENVENUTI!</h1>"%>
     <%}%>
 </article>

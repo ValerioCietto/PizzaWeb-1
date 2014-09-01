@@ -11,6 +11,7 @@
                     <input type ="text" name="username" required>
                     <p>Password</p>
                     <input type ="password" name="password" required>
+                    <br>
                     <input type= "submit"   name="action" value= "login">
                 </form>
             </div>
