@@ -13,6 +13,19 @@ public final class DBManager {
 ////////////////////////////////////////////////////////////////////////////////
 // CREAZIONE DATABASE
     
+    public static void inizializza() throws SQLException{
+        Connection conn=openConnection();
+        Statement st=openStatement(conn);
+        try{
+            creaTabelle(st);
+        }catch(SQLException e){}
+        try{
+            creaDati(st);
+        }catch(SQLException e){}
+        closeStatement(st);
+        closeConnection(conn);
+    }
+    
     /**
      * Genera il database creando tre tabelle: UTENTI, PIZZE e PRENOTAZIONI;
      * 
@@ -47,7 +60,7 @@ public final class DBManager {
                 "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER) ON DELETE CASCADE,"+
                 "FOREIGN KEY(IDPIZZA) REFERENCES PIZZE(IDPIZZA) ON DELETE CASCADE)");
     }
-    
+        
     /**
      * Inizializza il database con 4 utenti e 4 pizze;
      * 
@@ -55,10 +68,10 @@ public final class DBManager {
      * @throws java.sql.SQLException in caso di malfunzionamento del database;
      */
     
-    public static void inizializza(Statement st) throws SQLException{
+    public static void creaDati(Statement st) throws SQLException{
         addUser("admin", "admin", "admin", st);
         addUser("alessandro", "password", "user", st);
-        addUser("mirko", "password", "user", st);
+        addUser("m", "m", "user", st);
         addUser("anna", "password", "user", st);
         addPizza("Margherita", "pomodoro, mozzarella, basilico", 5.00, st);
         addPizza("4 Formaggi", "pomodoro, mozzarella, fontina, gorgonzola, emmenthal", 8.00, st);
@@ -504,9 +517,17 @@ public final class DBManager {
         ResultSet rs = st.executeQuery("SELECT * FROM PRENOTAZIONI WHERE IDPRENOTAZIONE="+ id);
         return rs;
     }
-
+    
 
 ////////////////////////////////////////////////////////////////////////////////    
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////        
+
+    public static void main(String[]args){
+        try{
+            inizializza();
+        }catch(SQLException e){
+            System.out.println("mmm");
+        }
+    }
 }

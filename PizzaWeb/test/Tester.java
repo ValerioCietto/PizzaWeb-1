@@ -106,7 +106,7 @@ public class Tester {
     public static void testDBManager(boolean add,boolean get,boolean mod, boolean rem, Statement st) throws SQLException{
         
         DBManager.creaTabelle(st);
-        DBManager.inizializza(st);
+        DBManager.creaDati(st);
         
         String user="user";
         String pwd="pwd";
@@ -392,7 +392,7 @@ public class Tester {
         Connection conn = DBManager.openConnection();
         Statement st = DBManager.openStatement(conn);
         DBManager.creaTabelle(st);
-        DBManager.inizializza(st);
+        DBManager.creaDati(st);
         DBManager.closeStatement(st);
         DBManager.closeConnection(conn);
         

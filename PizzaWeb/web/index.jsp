@@ -4,7 +4,7 @@
 <html>
     
     <head>
-        <title>Pizzeria Online</title>
+        <title>Da Gino</title>
         <link rel="stylesheet" href="pizzacss.css" type="text/css"> 
     </head>
         
