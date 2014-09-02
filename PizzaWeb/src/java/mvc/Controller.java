@@ -268,6 +268,11 @@ public class Controller extends HttpServlet {
     
     public static void notifica(HttpSession s,String txt){
         s.setAttribute("message",s.getAttribute("message")+"<p>"+txt+"</p>");
+        
+    }
+    
+     public static void notificautente(HttpSession s,String txt){
+        s.setAttribute("alert","<script type='text/javascript'>alert('"+txt+"')</script>");
     }
 
     
@@ -400,13 +405,17 @@ public class Controller extends HttpServlet {
                     Prenotazione p = new Prenotazione(idUser,idPizza,quantita,data);
                     Model.addPrenotazione(p);
                     notifica(s, "prenotazione aggiunta");
-                }else
+                    notificautente(s, "prenotazione aggiunta");
+                }else{
                     notifica(s,"prenotazione non aggiunta");
+                    notificautente(s, "prenotazione non aggiunta");
+                }
             }
             else{    
                 notifica(s, "non hai i permessi");
+                notificautente(s, "non hai i permessi");
                 }
-        }catch(SQLException e){notifica(s,"???B???");}
+        }catch(SQLException e){notifica(s,"???B???"); notificautente(s,"???B???");}
         req.getSession().setAttribute("view", "catalogo");
         aggiornaPagina(req);
     }
@@ -448,11 +457,14 @@ public class Controller extends HttpServlet {
                                 p.setData(data);
                             
                             Model.modPrenotazione(p);
-                            notifica(s, "prenotazione aggiornata");
+                           
+                            notificautente(s, "prenotazione aggiornata");
                         }else
-                            notifica(s, "prenotazione non tua");
+                           
+                            notificautente(s, "prenotazione non tua");
                     }else
-                        notifica(s, "prenotazione non trovata");
+                        
+                        notificautente(s, "prenotazione non trovata");
                     break;
                 case "admin":
                     try{
@@ -493,6 +505,7 @@ public class Controller extends HttpServlet {
                             if(quantita>0){
                                 p.setQuantita(quantita);
                                 notifica(s,"modificata quantità");
+                                
                             }
                         }
                         
@@ -521,7 +534,8 @@ public class Controller extends HttpServlet {
                         notifica(s, "prenotazione non trovata");
                     break;
                 default:
-                    notifica(s, "non hai i permessi");
+                    
+                    notificautente(s, "non hai i permessi");
                     break;
             }
         }catch(SQLException e){notifica(s,"???B???");}
@@ -546,9 +560,10 @@ public class Controller extends HttpServlet {
                         if(p.getIdUtente() == u.getId()){
                             p.setStato("Consegnato");
                             Model.modStatoPrenotazione(p);
-                            notifica(s, "prenotazione aggiornata");
+                            notificautente(s, "prenotazione aggiornata");
                         }else
-                            notifica(s, "prenotazione non tua");
+                            
+                            notificautente(s, "prenotazione non tua");
                     break;
                 case "admin":
                     try{
@@ -599,12 +614,13 @@ public class Controller extends HttpServlet {
                     if(p!=null){
                         if(p.getIdUtente()==Model.getIdUtente(username)){
                             Model.remPrenotazione(p);
-                            notifica(s, "prenotazione rimossa");
+                            notificautente(s, "prenotazione rimossa");
                         }else
-                            notifica(s, "prenotazione non tua");
+                            notificautente(s, "prenotazione non tua");
+                           
                     }
                     else
-                        notifica(s, "prenotazione non trovata");
+                       notificautente(s, "prenotazione non trovata");
                     break;
                 case "admin":
                     try{
@@ -674,6 +690,7 @@ public class Controller extends HttpServlet {
                         notifica(s, "utente aggiornato");
                     break;
                 default:
+                    notificautente(s, "non hai i permessi");
                     notifica(s, "non hai i permessi");
                     break;
             }
@@ -710,6 +727,7 @@ public class Controller extends HttpServlet {
                         notifica(s, "utente non trovato");
                     break;
                 default:
+                    notificautente(s, "non hai i permessi");
                     notifica(s, "non hai i permessi");
                     break;
             }
@@ -742,6 +760,7 @@ public class Controller extends HttpServlet {
             listaPizze= Model.getCatalogo();
             notifica(s,"catalogo ottenuto");
         }catch(SQLException e){
+            notificautente(s, "Impossibile ottenere il catalogo");
             notifica(s,"Impossibile ottenere il catalogo");
         }
         
@@ -768,7 +787,8 @@ public class Controller extends HttpServlet {
             
             if (u != null && u.getPermission().equals("user")){
                 listaPrenotazioni = Model.getListaPrenotazioni(u.getId());
-                notifica(req.getSession(), "Caricate Proprie Prenotazioni");
+                //notificautente(req.getSession(), "Caricate le tue Prenotazioni");
+               
             }
             else if(u != null && u.getPermission().equals("admin")){
                 listaPrenotazioni = Model.getListaPrenotazioni();
@@ -776,9 +796,11 @@ public class Controller extends HttpServlet {
             }
             else{
                 notifica(req.getSession(), "non hai i permessi");
+                notificautente(req.getSession(), "non hai i permessi");
             }
         }catch(SQLException e){
             notifica(req.getSession(),"Impossibile ottenere il catalogo");
+            notificautente(req.getSession(),"Impossibile ottenere il catalogo");
         }
         
         return View.visualizzaPrenotazioni(listaPrenotazioni, u, req);
@@ -801,13 +823,14 @@ public class Controller extends HttpServlet {
             
             if(u != null && u.getPermission().equals("admin")){
                 listaUtenti = Model.getListaUtenti(u.getId());
-                notifica(req.getSession(), "Caricate tutti gli utenti");
+                notifica(req.getSession(), "Caricati tutti gli utenti");
             }
             else{
                 notifica(req.getSession(), "non hai i permessi");
             }
         }catch(SQLException e){
             notifica(req.getSession(),"Impossibile ottenere il catalogo");
+            notificautente(req.getSession(),"Impossibile ottenere il catalogo");
         }
         
         return View.visualizzaUtenti(listaUtenti, req);
