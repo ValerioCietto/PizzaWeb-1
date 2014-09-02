@@ -4,7 +4,7 @@
 <html>
     
     <head>
-        <title>Da Gino</title>
+        <title>Da Purrer</title>
         <link rel="stylesheet" href="pizzacss.css" type="text/css"> 
     </head>
         
