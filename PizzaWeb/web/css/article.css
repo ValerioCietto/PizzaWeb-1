@@ -1,0 +1,51 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15-giu-2015, 20.25.17
+    Author     : Giuseppe
+*/
+
+
+article span{
+    
+    margin: 0px 10px 0px 10px;
+    
+}
+
+
+article .pizza, article .prenotazione, article .utente{
+    margin: 10px 0px 10px 0px;
+}
+
+article .pizza {
+  position: relative;
+  text-align: left;
+}
+
+
+article .pizza .nome {
+  font-weight: bold;
+}
+
+article .pizza .prezzo_block {
+  display: inline-block;
+  position: absolute;
+  right: 80px;
+}
+
+article .pizza .prezzo{
+}
+
+
+article .pizza .ingredienti_block {
+  font-size: 10px;
+  
+}
+
+article .pizza .ingredienti {
+  font-style: oblique;
+  
+}

@@ -1,0 +1,94 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 15-giu-2015, 20.26.32
+    Author     : Giuseppe
+*/
+
+
+aside div{
+  width: 90%;
+  color: black;
+}
+aside div form input{
+  width:80%;
+}
+aside #terminale{
+  background-color: black;
+  color: greenyellow;
+  margin: 1%;
+  width: 98%;
+}
+
+/* LOGIN MENU */
+
+aside form {
+  position: relative;
+}
+
+aside form .row {
+  margin-top: 10px;
+  position: relative;
+}
+
+aside form .row label {
+  display: block;
+  position: relative;
+}
+
+
+aside form input {
+  height: 2em;
+
+
+}
+
+aside form input[type="text"] , aside form  input[type="password"] {
+  background-color: #e2e2e2;
+  width: 8em;
+  padding-left: 1em;
+  padding-right: 1em;
+  position: relative;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+
+
+}
+
+aside  input[type="submit"] {
+  width: 5em;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+aside .Button_Login {
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  width: 5em;
+  padding: 0px;
+
+}
+aside .Button_Join {
+  display: inline-block;
+  position: absolute;
+  left: 5em;
+  width: 5em;
+}
+
+/* FINE LOGIN MENU */
+
+
+aside .back_button {
+  margin-bottom: 10px;
+}
+
+aside .join_div_form {
+  position: absolute;
+  left: 0px;
+}

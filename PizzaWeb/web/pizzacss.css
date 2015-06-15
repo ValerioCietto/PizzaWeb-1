@@ -1,3 +1,4 @@
+
 root { 
     display: block;
 }
@@ -11,7 +12,9 @@ div{
     color:black;
     font-size: 15px;
 }
-header {
+
+
+ header {
     margin: 0px;
     position:absolute;
     top: 0px;
@@ -19,73 +22,40 @@ header {
     width: 100%;  
     height: 15%;   
     
-    background-color: red;
+    background-color: #af1c22;
     text-align: center;
 }
 
-header div{
-    font-size: 30px;
-}
-nav .h{
-    font-size: 20px;
-}
-nav,article,aside{
-    position:absolute;
-    top:15%;
-    height: 80%;
-}
-nav {
+ nav {
     left:0px;
     width: 20%;
     
-    background-color: orange;
+    background-color: #af1c22;
     text-align: center;    
-} 
+}  
 
-nav div{
-    width: 90%;
-    color: black;
-}
-
-article {
+ 
+ article {
     left:20%;
     width: 60%;
     
-    background-color: bisque;
+    background-color: #ffe7d8;
     overflow-y: auto;
 }
 
-article span{
-    
-    margin: 0px 10px 0px 10px;
-    
-}
 
 
-article .pizza, article .prenotazione, article .utente{
-    margin: 10px 0px 10px 0px;
-}
-
-aside{
+ 
+ aside{
     right:0px;
     width: 20%;
+  
+    position: relative;
+    text-align: left;
     
-    background-color: orange;
+    background-color: #af1c22 ;
 }
 
-aside div{
-    width: 90%;
-    color: black;
-}
-aside div form input{
-    width:80%;
-}
-aside #terminale{
-    background-color: black;
-    color: greenyellow;
-    margin: 1%;
-    width: 98%;
-}
 
 footer {
     position:absolute;
@@ -94,6 +64,10 @@ footer {
     width: 100%;
     height: 5%;
     font-size: 1em;
-    background-color: red;
+    background-color: #af1c22;
     text-align: center;
 }
+
+ /* </editor-fold> */
+
+

@@ -6,6 +6,15 @@
     <head>
         <title>Da Purrer</title>
         <link rel="stylesheet" href="pizzacss.css" type="text/css"> 
+        <link rel="stylesheet" href="css/article.css" type="text/css"> 
+        <link rel="stylesheet" href="css/aside.css" type="text/css"> 
+        <link rel="stylesheet" href="css/footer.css" type="text/css"> 
+        <link rel="stylesheet" href="css/article.css" type="text/css"> 
+        <link rel="stylesheet" href="css/header.css" type="text/css"> 
+        <link rel="stylesheet" href="css/nav.css" type="text/css"> 
+        
+        <script type="text/javascript" src="function/inputCheck.js"></script>
+        
     </head>
         
     <body>
