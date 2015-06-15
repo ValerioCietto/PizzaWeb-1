@@ -1,0 +1,3 @@
+ - Rifare il CSS;
+ - Cambiare gestione Session.parameter a userBean;
+ - Aggiungere controlli lato Client (JS Possibile usare AJAX-HTML5) 
