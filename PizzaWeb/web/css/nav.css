@@ -13,12 +13,14 @@ and open the template in the editor.
 
 nav #account_system {
   position: relative;
-  margin-top: 300px;
+  margin-top: 10px;
+  margin-left: 10px;
 }
 
 nav #operazioni {
   margin-top: 50px;
   position: relative;
+  margin-left: 10px;
 }
 
 nav #account_system div{
@@ -83,16 +85,18 @@ nav #account_system  input[type="submit"] {
 
 nav #account_system .Button_Login {
   display: inline-block;
-  position: absolute;
-  left: 0px;
+  position: relative;
+  left: -30%;
+  top: 10px;
   width: 5em;
   padding: 0px;
 
 }
 nav  #account_system .Button_Join {
   display: inline-block;
-  position: absolute;
-  left: 5em;
+  position: relative;
+  top: -15px;
+  left: 60px;
   width: 5em;
 }
 

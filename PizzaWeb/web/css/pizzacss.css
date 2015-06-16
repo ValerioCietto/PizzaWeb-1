@@ -19,6 +19,13 @@ body {
   padding: 0;
   background-color: #af1c22;
 }
+
+header {
+  background-color: #af1c22;
+  text-align: center;
+  width: 100%;
+}
+
 nav {
   background-color: #af1c22;
   text-align: center;   
@@ -36,7 +43,7 @@ nav {
   float: right;
   padding: 0px;
   margin: 0px;
-  width: 80%;
+  width: 100%;
 
 
   /*  position: absolute;
@@ -44,16 +51,12 @@ nav {
   right: 0px;*/
 }
 
-header {
-  background-color: #af1c22;
-  text-align: center;
-  width: 100%;
-}
 
 article {
   background-color: #ffe7d8;
   overflow-y: auto;
   min-height: 600px;
+  width: 80%;
 }
 
 

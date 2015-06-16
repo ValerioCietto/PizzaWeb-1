@@ -19,9 +19,10 @@
         
     <body>
       <div id="container">
-        <%@include file="blocks/nav.jsp"%>
+        <%@include file="blocks/header.jsp" %>
+
         <div id="content">
-          <%@include file="blocks/header.jsp" %>
+          <%@include file="blocks/nav.jsp"%>
           <%@include file="blocks/article.jsp"%>
         </div>
           <%@include file="blocks/footer.jsp"%>
