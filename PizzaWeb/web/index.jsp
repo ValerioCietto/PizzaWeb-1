@@ -4,24 +4,27 @@
 <html>
     
     <head>
-        <title>Da Purrer</title>
-        <link rel="stylesheet" href="pizzacss.css" type="text/css"> 
-        <link rel="stylesheet" href="css/article.css" type="text/css"> 
-        <link rel="stylesheet" href="css/aside.css" type="text/css"> 
-        <link rel="stylesheet" href="css/footer.css" type="text/css"> 
-        <link rel="stylesheet" href="css/article.css" type="text/css"> 
-        <link rel="stylesheet" href="css/header.css" type="text/css"> 
-        <link rel="stylesheet" href="css/nav.css" type="text/css"> 
-        
-        <script type="text/javascript" src="function/inputCheck.js"></script>
-        
+      <title>Da Purrer</title>
+      <link rel="stylesheet" href="css/pizzacss.css" type="text/css"> 
+      <link rel="stylesheet" href="css/article.css" type="text/css"> 
+      <link rel="stylesheet" href="css/footer.css" type="text/css"> 
+      <link rel="stylesheet" href="css/article.css" type="text/css"> 
+      <link rel="stylesheet" href="css/header.css" type="text/css"> 
+      <link rel="stylesheet" href="css/nav.css" type="text/css"> 
+
+      <script type="text/javascript" src="function/inputCheck.js"></script>
+      <script src="js/jquery-2.1.4.min.js" ></script>
+      
     </head>
         
     <body>
-        <%@include file="blocks/header.jsp" %>
+      <div id="container">
         <%@include file="blocks/nav.jsp"%>
-        <%@include file="blocks/article.jsp"%>
-        <%@include file="blocks/aside.jsp"%>
-        <%@include file="blocks/footer.jsp"%>
+        <div id="content">
+          <%@include file="blocks/header.jsp" %>
+          <%@include file="blocks/article.jsp"%>
+        </div>
+          <%@include file="blocks/footer.jsp"%>
+      </div>
     </body>
 </html>

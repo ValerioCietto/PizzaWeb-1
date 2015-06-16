@@ -19,6 +19,15 @@ header h1 {
 }
 
 header .logo_image {
-    width: 60px;
-    height: 40px;
+    width: 8%;
+    height: 60%;
+    position: relative;
+
+}
+
+header .title_image {
+  height: 100%;
+  width: 40%;
+  position: relative;
+
 }
