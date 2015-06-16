@@ -75,7 +75,7 @@ nav #account_system form input[type="text"] , nav #account_system form  input[ty
 
 }
 
-nav #account_system  input[type="submit"] {
+nav #account_system  input[type="button"], nav #account_system  input[type="submit"] {
 /*  width: 80%;*/
   width: auto;
   -webkit-border-radius: 10px;

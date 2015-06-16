@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var checkPassword = function (str) {
-    var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
-    return re.test(str);
-  };
+  
   var checkForm = function (e) {
     if (this.username.value == "") {
       alert("Error: Username cannot be blank!");

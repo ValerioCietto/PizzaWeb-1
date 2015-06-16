@@ -3,6 +3,7 @@
 <%@page import="mvc.Model"%>
 <%@page session = "true" contentType="text/html" pageEncoding="UTF-8"%>
 <nav>
+  <script src="js/account.js"></script>
   <div id="account_system">
     <%if (!Controller.checkLogin(request)) { %>
     <%String checkView = request.getSession().getAttribute("view") + "";
@@ -12,7 +13,7 @@
         <div class="input">
           <div class="row">
             <label>Username</label>
-            <input type ="text" name="username" required>
+            <input type ="text" name="username" required value="<%= (request.getParameter("username") != null) ?  request.getParameter("username") : "" %>">
           </div>
           <div class="row">
             <label>Password</label>
@@ -20,7 +21,8 @@
           </div>
         </div>
         <div class="Button_Login">
-          <input type= "submit"   name="action" value= "login">
+          <input type= "button"   name="button" value= "login" onclick="Account.checkLogin();">
+          <input type= "hidden"   name="action" value= "login">
         </div>
       </form>
       <div class="Button_Join">
@@ -69,7 +71,6 @@
     </div>
 
     <%}%>
-    <%request.getSession().setAttribute("message", "");%>
 
   </div>
   <div id="operazioni">  

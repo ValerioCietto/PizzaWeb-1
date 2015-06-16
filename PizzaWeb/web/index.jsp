@@ -12,8 +12,9 @@
       <link rel="stylesheet" href="css/header.css" type="text/css"> 
       <link rel="stylesheet" href="css/nav.css" type="text/css"> 
 
-      <script type="text/javascript" src="function/inputCheck.js"></script>
+      <!-- <script type="text/javascript" src="function/inputCheck.js"></script> -->
       <script src="js/jquery-2.1.4.min.js" ></script>
+      <script src="js/re.js" ></script>
       
     </head>
         

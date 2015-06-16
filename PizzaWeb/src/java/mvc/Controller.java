@@ -32,11 +32,15 @@ public class Controller extends HttpServlet {
      */
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
-        request.getSession().setAttribute("message", "");
+        request.getSession().setAttribute("message", "");   
+        request.getSession().setAttribute("good", "");    
+        request.getSession().setAttribute("warning", "");    
+        request.getSession().setAttribute("error", "");    
         response.setContentType("text/html;charset=UTF-8");
-        String action= request.getParameter("action");
-        
-                    notifica(request.getSession(), action);
+        String action= request.getParameter("action");     
+        errorMessage(request.getSession(), "action: "+request.getParameter("action"));
+        errorMessage(request.getSession(), "user: "+request.getParameter("username"));
+        notifica(request.getSession(), action);
         if(action!=null){
             switch (action) {
                 case "switch":
@@ -169,12 +173,15 @@ public class Controller extends HttpServlet {
                 s.setAttribute("password", password);
                 View.login(req);
                 notifica(s, "Login ok!");
+                goodMessage(s, "Login ok!");
             }
             else{
                 notifica(req.getSession(), "Login error!");
+                errorMessage(s, "error: Assicurati che Username e Password siano esistenti e corretti");
             }
         } catch (SQLException ex) {
             notifica(req.getSession(), "Login exception!");
+            errorMessage(s, "error: E' Esploso il mondo");
         }
     }
     
@@ -270,6 +277,19 @@ public class Controller extends HttpServlet {
         s.setAttribute("message",s.getAttribute("message")+"<p>"+txt+"</p>");
         
     }
+    
+    public static void warningMessage(HttpSession s,String txt){
+       s.setAttribute("warning",s.getAttribute("warning")+"<p>"+txt+"</p>");
+    }
+    
+    public static void goodMessage(HttpSession s,String txt){
+        s.setAttribute("good",s.getAttribute("good")+"<p>"+txt+"</p>");
+    }
+    
+    public static void errorMessage(HttpSession s,String txt){
+        s.setAttribute("error",s.getAttribute("error")+"<p>"+txt+"</p>");
+    }
+    
     
      public static void notificautente(HttpSession s,String txt){
         s.setAttribute("alert","<script type='text/javascript'>alert('"+txt+"')</script>");
