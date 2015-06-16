@@ -95,6 +95,10 @@ nav  #account_system input[name="join_button"] {
   width: 5em;
 }
 
+nav  #account_system input[name="register"] {
+  margin-top: 10px;
+}
+
 /* FINE LOGIN MENU */
 
 

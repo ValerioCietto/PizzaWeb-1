@@ -34,13 +34,14 @@
             <label>Username:</label> <input id='field_username' type='text' required pattern='\w+' name='username'>
           </div>
           <div class="row">
-            <label>Password:</label> <input id='field_pwd1' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password1'>
+            <label>Password:</label> <input id='field_pwd1' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password1' title="Nota: La password deve contenere 6 caratteri di cui almeno un numero, una maiuscola e una minuscola">
           </div>
           <div class="row">
-            <label>Confirm Password:</label> <input id='field_pwd2' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password2'>
+            <label>Confirm Password:</label> <input id='field_pwd2' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password2' title="Nota: La password deve contenere 6 caratteri di cui almeno un numero, una maiuscola e una minuscola">
           </div>
           <div>
-            <input type='submit' name='action' value= 'register'>
+            <input type='hidden' name='action' value= 'register'>
+            <input type='button'  name = "register" value= 'register' onclick="Account.checkJoin()">
           </div>
         </form>
       </div>
