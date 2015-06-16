@@ -5,58 +5,51 @@
 <nav>
   <script src="js/account.js"></script>
   <div id="account_system">
+
     <%if (!Controller.checkLogin(request)) { %>
-    <%String checkView = request.getSession().getAttribute("view") + "";
-      if (checkView != null && !checkView.equals("Registrati")) {%>
-    <div class="Login">
+    <%String checkView = request.getSession().getAttribute("view") + "";%>
+
+    <div id="Login">
       <form name="login_form" action="/PizzaWeb/Servlet" method="post" >
         <div class="input">
           <div class="row">
             <label>Username</label>
-            <input type ="text" name="username" required value="<%= (request.getParameter("username") != null) ?  request.getParameter("username") : "" %>">
+            <input type ="text" name="username" required value="<%= (request.getParameter("username") != null) ? request.getParameter("username") : ""%>">
           </div>
           <div class="row">
             <label>Password</label>
             <input type ="password" name="password" required>
           </div>
         </div>
-        <div class="Button_Login">
-          <input type= "button"   name="button" value= "login" onclick="Account.checkLogin();">
+          <input type= "button"   name="login_button" value= "login" onclick="Account.checkLogin();">
+          <input type="button"  name = "join_button" value="Registrati" onclick="Account.updateForm('Join')">
           <input type= "hidden"   name="action" value= "login">
-        </div>
       </form>
-      <div class="Button_Join">
-        <form action="/PizzaWeb/Servlet" method="get">
-          <input type="hidden" name="action" value="switch">
-          <input type="submit" name="name"   value="Registrati">
+    </div>
+    <div id="Join">     
+      <button onclick="Account.updateForm('Login')" >Back </button>
+      <div class="join_div_form">
+        <form id='myForm' action='/PizzaWeb/Servlet' method='post' name="join_form">
+          <div class="row">
+            <label>Username:</label> <input id='field_username' type='text' required pattern='\w+' name='username'>
+          </div>
+          <div class="row">
+            <label>Password:</label> <input id='field_pwd1' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password1'>
+          </div>
+          <div class="row">
+            <label>Confirm Password:</label> <input id='field_pwd2' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password2'>
+          </div>
+          <div>
+            <input type='submit' name='action' value= 'register'>
+          </div>
         </form>
       </div>
     </div>
 
-    <%} else {%>
-    <div class="back_button">
-      <form action="/PizzaWeb/Servlet" method="get">
-        <input type="hidden" name="action" value="switch">
-        <input type="submit" name="name"   value="back">
-      </form>
-    </div>
-    <div class="join_div_form">
-      <form id='myForm' action='/PizzaWeb/Servlet' method='post' name="join_form">
-        <div class="row">
-          <label>Username:</label> <input id='field_username' type='text' required pattern='\w+' name='username'>
-        </div>
-        <div class="row">
-          <label>Password:</label> <input id='field_pwd1' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password1'>
-        </div>
-        <div class="row">
-          <label>Confirm Password:</label> <input id='field_pwd2' type='password' required pattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}' name='password2'>
-        </div>
-        <div>
-          <input type='submit' name='action' value= 'register'>
-        </div>
-      </form>
-    </div>
-    <%}
+    <script>
+      Account.updateForm('Login');
+    </script>     
+    <%
     } else {%>
     <%= View.login(request)%>
     <div>

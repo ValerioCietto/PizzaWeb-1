@@ -5,20 +5,21 @@
  */
 
 
-function Account(){}
+function Account() {
+}
 
-Account.checkLogin = function() {
+Account.checkLogin = function () {
   var form = $('form[name="login_form"]');
   var user = $('form[name="login_form"] :input[name="username"]');
   var pass = $('form[name="login_form"] :input[name="password"]');
-  
-  if(user == "" ||  !Re.checkUsername(user.val())) {
+
+  if (user == "" || !Re.checkUsername(user.val())) {
     alert("Inserire un Username Valido");
     user.focus();
     return false;
   }
-  
-  if(pass == "" ||  !Re.checkPassword(pass.val())) {
+
+  if (pass == "" || !Re.checkPassword(pass.val())) {
     alert("Inserire una Password Valida");
     pass.focus();
     return false;
@@ -27,6 +28,18 @@ Account.checkLogin = function() {
   form.submit();
 };
 
-Account.checkJoin = function() {
-  
+Account.checkJoin = function () {
+
 };
+
+
+Account.updateForm = function (checkView) {
+  if (checkView == "Login") {
+    $("#Login").show();
+    $("#Join").hide();
+  }
+  else {
+    $("#Join").show();
+    $("#Login").hide();
+  }
+}

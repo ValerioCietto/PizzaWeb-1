@@ -8,6 +8,27 @@ and open the template in the editor.
     Author     : Giuseppe
 */
 
+#message {
+  margin: 10px;
+}
+
+#message p {
+  display: block;
+  margin: 1px;
+  padding: 2px;
+}
+
+#message #goodMessage p {
+  background-color: #33ff33
+}
+
+#message #warningMessage p {
+  background-color: #ffff33
+}
+
+#message #errorMessage p {
+  background-color: #ff3333;
+}
 
 article span{
     

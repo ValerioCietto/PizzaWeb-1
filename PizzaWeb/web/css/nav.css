@@ -63,7 +63,6 @@ nav #account_system form input {
 
 nav #account_system form input[type="text"] , nav #account_system form  input[type="password"] {
   background-color: #e2e2e2;
-/*  width: 80%;*/
   width: auto;
   padding-left: 1em;
   padding-right: 1em;
@@ -75,28 +74,24 @@ nav #account_system form input[type="text"] , nav #account_system form  input[ty
 
 }
 
-nav #account_system  input[type="button"], nav #account_system  input[type="submit"] {
-/*  width: 80%;*/
+nav #account_system  input[type="button"], nav #account_system  input[type="submit"], nav #account_system button {
   width: auto;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
 }
 
-nav #account_system .Button_Login {
+nav #account_system input[name="login_button"] {
   display: inline-block;
   position: relative;
-  left: -30%;
-  top: 10px;
   width: 5em;
+  margin-top: 10px;
   padding: 0px;
 
 }
-nav  #account_system .Button_Join {
+nav  #account_system input[name="join_button"] {
   display: inline-block;
   position: relative;
-  top: -15px;
-  left: 60px;
   width: 5em;
 }
 

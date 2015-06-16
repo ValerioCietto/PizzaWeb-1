@@ -38,8 +38,6 @@ public class Controller extends HttpServlet {
         request.getSession().setAttribute("error", "");    
         response.setContentType("text/html;charset=UTF-8");
         String action= request.getParameter("action");     
-        errorMessage(request.getSession(), "action: "+request.getParameter("action"));
-        errorMessage(request.getSession(), "user: "+request.getParameter("username"));
         notifica(request.getSession(), action);
         if(action!=null){
             switch (action) {
