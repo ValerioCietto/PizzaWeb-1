@@ -275,7 +275,6 @@ public class View {
    * @return
    */
   public static String login(HttpServletRequest req) {
-    req.getSession().setAttribute("view", "login");
     String html = "<h1>Benvenuto " + req.getSession().getAttribute("username") + "</h1>";
     return html;
   }

@@ -202,7 +202,6 @@ public class Controller extends HttpServlet {
       if (!checkLogin(req) && Model.login(username, password)) {
         s.setAttribute("username", username);
         s.setAttribute("password", password);
-        View.login(req);
         notifica(s, "Login ok!");
         goodMessage(s, "Login ok!");
       } else {
