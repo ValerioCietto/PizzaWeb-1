@@ -43,7 +43,7 @@ public class Controller extends HttpServlet {
         switch (page) {
           case "catalogo":
             request.getSession().setAttribute("view", "catalogo");
-            out.println("<script src='js/prenotazione.js'></script>");
+            out.println("<script src='js/catalogo.js'></script>");
             out.println(getCatalogo(request));
             break;
           case "prenotazioni":
@@ -77,6 +77,9 @@ public class Controller extends HttpServlet {
           case "addPizza":
           out.print(addPizza(request));
           break;
+          case "remPizza":
+          out.print(remPizza(request));
+          break;
         }
  
        out.close();
@@ -103,10 +106,7 @@ public class Controller extends HttpServlet {
           break;
         //////////////////////////////////////
 
-        case "remPizza":
-          remPizza(request);
-          aggiornaPagina(request);
-          break;
+
         case "addPrenotazione":
           addPrenotazioni(request);
           aggiornaPagina(request);
@@ -364,7 +364,7 @@ public class Controller extends HttpServlet {
           Pizza p = new Pizza(nome, ingredienti, prezzo);
           Model.addPizza(p);
           goodMessage(s, "pizza aggiunta");
-          return View.getNewPizza(p);
+          return View.getAdminPizza(p);
         } else {
           errorMessage(s, "pizza non aggiunta");
         }
@@ -437,7 +437,7 @@ public class Controller extends HttpServlet {
    *
    * @param req
    */
-  public static void remPizza(HttpServletRequest req) {
+  public static String remPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
     String username = s.getAttribute("username") + "";
     try {
@@ -445,18 +445,18 @@ public class Controller extends HttpServlet {
         Pizza p = Model.getPizza(req.getParameter("pizza"));
         if (p != null) {
           Model.remPizza(p);
-          notifica(s, "pizza rimossa");
+          goodMessage(s, "pizza rimossa");
+          return "";
         } else {
-          notifica(s, "pizza non trovata");
+          errorMessage(s, "pizza non trovata");
         }
       } else {
-        notifica(s, "non hai i permessi");
+        errorMessage(s, "non hai i permessi");
       }
     } catch (SQLException e) {
-      notifica(s, "???B???");
+      errorMessage(s, "???B???");
     }
-    req.getSession().setAttribute("view", "catalogo");
-    aggiornaPagina(req);
+    return null;
   }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -20,7 +20,7 @@ Re.checkPassword = function (str) {
 
 Re.checkText = function (str) {
   var re = /^[\w\s\,]+$/;
-   return str.length === 0 || re.test(str);
+   return str === "" || re.test(str);
 };
 
 Re.checkDouble = function (double) {

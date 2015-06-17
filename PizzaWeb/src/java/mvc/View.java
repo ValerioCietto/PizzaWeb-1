@@ -62,12 +62,12 @@ public class View {
         html += "<span class='prezzo'> Prezzo: </span>";
         html += "<input type='double' name='prezzo'></br>";
         html += "<input type='hidden' name='action' value='addPizza'>";
-        html += "<input type='button' value='Aggiungi' onclick='Prenotazione.aggiungiPizza(this)'>";
+        html += "<input type='button' value='Aggiungi' onclick='Catalogo.aggiungiPizza(this)'>";
         html += "</form>";
         html += "</div>";
 
         for (Pizza al1 : al) {
-          html += getNewPizza(al1);
+          html += getAdminPizza(al1);
         }
       }
     }
@@ -83,7 +83,7 @@ public class View {
    * @param al1
    * @return
    */
-  protected static String getNewPizza(Pizza al1) {
+  protected static String getAdminPizza(Pizza al1) {
     String html = "";
     html += "<div class='pizza'>";
     html += getPizzaElement(al1);
@@ -95,12 +95,11 @@ public class View {
     html += "<input type ='text' name='prezzo'></br>";
     html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
     html += "<input type='hidden' name='action' value='modPizza'>";
-    html += "<input type='button' value='Modifica' onclick='Prenotazione.modificaPizza(this)'>";
+    html += "<input type='button' value='Modifica' onclick='Catalogo.modificaPizza(this)'>";
     html += "</form>";
     html += "<form action='/PizzaWeb/Servlet' method='post' >";
     html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
-    html += "<input type='hidden' name='action' value='remPizza'>";
-    html += "<input type='submit' value='Rimuovi'>";
+    html += "<input type='button' value='Rimuovi' onclick='Catalogo.rimuoviPizza(this)'>";
     html += "</form>";
     html += "</span>";
     html += "</div>";

@@ -12,14 +12,14 @@
   </div>
     <%String view=""+request.getSession().getAttribute("view");%>
     <%if(view.equals("catalogo")){%>
-      <script src='js/prenotazione.js'></script>
+      <script src='js/catalogo.js'></script>
       <script> $("#body_article").html("<%=Controller.getCatalogo(request)%>") </script>
     <%}else if(view.equals("prenotazioni")){%>
       <script> $("#body_article").html("<%= Controller.getPrenotazioni(request)%>") </script>  
     <%}else if(view.equals("utenti")){%>
       <script> $("#body_article").html("<%= Controller.getUtenti(request)%>") </script>  
     <%}else if(view.equals("registration")){%>
-      <script src='js/prenotazione.js'></script>
+      <script src='js/catalogo.js'></script>
       <script> $("#body_article").html("<%= Controller.getCatalogo(request)%>") </script>  
     <% } %>
 </article>
