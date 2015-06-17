@@ -69,26 +69,11 @@
   </div>
   <div id="operazioni">  
     <h1>Operazioni disponibili</h1>
-    <div>
-      <form action="/PizzaWeb/Servlet" method="get">
-        <input type="hidden" name="action" value="switch">
-        <input type="submit" name="name"   value="catalogo">
-      </form>
-    </div>
+    <div class="menu_button button_catalogo" onclick="Menu.sendCatalogoRequest()" onmouseover="Menu.addEmpatize(event, this)" onmouseout="Menu.removeEmpatize(event,this)">Catalogo</div>
     <%if (Controller.checkLogin(request)) { %>   
-    <div>
-      <form action="/PizzaWeb/Servlet" method="get">
-        <input type="hidden" name="action" value="switch">
-        <input type="submit" name="name" value="prenotazioni">
-      </form>
-    </div>
+    <div class="menu_button button_prenotazioni" onclick="Menu.sendPrenotazioniRequest()" onmouseover="Menu.addEmpatize(event, this)" onmouseout="Menu.removeEmpatize(event,this)" >Prenotazioni</div>
     <%if (Controller.checkAdmin(request)) { %>
-    <div>
-      <form action="/PizzaWeb/Servlet" method="post">
-        <input type="hidden" name="action" value="switch">
-        <input type="submit" name="name" value="utenti">
-      </form>
-    </div>
+    <div class="menu_button button_utenti" onclick="Menu.sendViewUtentiRequest()" onmouseover="Menu.addEmpatize(event, this)" onmouseout="Menu.removeEmpatize(event,this)" >Lista Utenti</div>
     <% }%>
     <%}%>
   </div>

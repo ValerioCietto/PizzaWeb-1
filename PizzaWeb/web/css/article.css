@@ -70,3 +70,7 @@ article .pizza .ingredienti {
   font-style: oblique;
   
 }
+
+#page{
+  display: none;
+}

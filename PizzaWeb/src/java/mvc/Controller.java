@@ -4,6 +4,8 @@ import components.*;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -34,6 +36,40 @@ public class Controller extends HttpServlet {
     request.getSession().setAttribute("warning", "");
     request.getSession().setAttribute("error", "");
     response.setContentType("text/html;charset=UTF-8");
+    
+    PrintWriter out = response.getWriter();
+      String page = request.getParameter("view");
+      if(page != null) {
+        switch (page) {
+          case "catalogo":
+            request.getSession().setAttribute("view", "catalogo");
+            out.println(getCatalogo(request));
+            break;
+          case "prenotazioni":
+        {
+          try {
+            request.getSession().setAttribute("view", "prenotazioni");
+            out.println(getPrenotazioni(request));
+          } catch (SQLException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }
+            break;
+          case "utenti":
+            request.getSession().setAttribute("view", "utenti");
+            out.println(getUtenti(request));
+            break;
+          default:
+            out.print("Pagina non trovata");
+            break;
+        }
+        out.close();
+       return; 
+      }
+
+    
+    
+    
     String action = request.getParameter("action");
     notifica(request.getSession(), action);
     if (action != null) {
@@ -90,12 +126,15 @@ public class Controller extends HttpServlet {
           break;
 
       }
+      
     }
 
     RequestDispatcher rd;
     //request e non named perchè richiediamo una jsp
     rd = getServletContext().getRequestDispatcher("/index.jsp");
     rd.include(request, response);
+    
+    out.close();
   }
 
   /**
@@ -117,15 +156,15 @@ public class Controller extends HttpServlet {
    * Esegue il refresh della pagina
    *
    * @param req
+   * @return 
    */
-  public static void aggiornaPagina(HttpServletRequest req) {
-    String page = (String) (req.getSession()).getAttribute("view");
+  public static String aggiornaPagina(HttpServletRequest req) {
+    String page = (String)req.getParameter("action");
 
     switch (page) {
       case "catalogo":
-        //getCatalogo(req);
+//        return getCatalogo(req);
         req.getSession().setAttribute("view", "catalogo");
-        break;
       case "prenotazioni":
         //getPrenotazioni(req);
         req.getSession().setAttribute("view", "prenotazioni");
@@ -143,6 +182,7 @@ public class Controller extends HttpServlet {
         break;
 
     }
+    return "";
   }
 
 ////////////////////////////////////////////////////////////////////////////////

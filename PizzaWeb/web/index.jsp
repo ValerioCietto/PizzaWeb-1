@@ -15,6 +15,7 @@
       <!-- <script type="text/javascript" src="function/inputCheck.js"></script> -->
       <script src="js/jquery-2.1.4.min.js" ></script>
       <script src="js/re.js" ></script>
+      <script src="js/menu.js" ></script>
       
     </head>
         

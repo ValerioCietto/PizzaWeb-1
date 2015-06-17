@@ -121,3 +121,30 @@ nav div{
     width: 90%;
     color: black;
 }
+
+
+
+/* MENU BUTTON*/
+nav .menu_button {
+  cursor: pointer;
+  border: 1px solid black;
+  padding: 15px;
+  background-color: #ffdf8b;
+}
+
+nav .button_catalogo {
+  
+}
+
+nav .button_prenotazioni {
+  
+}
+
+nav .button_utenti {
+  
+}
+
+nav .empatize_button {
+  font-weight: bold;
+  background-color: #ffaa2f;
+}

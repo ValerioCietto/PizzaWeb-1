@@ -6,16 +6,18 @@
     <div id="warningMessage"><%= ( request.getSession().getAttribute("warning") != null) ?  request.getSession().getAttribute("warning") : "" %></div>
     <div id="errorMessage"><%= (request.getSession().getAttribute("error") != null ) ? request.getSession().getAttribute("error") : "" %></div>
   </div>
+  <div id="page"></div>
+  <div id="body_article">
+    <h1>BENVENUTI!</h1>
+  </div>
     <%String view=""+request.getSession().getAttribute("view");%>
     <%if(view.equals("catalogo")){%>
-        <%= Controller.getCatalogo(request)%>
+      <script> $("#body_article").html("<%=Controller.getCatalogo(request)%>") </script>
     <%}else if(view.equals("prenotazioni")){%>
-        <%= Controller.getPrenotazioni(request)%>
+      <script> $("#body_article").html("<%= Controller.getPrenotazioni(request)%>") </script>  
     <%}else if(view.equals("utenti")){%>
-        <%= Controller.getUtenti(request)%>
+      <script> $("#body_article").html("<%= Controller.getUtenti(request)%>") </script>  
     <%}else if(view.equals("registration")){%>
-        <%= Controller.getCatalogo(request)%>
-    <%}else{%>
-        <%= "<h1>BENVENUTI!</h1>"%>
+      <script> $("#body_article").html("<%= Controller.getCatalogo(request)%>") </script>  
     <%}%>
 </article>
