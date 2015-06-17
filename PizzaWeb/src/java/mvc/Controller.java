@@ -43,6 +43,7 @@ public class Controller extends HttpServlet {
         switch (page) {
           case "catalogo":
             request.getSession().setAttribute("view", "catalogo");
+            out.println("<script src='js/prenotazione.js'></script>");
             out.println(getCatalogo(request));
             break;
           case "prenotazioni":
@@ -63,12 +64,25 @@ public class Controller extends HttpServlet {
             out.print("Pagina non trovata");
             break;
         }
-        out.close();
+       out.close();
+       return; 
+      }
+      
+      String ajaxRequest = request.getParameter("ajaxAction");
+      if(ajaxRequest!= null) {
+        switch(ajaxRequest) {      
+          case "modPizza":
+              out.print(modPizza(request));
+              break;
+          case "addPizza":
+          out.print(addPizza(request));
+          break;
+        }
+ 
+       out.close();
        return; 
       }
 
-    
-    
     
     String action = request.getParameter("action");
     notifica(request.getSession(), action);
@@ -88,16 +102,9 @@ public class Controller extends HttpServlet {
           logout(request);
           break;
         //////////////////////////////////////
-        case "addPizza":
-          addPizza(request);
-          aggiornaPagina(request);
-          break;
+
         case "remPizza":
           remPizza(request);
-          aggiornaPagina(request);
-          break;
-        case "modPizza":
-          modPizza(request);
           aggiornaPagina(request);
           break;
         case "addPrenotazione":
@@ -137,6 +144,7 @@ public class Controller extends HttpServlet {
     out.close();
   }
 
+  
   /**
    * Si occupa di visualizzare la pagina richiesta
    *
@@ -336,12 +344,12 @@ public class Controller extends HttpServlet {
    *
    * @param req
    */
-  public static void addPizza(HttpServletRequest req) {
+  public static String addPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
     String username = s.getAttribute("username") + "";
     try {
       if (Model.getUtente(username).getPermission().equals("admin")) {
-        String nome = req.getParameter("nome");
+        String nome = req.getParameter("pizza");
         String ingredienti = req.getParameter("ingredienti");
         String prezzoS = req.getParameter("prezzo");
         prezzoS = prezzoS.replaceAll(",", ".");
@@ -349,31 +357,33 @@ public class Controller extends HttpServlet {
         try {
           prezzo = Double.parseDouble(prezzoS);
         } catch (NumberFormatException e) {
-          notifica(s, prezzoS + " non double");
+          errorMessage(s, prezzoS + " non double");
+          return null;
         }
         if (nome != null && ingredienti != null && !nome.equals("") && !ingredienti.equals("") && prezzo > 0) {
           Pizza p = new Pizza(nome, ingredienti, prezzo);
           Model.addPizza(p);
-          notifica(s, "pizza aggiunta");
+          goodMessage(s, "pizza aggiunta");
+          return View.getNewPizza(p);
         } else {
-          notifica(s, "pizza non aggiunta");
+          errorMessage(s, "pizza non aggiunta");
         }
       } else {
-        notifica(s, "non hai i permessi");
+        errorMessage(s, "non hai i permessi");
       }
     } catch (SQLException e) {
-      notifica(s, "???A???");
+      errorMessage(s, "???A???");
     }
-    s.setAttribute("view", "catalogo");
-    aggiornaPagina(req);
+    return null;
   }
 
   /**
    * Permette all'admin di modificare una pizza
    *
    * @param req
+   * @return 
    */
-  public static void modPizza(HttpServletRequest req) {
+  public static String modPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
     String username = s.getAttribute("username") + "";
     try {
@@ -389,6 +399,8 @@ public class Controller extends HttpServlet {
               prezzo = Double.parseDouble(prezzoS);
             } catch (NumberFormatException e) {
               notifica(s, prezzoS + " non double");
+              errorMessage(s, prezzoS + " non double");
+              return null;
             }
             if (prezzo > 0) {
               p.setPrezzo(prezzo);
@@ -402,18 +414,22 @@ public class Controller extends HttpServlet {
 
           //applica modifiche
           Model.modPizza(p);
+          goodMessage(s, "Pizza Aggiornata");
           notifica(s, "pizza aggiornata");
+          return View.getPizzaElement(p);
         } else {
+          errorMessage(s, "pizza non trovata");
           notifica(s, "pizza non trovata");
         }
       } else {
+        errorMessage(s,"non hai i permessi");
         notifica(s, "non hai i permessi");
       }
     } catch (SQLException e) {
+      errorMessage(s,"KABOOM BABY!");
       notifica(s, "???A???");
     }
-    s.setAttribute("view", "catalogo");
-    aggiornaPagina(req);
+    return null;
   }
 
   /**
@@ -927,7 +943,7 @@ public class Controller extends HttpServlet {
    * @param req
    */
   public static void getRegistration(HttpServletRequest req) {
-    req.getSession().setAttribute("view", "register");
+//    req.getSession().setAttribute("view", "register");
   }
 
   /**

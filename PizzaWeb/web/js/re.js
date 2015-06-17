@@ -16,3 +16,13 @@ Re.checkPassword = function (str) {
     var re = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
     return re.test(str);
 };
+
+
+Re.checkText = function (str) {
+  var re = /^[\w\s\,]+$/;
+   return str.length === 0 || re.test(str);
+};
+
+Re.checkDouble = function (double) {
+  return !isNaN(double) || Number(double)===double; 
+}

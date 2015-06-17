@@ -32,32 +32,14 @@ public class View {
       if (u == null) {
         for (Pizza al1 : al) {
           html += "<div class='pizza'>";
-          html += "<div class='row'>"
-                  + "<span class='nome'> * " + al1.getNome() + "</span>";
-          html +=   "<div class='prezzo_block'>"
-                    + "<span>Prezzo:  </span>";
-          html +=     "<span class='prezzo'>" + al1.getPrezzo() + "</span>"
-                 + "</div>"
-               + "</div>";
-          html += "<div class='row ingredienti_block'><span>Ingredienti:  </span>";
-          html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span></div>"
-                  + "</div>";
-
+          html += getPizzaElement(al1);
+          html += "</div>";
         }
       } else if (u.getPermission().equals("user")) {
 
         for (Pizza al1 : al) {
           html += "<div class='pizza'>";
-          html += "<div class='row'>"
-                  + "<span class='nome'> * " + al1.getNome() + "</span>";
-          html +=   "<div class='prezzo_block'>"
-                    + "<span>Prezzo:  </span>";
-          html +=     "<span class='prezzo'>" + al1.getPrezzo() + "</span>"
-                 + "</div>"
-               + "</div>";
-          html += "<div class='row ingredienti_block'><span>Ingredienti:  </span>";
-          html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span></div>"
-                  + "</div>";
+          html += getPizzaElement(al1);
           html += "<form action='/PizzaWeb/Servlet' method='post' >";
           html += "<span>Quantità:  </span>";
           html += "<input type ='number' name='quantita' min='0' max='100'value = '0' required>";
@@ -80,37 +62,71 @@ public class View {
         html += "<span class='prezzo'> Prezzo: </span>";
         html += "<input type='double' name='prezzo'></br>";
         html += "<input type='hidden' name='action' value='addPizza'>";
-        html += "<input type='submit' value='Aggiungi'>";
+        html += "<input type='button' value='Aggiungi' onclick='Prenotazione.aggiungiPizza(this)'>";
         html += "</form>";
         html += "</div>";
 
         for (Pizza al1 : al) {
-          html += "<div class='pizza'>";
-          html += "<span class='nome'>" + al1.getNome() + "</span>";
-          html += "<span></br>Ingredienti:  </span>";
-          html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span>";
-          html += "<span></br>Prezzo:  </span>";
-          html += "<span class='prezzo'>" + al1.getPrezzo() + "</span>";
-          html += "<span>";
-          html += "<form action='/PizzaWeb/Servlet' method='post' >";
-          html += "<span>Ingredienti:  </span>";
-          html += "<input type ='text' name='ingredienti'>";
-          html += "<span></br>Prezzo:  </span>";
-          html += "<input type ='text' name='prezzo'></br>";
-          html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
-          html += "<input type='hidden' name='action' value='modPizza'>";
-          html += "<input type='submit' value='Modifica'>";
-          html += "</form>";
-          html += "<form action='/PizzaWeb/Servlet' method='post' >";
-          html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
-          html += "<input type='hidden' name='action' value='remPizza'>";
-          html += "<input type='submit' value='Rimuovi'>";
-          html += "</form>";
-          html += "</span>";
-          html += "</div>";
+          html += getNewPizza(al1);
         }
       }
     }
+
+    return html;
+  }
+
+  /**
+   * Restituisce un nuovo div quando viene aggiunta una pizza ATTENZIONE: Metodo
+   * riservato all' inserimento della pizza da parte dell' admin con tanto di
+   * form;
+   *
+   * @param al1
+   * @return
+   */
+  protected static String getNewPizza(Pizza al1) {
+    String html = "";
+    html += "<div class='pizza'>";
+    html += getPizzaElement(al1);
+    html += "<span>";
+    html += "<form action='/PizzaWeb/Servlet' method='post' >";
+    html += "<span>Ingredienti:  </span>";
+    html += "<input type ='text' name='ingredienti'>";
+    html += "<span></br>Prezzo:  </span>";
+    html += "<input type ='text' name='prezzo'></br>";
+    html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
+    html += "<input type='hidden' name='action' value='modPizza'>";
+    html += "<input type='button' value='Modifica' onclick='Prenotazione.modificaPizza(this)'>";
+    html += "</form>";
+    html += "<form action='/PizzaWeb/Servlet' method='post' >";
+    html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
+    html += "<input type='hidden' name='action' value='remPizza'>";
+    html += "<input type='submit' value='Rimuovi'>";
+    html += "</form>";
+    html += "</span>";
+    html += "</div>";
+    return html;
+  }
+
+  /**
+   * Restituisce l'html della pizza nel catalogo, contente solo le informazioni
+   * basilari
+   *
+   * @param al1
+   * @return
+   */
+  protected static String getPizzaElement(Pizza al1) {
+    String html = "";
+    html += "<div class='element'>";
+    html += "<div class='row'>"
+            + "<span class='nome'>" + al1.getNome() + "</span>";
+    html += "<div class='prezzo_block'>"
+            + "<span>Prezzo:  </span>";
+    html += "<span class='prezzo'>" + al1.getPrezzo() + "</span>"
+            + "</div>"
+            + "</div>";
+    html += "<div class='row ingredienti_block'><span>Ingredienti:  </span>";
+    html += "<span class='ingredienti'>" + al1.getIngredinti() + "</span></div>"
+            + "</div>";
     return html;
   }
 
@@ -264,6 +280,20 @@ public class View {
   public static String visualizzaFallimento(HttpServletRequest req) {
     String html = "";
     html += "Errore" + req.getAttribute("message");
+    return html;
+  }
+
+  public static String visualizzaNotify(HttpServletRequest request) {
+    String html = "";
+    String good = (request.getSession().getAttribute("good") != null) ? request.getSession().getAttribute("good") + "" : "";
+    String warning = (request.getSession().getAttribute("warning") != null) ? request.getSession().getAttribute("warning") + "" : "";
+    String error = (request.getSession().getAttribute("error") != null) ? request.getSession().getAttribute("error") + "" : "";
+    html += "<div id='goodMessage'>" + good + "</div>";
+    html += "<div id='warningMessage'>" + warning + "</div>";
+    html += "<div id='errorMessage'>" + error + "</div>";
+    request.getSession().setAttribute("good", "");
+    request.getSession().setAttribute("warning", "");
+    request.getSession().setAttribute("error", "");
     return html;
   }
 
