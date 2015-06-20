@@ -18,15 +18,15 @@ and open the template in the editor.
   padding: 2px;
 }
 
-#message #goodMessage p {
+#message .good {
   background-color: #33ff33
 }
 
-#message #warningMessage p {
+#message .warning {
   background-color: #ffff33
 }
 
-#message #errorMessage p {
+#message .error {
   background-color: #ff3333;
 }
 

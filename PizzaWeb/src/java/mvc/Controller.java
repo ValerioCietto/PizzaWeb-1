@@ -31,62 +31,61 @@ public class Controller extends HttpServlet {
    * @throws IOException
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    request.getSession().setAttribute("message", "");
-    request.getSession().setAttribute("good", "");
-    request.getSession().setAttribute("warning", "");
-    request.getSession().setAttribute("error", "");
     response.setContentType("text/html;charset=UTF-8");
-    
     PrintWriter out = response.getWriter();
-      String page = request.getParameter("view");
-      if(page != null) {
-        switch (page) {
-          case "catalogo":
-            request.getSession().setAttribute("view", "catalogo");
-            out.println("<script src='js/catalogo.js'></script>");
-            out.println(getCatalogo(request));
-            break;
-          case "prenotazioni":
-        {
+    UserBean user = (UserBean) request.getSession().getAttribute("user");
+    if (user == null) {
+      user = new UserBean();
+      request.getSession().setAttribute("user", user);
+    }
+    String page = request.getParameter("view");
+    if (page != null) {
+      switch (page) {
+        case "catalogo":
+          user.setView("catalogo");
+          out.println("<script src='js/catalogo.js'></script>");
+          out.println(getCatalogo(request));
+          break;
+        case "prenotazioni": {
           try {
-            request.getSession().setAttribute("view", "prenotazioni");
+            user.setView("prenotazioni");
             out.println(getPrenotazioni(request));
           } catch (SQLException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
           }
         }
-            break;
-          case "utenti":
-            request.getSession().setAttribute("view", "utenti");
-            out.println(getUtenti(request));
-            break;
-          default:
-            out.print("Pagina non trovata");
-            break;
-        }
-       out.close();
-       return; 
+        break;
+        case "utenti":
+          user.setView("utenti");
+          out.println(getUtenti(request));
+          break;
+        default:
+          out.print("Pagina non trovata");
+          break;
       }
-      
-      String ajaxRequest = request.getParameter("ajaxAction");
-      if(ajaxRequest!= null) {
-        switch(ajaxRequest) {      
-          case "modPizza":
-              out.print(modPizza(request));
-              break;
-          case "addPizza":
+      request.getSession().setAttribute("user", user);
+      out.close();
+      return;
+    }
+
+    String ajaxRequest = request.getParameter("ajaxAction");
+    if (ajaxRequest != null) {
+      switch (ajaxRequest) {
+        case "modPizza":
+          out.print(modPizza(request));
+          break;
+        case "addPizza":
           out.print(addPizza(request));
           break;
-          case "remPizza":
+        case "remPizza":
           out.print(remPizza(request));
           break;
-        }
- 
-       out.close();
-       return; 
       }
 
-    
+      out.close();
+      return;
+    }
+
     String action = request.getParameter("action");
     notifica(request.getSession(), action);
     if (action != null) {
@@ -105,7 +104,6 @@ public class Controller extends HttpServlet {
           logout(request);
           break;
         //////////////////////////////////////
-
 
         case "addPrenotazione":
           addPrenotazioni(request);
@@ -133,18 +131,17 @@ public class Controller extends HttpServlet {
           break;
 
       }
-      
+
     }
 
     RequestDispatcher rd;
     //request e non named perchè richiediamo una jsp
     rd = getServletContext().getRequestDispatcher("/index.jsp");
     rd.include(request, response);
-    
+    request.getSession().setAttribute("user", user);
     out.close();
   }
 
-  
   /**
    * Si occupa di visualizzare la pagina richiesta
    *
@@ -164,10 +161,10 @@ public class Controller extends HttpServlet {
    * Esegue il refresh della pagina
    *
    * @param req
-   * @return 
+   * @return
    */
   public static String aggiornaPagina(HttpServletRequest req) {
-    String page = (String)req.getParameter("action");
+    String page = (String) req.getParameter("action");
 
     switch (page) {
       case "catalogo":
@@ -190,6 +187,7 @@ public class Controller extends HttpServlet {
         break;
 
     }
+
     return "";
   }
 
@@ -204,20 +202,20 @@ public class Controller extends HttpServlet {
    */
   public static void login(HttpServletRequest req) {
     HttpSession s = req.getSession();
+
     String username = "" + req.getParameter("username");
     String password = "" + req.getParameter("password");
     try {
       if (!checkLogin(req) && Model.login(username, password)) {
-        s.setAttribute("username", username);
-        s.setAttribute("password", password);
-        notifica(s, "Login ok!");
+        UserBean user = new UserBean();
+        user.setUsername(username);
+        //s.setAttribute("password", password);
+        s.setAttribute("user", user);
         goodMessage(s, "Login ok!");
       } else {
-        notifica(req.getSession(), "Login error!");
         errorMessage(s, "error: Assicurati che Username e Password siano esistenti e corretti");
       }
     } catch (SQLException ex) {
-      notifica(req.getSession(), "Login exception!");
       errorMessage(s, "error: E' Esploso il mondo");
     }
   }
@@ -233,22 +231,24 @@ public class Controller extends HttpServlet {
     String password2 = req.getParameter("password2");
     try {
       if (password1.equals(password2)) {
-        if(Model.creaUtente(username, password1)) {
+        if (Model.creaUtente(username, password1)) {
+          UserBean user = new UserBean();
+          user.setUsername(username);
+          //s.setAttribute("password", password);
+          req.getSession().setAttribute("user", user);
           goodMessage(req.getSession(), "Utente Creato con successo");
-        }
-        else {
+
+        } else {
           errorMessage(req.getSession(), "Utente già esistente");
         }
-          
+
         req.getSession().setAttribute("view", "back");
         aggiornaPagina(req);
       } else {
-        notifica(req.getSession(), "password diverse");
         errorMessage(req.getSession(), "password diverse");
       }
 
     } catch (SQLException e) {
-      notifica(req.getSession(), "Registrazione fallita!");
       errorMessage(req.getSession(), "Registrazione fallita!");
     }
   }
@@ -321,15 +321,24 @@ public class Controller extends HttpServlet {
   }
 
   public static void warningMessage(HttpSession s, String txt) {
-    s.setAttribute("warning", s.getAttribute("warning") + "<p>" + txt + "</p>");
+    UserBean user = (UserBean) s.getAttribute("user");
+    if (user != null) {
+      user.setMessage("<p class='warning'>" + txt + "</p>");
+    }
   }
 
   public static void goodMessage(HttpSession s, String txt) {
-    s.setAttribute("good", s.getAttribute("good") + "<p>" + txt + "</p>");
+    UserBean user = (UserBean) s.getAttribute("user");
+    if (user != null) {
+      user.setMessage("<p class='good'>" + txt + "</p>");
+    }
   }
 
   public static void errorMessage(HttpSession s, String txt) {
-    s.setAttribute("error", s.getAttribute("error") + "<p>" + txt + "</p>");
+    UserBean user = (UserBean) s.getAttribute("user");
+    if (user != null) {
+      user.setMessage("<p class='error'>" + txt + "</p>");
+    }
   }
 
   public static void notificautente(HttpSession s, String txt) {
@@ -338,7 +347,7 @@ public class Controller extends HttpServlet {
 
 ////////////////////////////////////////////////////////////////////////////////
 // METODI SU CATALOGO   
-    // Solo visualizzazione
+  // Solo visualizzazione
   /**
    * Permette all'admin di aggiungere una pizza
    *
@@ -381,7 +390,7 @@ public class Controller extends HttpServlet {
    * Permette all'admin di modificare una pizza
    *
    * @param req
-   * @return 
+   * @return
    */
   public static String modPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
@@ -422,11 +431,11 @@ public class Controller extends HttpServlet {
           notifica(s, "pizza non trovata");
         }
       } else {
-        errorMessage(s,"non hai i permessi");
+        errorMessage(s, "non hai i permessi");
         notifica(s, "non hai i permessi");
       }
     } catch (SQLException e) {
-      errorMessage(s,"KABOOM BABY!");
+      errorMessage(s, "KABOOM BABY!");
       notifica(s, "???A???");
     }
     return null;
@@ -769,7 +778,7 @@ public class Controller extends HttpServlet {
           req.getParameter("id");
           String username = req.getParameter("id") + "";
           u = Model.getUtente(username);
-                        ///modifica utente
+          ///modifica utente
 
           String name = req.getParameter("name") + "";
           if (name != null && !name.equals("")) {
@@ -782,7 +791,7 @@ public class Controller extends HttpServlet {
             u.setPwd(password);
           }
 
-                        ///modifica permission
+          ///modifica permission
           String permission = req.getParameter("permission");
           if (permission != null && !permission.equals("")) {
             u.setPermission(permission);
@@ -891,7 +900,7 @@ public class Controller extends HttpServlet {
 
       if (u != null && u.getPermission().equals("user")) {
         listaPrenotazioni = Model.getListaPrenotazioni(u.getId());
-                //notificautente(req.getSession(), "Caricate le tue Prenotazioni");
+        //notificautente(req.getSession(), "Caricate le tue Prenotazioni");
 
       } else if (u != null && u.getPermission().equals("admin")) {
         listaPrenotazioni = Model.getListaPrenotazioni();
