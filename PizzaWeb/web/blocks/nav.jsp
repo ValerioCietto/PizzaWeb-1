@@ -7,14 +7,14 @@
   <div id="account_system">
 
     <%if (!Controller.checkLogin(request)) { %>
-    <%String checkView = request.getSession().getAttribute("view") + "";%>
+    <%String checkView = (user != null ) ? user.getView() : " "; %>
 
     <div id="Login">
       <form name="login_form" action="/PizzaWeb/Servlet" method="post" >
         <div class="input">
           <div class="row">
             <label>Username</label>
-            <input type ="text" name="username" required value="<%= (request.getParameter("username") != null) ? request.getParameter("username") : ""%>">
+            <input type ="text" name="username" required value="<%= (user != null &&  user.getUsername() != null) ? user.getUsername()  : ""%>">
           </div>
           <div class="row">
             <label>Password</label>
@@ -52,7 +52,7 @@
     </script>     
     <%
     } else {%>
-    <%= View.login(request)%>
+    <h1>Benvenuto <jsp:getProperty name="user" property="username" /></h1>
     <div>
       <form action="/PizzaWeb/Servlet" method="get">
         <input type="submit" name="action" value="logout">
@@ -60,10 +60,10 @@
     </div>
     <%}%>
     <%if (Controller.checkLogin(request) && Controller.checkAdmin(request)) {%>
-    <div id="terminale">
+  <%--  <div id="terminale">
       <%=request.getSession().getAttribute("message")%>
     </div>
-
+  --%>
     <%}%>
 
   </div>

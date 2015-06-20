@@ -1,5 +1,6 @@
 package components;
 
+import components.Pizza;
 import mvc.*;
 import java.util.ArrayList;
 
@@ -20,18 +21,28 @@ import java.util.ArrayList;
 public class UserBean {
 
   private String username;
+  private String password;
   private String ruolo;
   private String view;
   private ArrayList<String> message = new ArrayList<>();
   private ArrayList<Pizza> carrello = new ArrayList<Pizza>();
 
-  public UserBean() {
-  }
+  public UserBean() {}
 
   public String getUsername() {
     return username;
   }
 
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  
+  
   public String getRuolo() {
     return ruolo;
   }

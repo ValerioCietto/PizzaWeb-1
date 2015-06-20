@@ -296,17 +296,6 @@ public class View {
     return html;
   }
 
-  /**
-   * Esegue il refresh della pagina
-   *
-   * @param req
-   *
-   * @return
-   */
-  public static String login(HttpServletRequest req) {
-    String html = "<h1>Benvenuto " + req.getSession().getAttribute("username") + "</h1>";
-    return html;
-  }
 
 ///////////////////////////////////////////////////////////////////////////////////////////    
 }

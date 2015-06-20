@@ -34,10 +34,12 @@ public class Controller extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     UserBean user = (UserBean) request.getSession().getAttribute("user");
+    
+    //in quest'occasione inizializza user e modifica automaticamente anche il session
     if (user == null) {
       user = new UserBean();
-      request.getSession().setAttribute("user", user);
     }
+
     String page = request.getParameter("view");
     if (page != null) {
       switch (page) {
@@ -63,7 +65,6 @@ public class Controller extends HttpServlet {
           out.print("Pagina non trovata");
           break;
       }
-      request.getSession().setAttribute("user", user);
       out.close();
       return;
     }
@@ -98,7 +99,7 @@ public class Controller extends HttpServlet {
           register(request);
           break;
         case "login":
-          login(request);
+          login(request,user);
           break;
         case "logout":
           logout(request);
@@ -138,7 +139,6 @@ public class Controller extends HttpServlet {
     //request e non named perchè richiediamo una jsp
     rd = getServletContext().getRequestDispatcher("/index.jsp");
     rd.include(request, response);
-    request.getSession().setAttribute("user", user);
     out.close();
   }
 
@@ -199,18 +199,18 @@ public class Controller extends HttpServlet {
    * Gestisce il login
    *
    * @param req
+   * @param user
    */
-  public static void login(HttpServletRequest req) {
+  public static void login(HttpServletRequest req, UserBean user) {
     HttpSession s = req.getSession();
-
+    if(checkLogin(req))
+      return;
     String username = "" + req.getParameter("username");
     String password = "" + req.getParameter("password");
     try {
-      if (!checkLogin(req) && Model.login(username, password)) {
-        UserBean user = new UserBean();
+      if ( Model.login(username, password)) {
         user.setUsername(username);
-        //s.setAttribute("password", password);
-        s.setAttribute("user", user);
+         user.setPassword(password);
         goodMessage(s, "Login ok!");
       } else {
         errorMessage(s, "error: Assicurati che Username e Password siano esistenti e corretti");
@@ -261,14 +261,18 @@ public class Controller extends HttpServlet {
    * @return
    */
   public static boolean checkLogin(HttpServletRequest req) {
-    String username = "" + req.getSession().getAttribute("username");
-    String password = "" + req.getSession().getAttribute("password");
+    UserBean user = (UserBean) req.getSession().getAttribute("user");
+    
+    if(user == null)
+      return false;
+    String username = user.getUsername();
+    String password = user.getPassword();
     try {
       if (Model.login(username, password)) {
         return true;
       }
     } catch (SQLException e) {
-      req.getSession().setAttribute("message", "SQL error!");
+      errorMessage(req.getSession(), "SQL error!"); 
     }
     return false;
   }
@@ -282,14 +286,15 @@ public class Controller extends HttpServlet {
    */
   public static boolean checkAdmin(HttpServletRequest req) {
 
-    String username = "" + req.getSession().getAttribute("username");
-    String password = "" + req.getSession().getAttribute("password");
+    UserBean user = (UserBean) req.getSession().getAttribute("user");
+    String username = user.getUsername();
+    String password = user.getPassword();
     try {
       if (Model.checkLogin(username, password).getPermission().equals("admin")) {
         return true;
       }
     } catch (SQLException e) {
-      req.getSession().setAttribute("message", "SQL error!");
+      errorMessage(req.getSession(), "SQL error!"); 
     }
     return false;
   }

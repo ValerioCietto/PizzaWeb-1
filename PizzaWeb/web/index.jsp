@@ -1,6 +1,6 @@
 <%@page import="mvc.*" %>
 <%@page session = "true" contentType="text/html" pageEncoding="UTF-8"%>
-
+<jsp:useBean id="user" scope="session" class="components.UserBean"/>
 
 <!DOCTYPE html>
 <html>
