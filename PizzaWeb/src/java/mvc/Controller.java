@@ -46,6 +46,7 @@ public class Controller extends HttpServlet {
         case "catalogo":
           user.setView("catalogo");
           out.println("<script src='js/catalogo.js'></script>");
+          out.println("<script src='js/prenotazione.js'></script>");
           out.println(getCatalogo(request));
           break;
         case "prenotazioni": {
@@ -360,7 +361,8 @@ public class Controller extends HttpServlet {
    */
   public static String addPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
-    String username = s.getAttribute("username") + "";
+        UserBean user = (UserBean)s.getAttribute("user");
+    String username = user.getUsername();
     try {
       if (Model.getUtente(username).getPermission().equals("admin")) {
         String nome = req.getParameter("pizza");
@@ -399,7 +401,8 @@ public class Controller extends HttpServlet {
    */
   public static String modPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
-    String username = s.getAttribute("username") + "";
+    UserBean user = (UserBean)s.getAttribute("user");
+    String username = user.getUsername();
     try {
       if (Model.getUtente(username).getPermission().equals("admin")) {
         Pizza p = Model.getPizza(req.getParameter("pizza"));
@@ -429,19 +432,15 @@ public class Controller extends HttpServlet {
           //applica modifiche
           Model.modPizza(p);
           goodMessage(s, "Pizza Aggiornata");
-          notifica(s, "pizza aggiornata");
           return View.getPizzaElement(p);
         } else {
           errorMessage(s, "pizza non trovata");
-          notifica(s, "pizza non trovata");
         }
       } else {
         errorMessage(s, "non hai i permessi");
-        notifica(s, "non hai i permessi");
       }
     } catch (SQLException e) {
       errorMessage(s, "KABOOM BABY!");
-      notifica(s, "???A???");
     }
     return null;
   }
@@ -453,7 +452,8 @@ public class Controller extends HttpServlet {
    */
   public static String remPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
-    String username = s.getAttribute("username") + "";
+        UserBean user = (UserBean)s.getAttribute("user");
+    String username = user.getUsername();
     try {
       if (Model.getUtente(username).getPermission().equals("admin")) {
         Pizza p = Model.getPizza(req.getParameter("pizza"));
@@ -505,8 +505,7 @@ public class Controller extends HttpServlet {
           notificautente(s, "prenotazione non aggiunta");
         }
       } else {
-        notifica(s, "non hai i permessi");
-        notificautente(s, "non hai i permessi");
+        errorMessage(s, "non hai i permessi per aggiungere la prenotazione");
       }
     } catch (SQLException e) {
       notifica(s, "???B???");
@@ -641,8 +640,7 @@ public class Controller extends HttpServlet {
           }
           break;
         default:
-
-          notificautente(s, "non hai i permessi");
+          errorMessage(s, "non hai i permessi in generale!");
           break;
       }
     } catch (SQLException e) {
@@ -808,8 +806,7 @@ public class Controller extends HttpServlet {
           notifica(s, "utente aggiornato");
           break;
         default:
-          notificautente(s, "non hai i permessi");
-          notifica(s, "non hai i permessi");
+          errorMessage(s, "non hai i permessi per modificare gli utenti");
           break;
       }
     } catch (SQLException e) {
@@ -847,8 +844,7 @@ public class Controller extends HttpServlet {
           }
           break;
         default:
-          notificautente(s, "non hai i permessi");
-          notifica(s, "non hai i permessi");
+          errorMessage(s, "non hai i permessi per rimuovere un utente");
           break;
       }
     } catch (SQLException e) {
@@ -868,18 +864,17 @@ public class Controller extends HttpServlet {
    */
   public static String getCatalogo(HttpServletRequest req) {
     HttpSession s = req.getSession();
-    String username = req.getSession().getAttribute("username") + "";
+    UserBean user = (UserBean)s.getAttribute("user");
     ArrayList<Pizza> listaPizze = null;
     Utente u = null;
 
     try {
-      u = Model.getUtente(username);
+      u = Model.getUtente(user.getUsername());
 
       listaPizze = Model.getCatalogo();
-      notifica(s, "catalogo ottenuto");
+      goodMessage(s, "catalogo ottenuto");
     } catch (SQLException e) {
-      notificautente(s, "Impossibile ottenere il catalogo");
-      notifica(s, "Impossibile ottenere il catalogo");
+      errorMessage(s, "Impossibile ottenere il catalogo");
     }
 
     return View.visualizzaCatalogo(listaPizze, u, req);
@@ -911,8 +906,7 @@ public class Controller extends HttpServlet {
         listaPrenotazioni = Model.getListaPrenotazioni();
         notifica(req.getSession(), "Caricate Tutte Prenotazioni");
       } else {
-        notifica(req.getSession(), "non hai i permessi");
-        notificautente(req.getSession(), "non hai i permessi");
+        errorMessage(req.getSession(), "non hai i permessi per vedere le prenotazioni");
       }
     } catch (SQLException e) {
       notifica(req.getSession(), "Impossibile ottenere il catalogo");

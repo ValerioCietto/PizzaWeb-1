@@ -8,6 +8,13 @@ and open the template in the editor.
     Author     : Giuseppe
 */
 
+
+/*
+###################### MESSAGGI #######################
+*/
+
+
+
 #message {
   margin: 10px;
 }
@@ -30,12 +37,22 @@ and open the template in the editor.
   background-color: #ff3333;
 }
 
+
+/*
+################### FINE MESSAGGI #######################
+*/
+
+
 article span{
     
     margin: 0px 10px 0px 10px;
     
 }
 
+
+/*
+#########################CATALOGO #######################
+*/
 
 article .pizza, article .prenotazione, article .utente{
     margin: 10px 0px 10px 0px;
@@ -71,6 +88,32 @@ article .pizza .ingredienti {
   
 }
 
+/*
+################### FINE CATALOGO #######################
+*/
+
 #page{
   display: none;
 }
+
+
+/*
+#########################CATALOGO PRENOTAZIONI #######################
+*/
+
+.pren_pizza {
+  
+  position: relative;
+}
+
+input[name="addPizza"] {
+  margin-top: 5px;
+  margin-bottom: 20px;
+  
+  
+}
+
+
+/*
+################### FINE CATALOGO PRENOTAZIONI #######################
+*/

@@ -9,6 +9,8 @@ package mvc;
 import components.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.*;
 
 public class View {
@@ -36,21 +38,20 @@ public class View {
           html += "</div>";
         }
       } else if (u.getPermission().equals("user")) {
-
-        for (Pizza al1 : al) {
-          html += "<div class='pizza'>";
-          html += getPizzaElement(al1);
-          html += "<form action='/PizzaWeb/Servlet' method='post' >";
-          html += "<span>Quantità:  </span>";
-          html += "<input type ='number' name='quantita' min='0' max='100'value = '0' required>";
-          html += "<span>  Data:  </span>";
-          html += "<input type ='date' name='data' required>";
-          html += "<input type='hidden' name='pizza' value='" + al1.getNome() + "'>";
-          html += "<input type='hidden' name='action' value='addPrenotazione'>";
-          html += "<input type='submit' value='Prenota'>";
-          html += "</form>";
-          html += "</div>";
-        }
+       
+        
+        html += "<form action='/PizzaWeb/Servlet' method='post' >";
+        html += "<div class='pren_pizza_list'>";
+        html += "<div class='pren_pizza'>";
+        html += getSelectablePizzaSlot();
+        html += "</div>";
+        html += "<div class='slot_add_pizza'></div>";
+        html += "</div>";
+        html += "<input type='button' name='addPizza' value ='Aggiungi Pizza' onclick='Prenotazione.addPizza()'/>";
+        html += "<div class='data_consegna'> Consegna: <input type ='date' name='data' required/></div>";
+        html += "<input type='button' value ='prenota' onclick='Prenotazione.addPrenotazione()'/>";
+        html += "</form>";
+        
       } else if (u.getPermission().equals("admin")) {
 
         html += "<div class= 'new'>";
@@ -75,6 +76,25 @@ public class View {
     return html;
   }
 
+  
+  public static String getSelectablePizzaSlot() {
+    String s = "";
+      ArrayList<Pizza> listapizze;
+        try {
+          listapizze = Model.getListaPizze();
+        } catch (SQLException ex) {
+          listapizze = new ArrayList<>();
+        }
+    s +=" <select>\n";
+     for(Pizza p : listapizze) {
+       s+="\t <option value=\""+p.getNome()+"\">"+p.getNome()+"</option>\n";
+     }
+     s+= "</select> ";
+     s += "<span>Quantità:  </span>";
+     s+= "<input type ='number' name='quantita' min='0' max='100'value = '0' required>";
+    return s;
+  }   
+  
   /**
    * Restituisce un nuovo div quando viene aggiunta una pizza ATTENZIONE: Metodo
    * riservato all' inserimento della pizza da parte dell' admin con tanto di

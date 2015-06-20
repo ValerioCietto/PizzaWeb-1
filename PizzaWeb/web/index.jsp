@@ -28,6 +28,9 @@
         <div id="content">
           <%@include file="blocks/nav.jsp"%>
           <%@include file="blocks/article.jsp"%>
+        <%--<jsp:include page="blocks/article.jsp" >
+            <jsp:param name="user" value="user" />
+        </jsp:include> --%>
         </div>
           <%@include file="blocks/footer.jsp"%>
       </div>
