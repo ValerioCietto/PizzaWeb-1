@@ -118,7 +118,7 @@ public class Controller extends HttpServlet {
 
         case "addPrenotazione":
           addPrenotazioni(request, out);
-          aggiornaPagina(request);
+          
           break;
         case "modPrenotazione":
           modPrenotazioni(request);
@@ -496,56 +496,30 @@ public class Controller extends HttpServlet {
     UserBean user = (UserBean) s.getAttribute("user");
     String username = user.getUsername();
     JSONArray jarr = null;
-    HashMap<String, Integer> carrello = new HashMap<>();
-    out.println("Eccomi qui!!");
-//    json.deleteCharAt(0);
-//    json.deleteCharAt(json.length()-1);
-    try {
-      jarr = new JSONArray(req.getParameter("lista"));
-      for(int i=0; i < jarr.length(); i++) {
-        JSONObject obj = jarr.getJSONObject(i);
-        String pizza = obj.getString("pizza");
-        Integer qt =  obj.getInt("quantita");
-        if(!carrello.containsKey(pizza))
-          carrello.put(pizza,qt);
-        else
-          carrello.put(pizza, carrello.get(pizza) +qt);
-        
-      }
-    } catch (JSONException ex) {
-      Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
-      out.println(ex.getMessage());
-    }
-    String nomePizza = req.getParameter("pizza");
-    int quantita = -1;
-    try {
-      quantita = Integer.parseInt(req.getParameter("quantita"));
-    } catch (NumberFormatException e) {
-      notifica(s, req.getParameter("quantita") + " non int");
-    }
     String data = req.getParameter("data");
     try {
-      if (Model.getUtente(username).getPermission().equals("user")) {
-        int idUser = Model.getIdUtente(username);
-        int idPizza = Model.getIdPizza(nomePizza);
-        if (Model.getPizza(nomePizza) != null && quantita > 0 && data != null && !data.equals("")) {
-          Prenotazione p = new Prenotazione(idUser, idPizza, quantita, data);
-          Model.addPrenotazione(p);
-          notifica(s, "prenotazione aggiunta");
-          notificautente(s, "prenotazione aggiunta");
-        } else {
-          notifica(s, "prenotazione non aggiunta");
-          notificautente(s, "prenotazione non aggiunta");
+      jarr = new JSONArray(req.getParameter("lista"));
+      for (int i = 0; i < jarr.length(); i++) {
+        JSONObject obj = jarr.getJSONObject(i);
+        String pizza = obj.getString("pizza");
+        Integer qt = obj.getInt("quantita");
+
+        if (Model.getUtente(username).getPermission().equals("user")) {
+          int idUser = Model.getIdUtente(username);
+          int idPizza = Model.getIdPizza(pizza);
+          if (Model.getPizza(pizza) != null && qt > 0 && data != null && !data.equals("")) {
+            Prenotazione p = new Prenotazione(idUser, idPizza, qt, data);
+            Model.addPrenotazione(p);
+          } else {
+            errorMessage(s, "prenotazione non aggiunta");
+          }
+
         }
-      } else {
-        errorMessage(s, "non hai i permessi per aggiungere la prenotazione");
       }
-    } catch (SQLException e) {
-      notifica(s, "???B???");
-      notificautente(s, "???B???");
+    } catch (JSONException | SQLException ex) {
+      Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+
     }
-    req.getSession().setAttribute("view", "catalogo");
-    aggiornaPagina(req);
   }
 
   /**
@@ -922,7 +896,8 @@ public class Controller extends HttpServlet {
    * @throws java.sql.SQLException
    */
   public static String getPrenotazioni(HttpServletRequest req) throws SQLException {
-    String username = req.getSession().getAttribute("username") + "";
+    UserBean user = (UserBean)req.getSession().getAttribute("user");
+    String username = user.getUsername();
     ArrayList<Prenotazione> listaPrenotazioni = null;
 
     Utente u = null;

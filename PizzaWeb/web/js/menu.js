@@ -18,6 +18,7 @@ Menu.sendCatalogoRequest = function () {
     success: function (risposta) {
       $("#body_article").html(risposta) ;
       $("#page").html("catalogo");
+      $("#message").load("view/notify.jsp");
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -36,6 +37,7 @@ Menu.sendPrenotazioniRequest = function () {
     success: function (risposta) {
       $("#body_article").html(risposta) ;
       $("#page").html("prenotazioni");
+      $("#message").load("view/notify.jsp");
     },
     error: function (jqXHR, textStatus, errorThrown) {
       alert("Error");      
@@ -52,6 +54,7 @@ Menu.sendViewUtentiRequest = function () {
     success: function (risposta) {
       $("#body_article").html(risposta) ;
       $("#page").html("utenti");
+      $("#message").load("view/notify.jsp");
     },
     error: function (jqXHR, textStatus, errorThrown) {
       alert("Error");      

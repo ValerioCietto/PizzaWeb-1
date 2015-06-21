@@ -3,23 +3,30 @@ function Prenotazione() {
 
 Prenotazione.addPrenotazione = function () {
   var list = [];
+  var data = $("input[name='data']");
+  if (!Re.checkData(data.val())) {
+    alert("orario prenotazione non accettabile");
+    data.focus();
+    return false;
+  }
+
   $(".pren_pizza").each(function (index) {
-    pizza =$(this).find("select").val();
+    pizza = $(this).find("select").val();
     qt = $(this).find("input[name='quantita']").val();
-    if(qt>0)
-      list.push(new PrenElem(pizza, qt ));
+    if (qt > 0)
+      list.push(new PrenElem(pizza, qt));
   });
 
   console.log(list);
   $.ajax({
     url: "/PizzaWeb/Servlet",
     type: "POST",
-    data: {"action" : "addPrenotazione" , "lista" : JSON.stringify(list)},
+    data: {"action": "addPrenotazione", "lista": JSON.stringify(list), "data": data.val()},
     dataType: "html",
     success: function (risposta) {
-//      document.write(risposta);
+      Menu.sendPrenotazioniRequest();
     }
-    });
+  });
 };
 
 

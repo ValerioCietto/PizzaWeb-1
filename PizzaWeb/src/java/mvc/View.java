@@ -45,7 +45,7 @@ public class View {
         html += "<div class='slot_add_pizza'></div>";
         html += "</div>";
         html += "<input type='button' name='addPizza' value ='Aggiungi Pizza' onclick='Prenotazione.addPizza()'/>";
-        html += "<div class='data_consegna'> Consegna: <input type ='date' name='data' required/></div>";
+        html += "<div class='data_consegna'> Consegna: <input type ='date' name='data' required pattern='/(0000-00-00 00:00)|((20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|[12][0-4]):([0-5][0-9]))$/' placeholder=\"AAAA-MM-GG hh:mm\"  title=\"orario prenotazione: AAAA-MM-GG hh:mm\"/></div>";
         html += "<!--<script>$('input[name=\"data\"]').val(new Date().toISOString().substring(0, 16))</script>-->";
         html += "<input type='button' value ='prenota' onclick='Prenotazione.addPrenotazione()'/>";
         html += "</form>";

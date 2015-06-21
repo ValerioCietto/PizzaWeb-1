@@ -25,4 +25,8 @@ Re.checkText = function (str) {
 
 Re.checkDouble = function (double) {
   return !isNaN(double) || Number(double)===double; 
-}
+};
+
+Re.checkData = function (date) {
+  return /(0000-00-00 00:00)|((20\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):([0-5][0-9]))$/.test(date);
+}; 

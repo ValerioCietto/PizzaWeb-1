@@ -54,7 +54,7 @@ public final class DBManager {
                 "IDUTENTE       INT         NOT NULL    ," +
                 "IDPIZZA        INT         NOT NULL    ," +
                 "QUANTITA       INT         NOT NULL    ," +
-                "DATA           VARCHAR(10) NOT NULL    ," +
+                "DATA           VARCHAR(16) NOT NULL    ," +
                 "STATO          VARCHAR(10) NOT NULL    ," +
                 "PRIMARY KEY(IDPRENOTAZIONE, IDUTENTE, IDPIZZA),"+
                 "FOREIGN KEY(IDUTENTE) REFERENCES UTENTI(IDUSER) ON DELETE CASCADE,"+
