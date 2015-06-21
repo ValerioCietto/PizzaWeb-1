@@ -4,11 +4,21 @@ import components.*;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import javax.json.stream.JsonParser;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import org.json.JSONArray;
+/*
+ La libreria JSON la si può recuperare su internet, ma in questo progetto
+ è stata posizionata nella directory Libraries del progetto
+ */
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Classe dell'oggetto Pizza
@@ -34,7 +44,6 @@ public class Controller extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     UserBean user = (UserBean) request.getSession().getAttribute("user");
-    
     //in quest'occasione inizializza user e modifica automaticamente anche il session
     if (user == null) {
       user = new UserBean();
@@ -100,7 +109,7 @@ public class Controller extends HttpServlet {
           register(request);
           break;
         case "login":
-          login(request,user);
+          login(request, user);
           break;
         case "logout":
           logout(request);
@@ -108,7 +117,7 @@ public class Controller extends HttpServlet {
         //////////////////////////////////////
 
         case "addPrenotazione":
-          addPrenotazioni(request);
+          addPrenotazioni(request, out);
           aggiornaPagina(request);
           break;
         case "modPrenotazione":
@@ -204,14 +213,15 @@ public class Controller extends HttpServlet {
    */
   public static void login(HttpServletRequest req, UserBean user) {
     HttpSession s = req.getSession();
-    if(checkLogin(req))
+    if (checkLogin(req)) {
       return;
+    }
     String username = "" + req.getParameter("username");
     String password = "" + req.getParameter("password");
     try {
-      if ( Model.login(username, password)) {
+      if (Model.login(username, password)) {
         user.setUsername(username);
-         user.setPassword(password);
+        user.setPassword(password);
         goodMessage(s, "Login ok!");
       } else {
         errorMessage(s, "error: Assicurati che Username e Password siano esistenti e corretti");
@@ -263,9 +273,10 @@ public class Controller extends HttpServlet {
    */
   public static boolean checkLogin(HttpServletRequest req) {
     UserBean user = (UserBean) req.getSession().getAttribute("user");
-    
-    if(user == null)
+
+    if (user == null) {
       return false;
+    }
     String username = user.getUsername();
     String password = user.getPassword();
     try {
@@ -273,7 +284,7 @@ public class Controller extends HttpServlet {
         return true;
       }
     } catch (SQLException e) {
-      errorMessage(req.getSession(), "SQL error!"); 
+      errorMessage(req.getSession(), "SQL error!");
     }
     return false;
   }
@@ -295,7 +306,7 @@ public class Controller extends HttpServlet {
         return true;
       }
     } catch (SQLException e) {
-      errorMessage(req.getSession(), "SQL error!"); 
+      errorMessage(req.getSession(), "SQL error!");
     }
     return false;
   }
@@ -361,7 +372,7 @@ public class Controller extends HttpServlet {
    */
   public static String addPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
-        UserBean user = (UserBean)s.getAttribute("user");
+    UserBean user = (UserBean) s.getAttribute("user");
     String username = user.getUsername();
     try {
       if (Model.getUtente(username).getPermission().equals("admin")) {
@@ -401,7 +412,7 @@ public class Controller extends HttpServlet {
    */
   public static String modPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
-    UserBean user = (UserBean)s.getAttribute("user");
+    UserBean user = (UserBean) s.getAttribute("user");
     String username = user.getUsername();
     try {
       if (Model.getUtente(username).getPermission().equals("admin")) {
@@ -452,7 +463,7 @@ public class Controller extends HttpServlet {
    */
   public static String remPizza(HttpServletRequest req) {
     HttpSession s = req.getSession();
-        UserBean user = (UserBean)s.getAttribute("user");
+    UserBean user = (UserBean) s.getAttribute("user");
     String username = user.getUsername();
     try {
       if (Model.getUtente(username).getPermission().equals("admin")) {
@@ -480,9 +491,31 @@ public class Controller extends HttpServlet {
    *
    * @param req
    */
-  public static void addPrenotazioni(HttpServletRequest req) {
+  public static void addPrenotazioni(HttpServletRequest req, PrintWriter out) {
     HttpSession s = req.getSession();
-    String username = s.getAttribute("username") + "";
+    UserBean user = (UserBean) s.getAttribute("user");
+    String username = user.getUsername();
+    JSONArray jarr = null;
+    HashMap<String, Integer> carrello = new HashMap<>();
+    out.println("Eccomi qui!!");
+//    json.deleteCharAt(0);
+//    json.deleteCharAt(json.length()-1);
+    try {
+      jarr = new JSONArray(req.getParameter("lista"));
+      for(int i=0; i < jarr.length(); i++) {
+        JSONObject obj = jarr.getJSONObject(i);
+        String pizza = obj.getString("pizza");
+        Integer qt =  obj.getInt("quantita");
+        if(!carrello.containsKey(pizza))
+          carrello.put(pizza,qt);
+        else
+          carrello.put(pizza, carrello.get(pizza) +qt);
+        
+      }
+    } catch (JSONException ex) {
+      Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+      out.println(ex.getMessage());
+    }
     String nomePizza = req.getParameter("pizza");
     int quantita = -1;
     try {
@@ -864,7 +897,7 @@ public class Controller extends HttpServlet {
    */
   public static String getCatalogo(HttpServletRequest req) {
     HttpSession s = req.getSession();
-    UserBean user = (UserBean)s.getAttribute("user");
+    UserBean user = (UserBean) s.getAttribute("user");
     ArrayList<Pizza> listaPizze = null;
     Utente u = null;
 

@@ -38,20 +38,18 @@ public class View {
           html += "</div>";
         }
       } else if (u.getPermission().equals("user")) {
-       
-        
+
         html += "<form action='/PizzaWeb/Servlet' method='post' >";
         html += "<div class='pren_pizza_list'>";
-        html += "<div class='pren_pizza'>";
         html += getSelectablePizzaSlot();
-        html += "</div>";
         html += "<div class='slot_add_pizza'></div>";
         html += "</div>";
         html += "<input type='button' name='addPizza' value ='Aggiungi Pizza' onclick='Prenotazione.addPizza()'/>";
         html += "<div class='data_consegna'> Consegna: <input type ='date' name='data' required/></div>";
+        html += "<!--<script>$('input[name=\"data\"]').val(new Date().toISOString().substring(0, 16))</script>-->";
         html += "<input type='button' value ='prenota' onclick='Prenotazione.addPrenotazione()'/>";
         html += "</form>";
-        
+
       } else if (u.getPermission().equals("admin")) {
 
         html += "<div class= 'new'>";
@@ -76,25 +74,26 @@ public class View {
     return html;
   }
 
-  
   public static String getSelectablePizzaSlot() {
     String s = "";
-      ArrayList<Pizza> listapizze;
-        try {
-          listapizze = Model.getListaPizze();
-        } catch (SQLException ex) {
-          listapizze = new ArrayList<>();
-        }
-    s +=" <select>\n";
-     for(Pizza p : listapizze) {
-       s+="\t <option value=\""+p.getNome()+"\">"+p.getNome()+"</option>\n";
-     }
-     s+= "</select> ";
-     s += "<span>Quantità:  </span>";
-     s+= "<input type ='number' name='quantita' min='0' max='100'value = '0' required>";
+    ArrayList<Pizza> listapizze;
+    try {
+      listapizze = Model.getListaPizze();
+    } catch (SQLException ex) {
+      listapizze = new ArrayList<>();
+    }
+    s += "<div class='pren_pizza'>";
+    s += " <select>\n";
+    for (Pizza p : listapizze) {
+      s += "\t <option value=\"" + p.getNome() + "\">" + p.getNome() + "</option>\n";
+    }
+    s += "</select> ";
+    s += "<span>Quantità:  </span>";
+    s += "<input type ='number' name='quantita' min='0' max='100'value = '0' required>";
+    s += "</div>";
     return s;
-  }   
-  
+  }
+
   /**
    * Restituisce un nuovo div quando viene aggiunta una pizza ATTENZIONE: Metodo
    * riservato all' inserimento della pizza da parte dell' admin con tanto di
@@ -315,7 +314,6 @@ public class View {
     request.getSession().setAttribute("error", "");
     return html;
   }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////    
 }
