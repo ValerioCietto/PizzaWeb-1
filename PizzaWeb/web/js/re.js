@@ -24,6 +24,10 @@ Re.checkText = function (str) {
 };
 
 Re.checkDouble = function (double) {
+  return Re.checkNumber(double);  
+};
+
+Re.checkNumber = function (double) {
   return !isNaN(double) || Number(double)===double; 
 };
 

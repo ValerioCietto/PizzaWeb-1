@@ -69,10 +69,10 @@ public final class DBManager {
      */
     
     public static void creaDati(Statement st) throws SQLException{
-        addUser("admin", "admin", "admin", st);
-        addUser("alessandro", "password", "user", st);
-        addUser("m", "m", "user", st);
-        addUser("anna", "password", "user", st);
+        addUser("admin", "Pizza1", "admin", st);
+        addUser("alessandro", "Pizza1", "user", st);
+        addUser("m", "Pizza1", "user", st);
+        addUser("anna", "Pizza1", "user", st);
         addPizza("Margherita", "pomodoro, mozzarella, basilico", 5.00, st);
         addPizza("4 Formaggi", "pomodoro, mozzarella, fontina, gorgonzola, emmenthal", 8.00, st);
         addPizza("Wurstel", "pomodoro, mozzarella, wurstel", 6.00, st);

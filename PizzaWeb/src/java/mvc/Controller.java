@@ -4,9 +4,6 @@ import components.*;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import javax.json.stream.JsonParser;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.*;
@@ -61,6 +58,7 @@ public class Controller extends HttpServlet {
         case "prenotazioni": {
           try {
             user.setView("prenotazioni");
+            out.println("<script src='js/prenotazione.js'></script>");
             out.println(getPrenotazioni(request));
           } catch (SQLException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,6 +89,9 @@ public class Controller extends HttpServlet {
         case "remPizza":
           out.print(remPizza(request));
           break;
+        case "modPrenotazione":
+          out.println(modPrenotazioni(request));
+          break;
       }
 
       out.close();
@@ -120,10 +121,7 @@ public class Controller extends HttpServlet {
           addPrenotazioni(request, out);
           
           break;
-        case "modPrenotazione":
-          modPrenotazioni(request);
-          aggiornaPagina(request);
-          break;
+
         case "modStatoPrenotazione":
           modStatoPrenotazione(request);
           aggiornaPagina(request);
@@ -320,9 +318,9 @@ public class Controller extends HttpServlet {
     HttpSession s = req.getSession();
     if (checkLogin(req)) {
       s.invalidate();
-      notifica(req.getSession(), "logout effettuato");
+      goodMessage(req.getSession(), "logout effettuato");
     } else {
-      notifica(req.getSession(), "logout impossibile");
+      errorMessage(req.getSession(), "logout impossibile");
     }
   }
 
@@ -528,10 +526,11 @@ public class Controller extends HttpServlet {
    *
    * @param req
    */
-  public static void modPrenotazioni(HttpServletRequest req) {
+  public static String modPrenotazioni(HttpServletRequest req) {
 
     HttpSession s = req.getSession();
-    String username = req.getSession().getAttribute("username") + "";
+    UserBean user = (UserBean)s.getAttribute("user");
+    String username = user.getUsername();
     try {
       Prenotazione p;
       Utente u = Model.getUtente(username);
@@ -566,12 +565,13 @@ public class Controller extends HttpServlet {
 
               Model.modPrenotazione(p);
 
-              notificautente(s, "prenotazione aggiornata");
+              goodMessage(s, "prenotazione aggiornata");
+              return View.getPrenotazioneUserView(p);
             } else {
-              notificautente(s, "prenotazione non tua");
+              errorMessage(s, "prenotazione non tua");
             }
           } else {
-            notificautente(s, "prenotazione non trovata");
+            errorMessage(s, "prenotazione non trovata");
           }
           break;
         case "admin":
@@ -584,15 +584,13 @@ public class Controller extends HttpServlet {
           if (p != null) {
 
             //gestione cliente
-            if (req.getParameter("utente") != null) {
-              String nome = req.getParameter("utente") + "";
-              if (nome.equals("")) {
-                notifica(s, "nome vuoto");
-              } else {
+            if (req.getParameter("nome_utente") != null) {
+              String nome = req.getParameter("nome_utente") + "";
+              if (!nome.equals("")) {
                 int i = Model.getIdUtente(nome);
                 if (i > 0) {
                   p.setIdUtente(i);
-                  notifica(s, "modificato idNome");
+                  goodMessage(s, "modificato idNome");
                 }
               }
             }
@@ -602,7 +600,7 @@ public class Controller extends HttpServlet {
               int pizza = Model.getIdPizza(req.getParameter("pizza") + "");
               if (pizza > 0) {
                 p.setIdPizza(pizza);
-                notifica(s, "modificato id");
+                goodMessage(s, "modificato id");
               }
             }
 
@@ -612,11 +610,11 @@ public class Controller extends HttpServlet {
               try {
                 quantita = Integer.parseInt(req.getParameter("quantita"));
               } catch (NumberFormatException e) {
-                notifica(s, req.getParameter("quantita") + " non int");
+                errorMessage(s, req.getParameter("quantita") + " non int");
               }
               if (quantita > 0) {
                 p.setQuantita(quantita);
-                notifica(s, "modificata quantità");
+                goodMessage(s, "modificata quantità");
 
               }
             }
@@ -626,7 +624,7 @@ public class Controller extends HttpServlet {
               String data = req.getParameter("data");
               if (data != null && !data.equals("")) {
                 p.setData(data);
-                notifica(s, "modificata data");
+                goodMessage(s, "modificata data");
               }
             }
 
@@ -641,9 +639,10 @@ public class Controller extends HttpServlet {
 
             Model.modStatoPrenotazione(p);
             Model.modPrenotazione(p);
-            notifica(s, "prenotazione aggiornata");
+            goodMessage(s, "prenotazione aggiornata");
+            return View.getPrenotazioneAdminView(p);
           } else {
-            notifica(s, "prenotazione non trovata");
+            errorMessage(s, "prenotazione non trovata");
           }
           break;
         default:
@@ -651,10 +650,9 @@ public class Controller extends HttpServlet {
           break;
       }
     } catch (SQLException e) {
-      notifica(s, "???B???");
+      errorMessage(s, "???B???");
     }
-    req.getSession().setAttribute("view", "prenotazioni");
-    aggiornaPagina(req);
+    return "";
   }
 
   public static void modStatoPrenotazione(HttpServletRequest req) {

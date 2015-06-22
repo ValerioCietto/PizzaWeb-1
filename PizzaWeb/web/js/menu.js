@@ -22,7 +22,7 @@ Menu.sendCatalogoRequest = function () {
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      alert("Error");      
+      location.reload();     
     }
   });
 
@@ -40,7 +40,7 @@ Menu.sendPrenotazioniRequest = function () {
       $("#message").load("view/notify.jsp");
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      alert("Error");      
+      location.reload();       
     }
   });
 };
@@ -57,7 +57,7 @@ Menu.sendViewUtentiRequest = function () {
       $("#message").load("view/notify.jsp");
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      alert("Error");      
+      location.reload();    
     }
   });
 };
