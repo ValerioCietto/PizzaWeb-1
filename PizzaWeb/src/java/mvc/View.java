@@ -48,6 +48,11 @@ public class View {
         html += "<input type='button' value ='prenota' onclick='Prenotazione.addPrenotazione()'/>";
         html += "</form>";
 
+        for (Pizza al1 : al) {
+          html += "<div class='pizza'>";
+          html += getPizzaElement(al1);
+          html += "</div>";
+        }
       } else if (u.getPermission().equals("admin")) {
 
         html += "<div class= 'new'>";
@@ -275,8 +280,8 @@ public class View {
     html += "<span>  password:  </span>";
     html += "<input type ='text' name='password'>";
     html += "<select name = 'permission'>";
-    html += "<option value = 'admin'> admin </option>";
-    html += "<option value = 'user' selected> user </option>";
+    html += "<option value = 'admin' "+(( "admin".equals(us.getPermission())) ? "selected" : "" )+"> admin </option>";
+    html += "<option value = 'user' "+(( "user".equals(us.getPermission())) ? "selected" : "" )+"> user </option>";
     html += "</select>";
     html += "<input type='hidden' name='id' value=" + us.getId() + ">";
     html += "<input type='submit' value='Modifica'  onclick='return UserList.modUtente(this)'>";

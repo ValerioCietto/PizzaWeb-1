@@ -1,7 +1,1 @@
- - Rifare il CSS;
- - Cambiare gestione Session.parameter a userBean;
- - Aggiungere controlli lato Client (JS Possibile usare AJAX-HTML5) 
  - Aggiungere l'eliminazione della prenotazione lato utente
- - Rifare completamente la prenotazione
- - Login convertito in ajax per non perdere i dati già inseriti in caso di errore
- - Convertire Session in UserBean

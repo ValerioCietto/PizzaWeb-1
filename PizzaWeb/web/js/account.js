@@ -52,8 +52,8 @@ Account.checkJoin = function () {
     return false;
   }
   
-  form.submit();
-   
+//  form.submit();
+   return true;
    
 };
 

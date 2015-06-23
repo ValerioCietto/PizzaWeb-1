@@ -21,7 +21,7 @@
             <input type ="password" name="password" required>
           </div>
         </div>
-          <input type= "button"   name="login_button" value= "login" onclick="Account.checkLogin();">
+          <input type= "submit"   name="login_button" value= "login" onclick=" return Account.checkLogin();">
           <input type="button"  name = "join_button" value="Registrati" onclick="Account.updateForm('Join')">
           <input type= "hidden"   name="action" value= "login">
       </form>

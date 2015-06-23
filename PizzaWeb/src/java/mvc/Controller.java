@@ -4,6 +4,9 @@ import components.*;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.*;
@@ -131,11 +134,7 @@ public class Controller extends HttpServlet {
 
         case "addPrenotazione":
           addPrenotazioni(request, out);
-          
           break;
-
-
-
       }
 
     }
@@ -491,6 +490,7 @@ public class Controller extends HttpServlet {
     UserBean user = (UserBean) s.getAttribute("user");
     String username = user.getUsername();
     JSONArray jarr = null;
+    HashMap<String, Integer> carrello = new HashMap<>();
     String data = req.getParameter("data");
     try {
       jarr = new JSONArray(req.getParameter("lista"));
@@ -498,7 +498,14 @@ public class Controller extends HttpServlet {
         JSONObject obj = jarr.getJSONObject(i);
         String pizza = obj.getString("pizza");
         Integer qt = obj.getInt("quantita");
-
+        if(carrello.containsKey(pizza)) 
+          qt += carrello.get(pizza);
+        carrello.put(pizza, qt);
+      }
+      Iterator<String> it = carrello.keySet().iterator();
+      while (it.hasNext()) {
+        String pizza = it.next();
+        Integer qt = carrello.get(pizza);
         if (Model.getUtente(username).getPermission().equals("user")) {
           int idUser = Model.getIdUtente(username);
           int idPizza = Model.getIdPizza(pizza);
