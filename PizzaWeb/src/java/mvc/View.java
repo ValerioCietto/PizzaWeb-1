@@ -9,8 +9,6 @@ package mvc;
 import components.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.*;
 
 public class View {
@@ -197,11 +195,7 @@ public class View {
             html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
             html += "<input type='hidden' name='action' value='modPrenotazione'>";
             html += "<input type='button' value='Modifica' onclick='return Prenotazione.modPrenotazioneUser(this)'>";
-            html += "</form>";
-            html += "<form action='/PizzaWeb/Servlet' method='post' >";
-            html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
-            html += "<input type='hidden' name='action' value='modStatoPrenotazione'>";
-            html += "<input type='button' value='pizza consegnata'>";
+            html += "<input type='button' value='pizza consegnata' onclick = 'Prenotazione.modStatoPrenotazione(this)'>";      
             html += "</form>";
         }
         html += "</div>";
@@ -223,31 +217,24 @@ public class View {
         html += "<span class='data'>" + al1.getData() + "</span>";
         html += "<span></br>Stato:  </span>";
         html += "<span class='stato'>" + al1.getStato() + "</span>";
-        html += "<span>";
         html += "<form action='/PizzaWeb/Servlet' method='post' >";
         html += "<span> Utente: </span>";
         html += "<input type ='text' name='nome_utente'>";
-        html += "<span'> Pizza: </span>";
+        html += "<span> Pizza: </span>";
         html += "<input type ='text' name='pizza'>";
         html += "<span> Quantità:  </span>";
         html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
         html += "<span>  Data:  </span>";
         html += "<input type ='date' name='data'>";
         html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
-        html += "<input type='hidden' name='action' value='modPrenotazione'>";
         html += "<input type='button' value='Modifica ordine' onclick='return Prenotazione.modPrenotazioneUser(this)'>";
         html += "<select name = 'stato'>";
-        html += "<option value = 'Ordinato'> Ordinato </option>";
-        html += "<option value = 'Consegnato' selected> Consegnato </option>";
+        html += "<option value = 'Ordinato' "+ ((!"Ordinato".equals(al1.getStato())) ? "selected" : "") +" > Ordinato </option>";
+        html += "<option value = 'Consegnato' "+((!"Consegnato".equals(al1.getStato())) ? "selected" : "")+" > Consegnato </option>";
         html += "</select>";
-        html += "<input type='submit' value='Modifica stato'>";
+        html += "<input type='button' value='Modifica stato' onclick='Prenotazione.modStatoPrenotazione(this)'>";
+        html += "<input type='button' value='Rimuovi' onclick='Prenotazione.remPrenotazione(this)'>";
         html += "</form>";
-        html += "<form action='/PizzaWeb/Servlet' method='post' >";
-        html += "<input type='hidden' name='prenotazione' value=" + al1.getIdPrenotazione() + ">";
-        html += "<input type='hidden' name='action' value='remPrenotazione'>";
-        html += "<input type='button' value='Rimuovi'>";
-        html += "</form>";
-        html += "</span>";
         html += "</div>";
         return html;
     }
@@ -309,19 +296,7 @@ public class View {
         return html;
     }
 
-    public static String visualizzaNotify(HttpServletRequest request) {
-        String html = "";
-        String good = (request.getSession().getAttribute("good") != null) ? request.getSession().getAttribute("good") + "" : "";
-        String warning = (request.getSession().getAttribute("warning") != null) ? request.getSession().getAttribute("warning") + "" : "";
-        String error = (request.getSession().getAttribute("error") != null) ? request.getSession().getAttribute("error") + "" : "";
-        html += "<div id='goodMessage'>" + good + "</div>";
-        html += "<div id='warningMessage'>" + warning + "</div>";
-        html += "<div id='errorMessage'>" + error + "</div>";
-        request.getSession().setAttribute("good", "");
-        request.getSession().setAttribute("warning", "");
-        request.getSession().setAttribute("error", "");
-        return html;
-    }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////    
 }

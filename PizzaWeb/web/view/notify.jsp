@@ -1,4 +1,6 @@
 <%@page import="mvc.*"%>
 <%@page session = "true" contentType="text/html" pageEncoding="UTF-8"%>
 
-<%= View.visualizzaNotify(request) %>
+  <div id="message">
+    <jsp:getProperty name="user" property="message"/>
+  </div>

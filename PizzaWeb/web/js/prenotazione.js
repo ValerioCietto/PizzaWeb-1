@@ -17,7 +17,6 @@ Prenotazione.addPrenotazione = function () {
             list.push(new PrenElem(pizza, qt));
     });
 
-    console.log(list);
     $.ajax({
         url: "/PizzaWeb/Servlet",
         type: "POST",
@@ -51,7 +50,9 @@ Prenotazione.modPrenotazioneUser = function (button) {
     var quantita = form.find("input[name='quantita']");
     var data = form.find("input[name='data']");
     var utente = parent.find("input[name='nome_utente']");
+    var pizza = parent.find("input[name='pizza']");
     var ut = "";
+    var pz = "";
 
     if (!Re.checkNumber(quantita.val()))
     {
@@ -59,13 +60,15 @@ Prenotazione.modPrenotazioneUser = function (button) {
         quantita.focus();
         return false;
     }
+
     if (data.val() != "" && !Re.checkData(data.val()))
     {
         alert("data prenotazione non valida");
         data.focus();
         return false;
     }
-    if (utente.length > 0 && !Re.checkUsername(utente.val())) {
+
+    if (utente.length > 0 &&  utente.val() != ""  && !Re.checkUsername(utente.val())) {
         alert("user non accettabile");
         utente.focus();
         return false;
@@ -73,18 +76,67 @@ Prenotazione.modPrenotazioneUser = function (button) {
     }
     else
         ut = utente.val();
+    
+    if (pizza.length > 0 &&  pizza.val() != ""  && !Re.checkText(pizza.val())) {
+        alert("nome pizza non accettabile");
+        utente.focus();
+        return false;
 
+    }
+    else
+        pz = pizza.val();
+      
     $.ajax({
         url: "/PizzaWeb/Servlet",
         type: "POST",
-        data: {"ajaxActiond": "modPrenotazione", "id": form.find("input[name='id']"), "nome_utente": ut, "quantita": quantita.val(), "data": data.val()},
+        data: {"ajaxAction": "modPrenotazione", "id": form.find("input[name='id']").val(), "nome_utente": ut, "pizza" : pz , "quantita": quantita.val(), "data": data.val()},
         dataType: "html",
         success: function (risposta) {
             if (risposta != "") parent.html(risposta);
-            return false;
+            $("#message").load("view/notify.jsp");
         }
 
     });
+return true;
+};
 
-    return true;
+
+Prenotazione.modStatoPrenotazione = function (button) {
+  var parent = $(button.parentNode.parentNode);
+  var sel = parent.find("select[name='stato']");
+  var opt ;
+  if(sel.length > 0)
+    opt = sel.val();
+  else
+    opt = "Consegnato";
+      $.ajax({
+        url: "/PizzaWeb/Servlet",
+        type: "POST",
+        data: {"ajaxAction": "modStatoPrenotazione", "id": parent.find("input[name='id']").val() , "stato" : opt },
+        dataType: "html",
+        success: function (risposta) {
+            if (risposta != "") parent.html(risposta);
+            $("#message").load("view/notify.jsp");
+        }
+
+    });
+  
+};
+
+Prenotazione.remPrenotazione = function (button) {
+  var parent = $(button.parentNode.parentNode);
+  var opt ;
+  
+      $.ajax({
+        url: "/PizzaWeb/Servlet",
+        type: "POST",
+        data: {"ajaxAction": "remPrenotazione", "id": parent.find("input[name='id']").val() },
+        dataType: "html",
+        success: function (risposta) {
+            if (risposta == "") parent.html(risposta);
+            $("#message").load("view/notify.jsp");
+        }
+
+    });
+  
 };

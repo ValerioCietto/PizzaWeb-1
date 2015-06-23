@@ -16,8 +16,10 @@
 
         if (view.equals("catalogo")) {%>
           <script src='js/catalogo.js'></script>
+          <script src='js/prenotazione.js'></script>
           <script> $("#body_article").html("<%=Controller.getCatalogo(request)%>")</script>
         <%} else if (view.equals("prenotazioni")) {%>
+          <script src='js/prenotazione.js'></script>
           <script> $("#body_article").html("<%= Controller.getPrenotazioni(request)%>")</script>  
         <%} else if (view.equals("utenti")) {%>
           <script> $("#body_article").html("<%= Controller.getUtenti(request)%>")</script>  

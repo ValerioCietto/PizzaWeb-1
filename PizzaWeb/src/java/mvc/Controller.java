@@ -92,8 +92,13 @@ public class Controller extends HttpServlet {
         case "modPrenotazione":
           out.println(modPrenotazioni(request));
           break;
+        case "modStatoPrenotazione":
+          out.println(modStatoPrenotazione(request));
+          break;
+        case "remPrenotazione":
+          out.print(remPrenotazioni(request));
+          break;
       }
-
       out.close();
       return;
     }
@@ -120,15 +125,6 @@ public class Controller extends HttpServlet {
         case "addPrenotazione":
           addPrenotazioni(request, out);
           
-          break;
-
-        case "modStatoPrenotazione":
-          modStatoPrenotazione(request);
-          aggiornaPagina(request);
-          break;
-        case "remPrenotazione":
-          remPrenotazioni(request);
-          aggiornaPagina(request);
           break;
         case "modUtente":
           modUtente(request);
@@ -540,7 +536,7 @@ public class Controller extends HttpServlet {
           try {
             idpren = Integer.parseInt(req.getParameter("id"));
           } catch (NumberFormatException e) {
-            notifica(s, req.getParameter("id") + " non int");
+            errorMessage(s, req.getParameter("id") + " non int");
           }
           p = Model.getPrenotazione(idpren);
 
@@ -552,7 +548,7 @@ public class Controller extends HttpServlet {
               try {
                 quantita = Integer.parseInt(req.getParameter("quantita"));
               } catch (NumberFormatException e) {
-                notifica(s, req.getParameter("quantita") + " non int");
+                errorMessage(s, req.getParameter("quantita") + " non int");
               }
               if (quantita > 0) {
                 p.setQuantita(quantita);
@@ -578,7 +574,7 @@ public class Controller extends HttpServlet {
           try {
             idpren = Integer.parseInt(req.getParameter("id"));
           } catch (NumberFormatException e) {
-            notifica(s, req.getParameter("id") + " non int");
+            errorMessage(s, req.getParameter("id") + " non int");
           }
           p = Model.getPrenotazione(idpren);
           if (p != null) {
@@ -600,7 +596,10 @@ public class Controller extends HttpServlet {
               int pizza = Model.getIdPizza(req.getParameter("pizza") + "");
               if (pizza > 0) {
                 p.setIdPizza(pizza);
-                goodMessage(s, "modificato id");
+                goodMessage(s, "modificato pizza");
+              }
+              else {
+                errorMessage(s, "Pizza non trovata nel menu");
               }
             }
 
@@ -633,7 +632,7 @@ public class Controller extends HttpServlet {
               String stato = req.getParameter("stato");
               if (stato != null && !stato.equals("")) {
                 p.setStato(stato);
-                notifica(s, "modificato stato");
+                goodMessage(s, "modificato stato");
               }
             }
 
@@ -655,10 +654,11 @@ public class Controller extends HttpServlet {
     return "";
   }
 
-  public static void modStatoPrenotazione(HttpServletRequest req) {
+  public static String modStatoPrenotazione(HttpServletRequest req) {
 
     HttpSession s = req.getSession();
-    String username = req.getSession().getAttribute("username") + "";
+    UserBean bean = (UserBean) s.getAttribute("user");
+    String username = bean.getUsername();
     try {
       Prenotazione p;
       Utente u = Model.getUtente(username);
@@ -668,22 +668,23 @@ public class Controller extends HttpServlet {
           try {
             idpren = Integer.parseInt(req.getParameter("id"));
           } catch (NumberFormatException e) {
-            notifica(s, req.getParameter("id") + " non int");
+            errorMessage(s, req.getParameter("id") + " non int");
           }
           p = Model.getPrenotazione(idpren);
           if (p.getIdUtente() == u.getId()) {
             p.setStato("Consegnato");
             Model.modStatoPrenotazione(p);
-            notificautente(s, "prenotazione aggiornata");
+            goodMessage(s, "prenotazione aggiornata");
+            return View.getPrenotazioneUserView(p);
           } else {
-            notificautente(s, "prenotazione non tua");
+            errorMessage(s, "prenotazione non tua");
           }
           break;
         case "admin":
           try {
             idpren = Integer.parseInt(req.getParameter("id"));
           } catch (NumberFormatException e) {
-            notifica(s, req.getParameter("id") + " non int");
+            errorMessage(s, req.getParameter("id") + " non int");
           }
           p = Model.getPrenotazione(idpren);
           if (p != null) {
@@ -696,20 +697,20 @@ public class Controller extends HttpServlet {
               }
             }
             Model.modStatoPrenotazione(p);
-            notifica(s, "prenotazione aggiornata");
+            goodMessage(s, "prenotazione aggiornata");
+            return View.getPrenotazioneAdminView(p);
           } else {
-            notifica(s, "prenotazione non trovata");
+            errorMessage(s, "prenotazione non trovata");
           }
           break;
         default:
-          notifica(s, "non hai i permessi");
+          warningMessage(s, "non hai i permessi");
           break;
       }
     } catch (SQLException e) {
-      notifica(s, "???B???");
+      errorMessage(s, "???B???");
     }
-    req.getSession().setAttribute("view", "prenotazioni");
-    aggiornaPagina(req);
+    return "";
   }
 
   /**
@@ -717,56 +718,58 @@ public class Controller extends HttpServlet {
    *
    * @param req
    */
-  public static void remPrenotazioni(HttpServletRequest req) {
+  public static String remPrenotazioni(HttpServletRequest req) {
 
     HttpSession s = req.getSession();
-    String username = req.getSession().getAttribute("username") + "";
+    UserBean user = (UserBean) s.getAttribute("user");
+    String username = user.getUsername();
     Prenotazione p;
     int idpren = -1;
     try {
       switch (Model.getUtente(username).getPermission()) {
         case "user":
           try {
-            idpren = Integer.parseInt(req.getParameter("prenotazione"));
+            idpren = Integer.parseInt(req.getParameter("id"));
           } catch (NumberFormatException e) {
-            notifica(s, req.getParameter("prenotazione") + " non int");
+            errorMessage(s, req.getParameter("id") + " non int");
           }
           p = Model.getPrenotazione(idpren);
           if (p != null) {
             if (p.getIdUtente() == Model.getIdUtente(username)) {
               Model.remPrenotazione(p);
-              notificautente(s, "prenotazione rimossa");
+              goodMessage(s, "prenotazione rimossa");
+              return "";
             } else {
-              notificautente(s, "prenotazione non tua");
+              errorMessage(s, "prenotazione non tua");
             }
 
           } else {
-            notificautente(s, "prenotazione non trovata");
+            errorMessage(s, "prenotazione non trovata");
           }
           break;
         case "admin":
           try {
-            idpren = Integer.parseInt(req.getParameter("prenotazione"));
+            idpren = Integer.parseInt(req.getParameter("id"));
           } catch (NumberFormatException e) {
-            notifica(s, req.getParameter("prenotazione") + " non int");
+            errorMessage(s, req.getParameter("id") + " non int");
           }
           p = Model.getPrenotazione(idpren);
           if (p != null) {
             Model.remPrenotazione(p);
-            notifica(s, "prenotazione rimossa");
+            goodMessage(s, "prenotazione rimossa");
+            return "";
           } else {
-            notifica(s, "prenotazione non trovata");
+            errorMessage(s, "prenotazione non trovata");
           }
           break;
         default:
-          notifica(s, "non hai i permessi");
+          warningMessage(s, "non hai i permessi per farlo");
           break;
       }
     } catch (SQLException e) {
-      notifica(s, "???B???");
+      errorMessage(s, "???B???");
     }
-    req.getSession().setAttribute("view", "prenotazioni");
-    aggiornaPagina(req);
+    return "null";
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
