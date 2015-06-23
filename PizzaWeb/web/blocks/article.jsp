@@ -22,6 +22,7 @@
           <script src='js/prenotazione.js'></script>
           <script> $("#body_article").html("<%= Controller.getPrenotazioni(request)%>")</script>  
         <%} else if (view.equals("utenti")) {%>
+        <script src='js/userList.js'></script>
           <script> $("#body_article").html("<%= Controller.getUtenti(request)%>")</script>  
         <%}
       }%>

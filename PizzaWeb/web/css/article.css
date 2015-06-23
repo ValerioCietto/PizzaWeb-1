@@ -117,3 +117,29 @@ input[name="addPizza"] {
 /*
 ################### FINE CATALOGO PRENOTAZIONI #######################
 */
+
+
+/*
+######################### LISTA UTENTI ############################
+*/
+
+div.utente {
+  position: relative;
+}
+
+div.utente .info {
+
+  font-size: large;
+  margin-top: 60px;
+  margin-bottom: 30px;
+}
+
+div.utente .info .username, div.utente .info .password, div.utente .info .permission {
+    border: 1px solid #000;
+    padding: 20px;
+    margin: 0px;
+}
+
+/*
+######################### FINE LISTA UTENTI #######################
+*/

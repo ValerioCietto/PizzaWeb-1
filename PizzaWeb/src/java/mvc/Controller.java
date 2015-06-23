@@ -67,6 +67,7 @@ public class Controller extends HttpServlet {
         break;
         case "utenti":
           user.setView("utenti");
+          out.println("<script src='js/userList.js'></script>");
           out.println(getUtenti(request));
           break;
         default:
@@ -98,6 +99,12 @@ public class Controller extends HttpServlet {
         case "remPrenotazione":
           out.print(remPrenotazioni(request));
           break;
+        case "modUtente":
+          out.print(modUtente(request));
+          break;
+        case "remUtente":
+          out.print(remUtente(request));
+          break;
       }
       out.close();
       return;
@@ -126,14 +133,8 @@ public class Controller extends HttpServlet {
           addPrenotazioni(request, out);
           
           break;
-        case "modUtente":
-          modUtente(request);
-          aggiornaPagina(request);
-          break;
-        case "remUtente":
-          remUtente(request);
-          aggiornaPagina(request);
-          break;
+
+
 
       }
 
@@ -779,49 +780,51 @@ public class Controller extends HttpServlet {
    *
    * @param req
    */
-  public static void modUtente(HttpServletRequest req) {
+  public static String modUtente(HttpServletRequest req) {
     HttpSession s = req.getSession();
-    String user = req.getSession().getAttribute("username") + "";
+    UserBean user = (UserBean) s.getAttribute("user");
+    String username = user.getUsername();
     try {
-      Utente u = Model.getUtente(user);
+      Utente u = Model.getUtente(username);
       switch (u.getPermission()) {
         case "admin":
-          req.getParameter("id");
-          String username = req.getParameter("id") + "";
-          u = Model.getUtente(username);
+         int idUtente = -1;
+          try {
+            idUtente = Integer.parseInt(req.getParameter("id"));
+          } catch (NumberFormatException e) {
+            errorMessage(s, req.getParameter("id") + " non int");
+          }
+          Utente modu = Model.getUtente(idUtente);
           ///modifica utente
-
+          String moduser_name = modu.getUsername();
           String name = req.getParameter("name") + "";
           if (name != null && !name.equals("")) {
-            u.setUsername(name);
+            modu.setUsername(name);
           }
 
           ///modifica password
           String password = req.getParameter("password") + "";
           if (password != null && !password.equals("")) {
-            u.setPwd(password);
+            modu.setPwd(password);
           }
 
           ///modifica permission
-          String permission = req.getParameter("permission");
+          String permission = req.getParameter("rule");
           if (permission != null && !permission.equals("")) {
-            u.setPermission(permission);
+            modu.setPermission(permission);
           }
 
-          notifica(s, u.getUsername() + u.getPassword() + u.getPermission() + "");
-
-          Model.modUtente(username, u);
-          notifica(s, "utente aggiornato");
-          break;
+          Model.modUtente(moduser_name, modu);
+          goodMessage(s, "utente aggiornato");
+          return View.getUtenteElement(modu);
         default:
           errorMessage(s, "non hai i permessi per modificare gli utenti");
           break;
       }
     } catch (SQLException e) {
-      notifica(s, e.getMessage());
+      errorMessage(s, e.getMessage());
     }
-    req.getSession().setAttribute("view", "utenti");
-    aggiornaPagina(req);
+    return "";
   }
 
   /**
@@ -829,37 +832,35 @@ public class Controller extends HttpServlet {
    *
    * @param req
    */
-  public static void remUtente(HttpServletRequest req) {
+  public static String remUtente(HttpServletRequest req) {
 
     HttpSession s = req.getSession();
-    String username = req.getSession().getAttribute("username") + "";
+    UserBean user = (UserBean) s.getAttribute("user");
+    String username = user.getUsername();
     int idUtente = -1;
     try {
       idUtente = Integer.parseInt(req.getParameter("id"));
     } catch (NumberFormatException e) {
-      notifica(s, req.getParameter("id") + " non int");
+      errorMessage(s, req.getParameter("id") + " non int");
     }
     try {
-      switch (Model.getUtente(username).getPermission()) {
-        case "admin":
-
+      if ("admin".equals(Model.getUtente(username).getPermission())) {
           Utente u = Model.getUtente(idUtente);
           if (u != null) {
             Model.remUtente(u);
-            notifica(s, "utente rimosso");
+            goodMessage(s, "utente rimosso");
+            return "";
           } else {
-            notifica(s, "utente non trovato");
+            errorMessage(s, "utente non trovato");
           }
-          break;
-        default:
+      }
+      else {
           errorMessage(s, "non hai i permessi per rimuovere un utente");
-          break;
       }
     } catch (SQLException e) {
-      notifica(s, "???B???");
+      errorMessage(s, "???B???");
     }
-    req.getSession().setAttribute("view", "utenti");
-    aggiornaPagina(req);
+    return "null";
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -933,7 +934,8 @@ public class Controller extends HttpServlet {
    * @return
    */
   public static String getUtenti(HttpServletRequest req) {
-    String username = req.getSession().getAttribute("username") + "";
+    UserBean user = (UserBean)req.getSession().getAttribute("user");
+    String username = user.getUsername();
     ArrayList<Utente> listaUtenti = null;
 
     try {
@@ -942,13 +944,12 @@ public class Controller extends HttpServlet {
 
       if (u != null && u.getPermission().equals("admin")) {
         listaUtenti = Model.getListaUtenti(u.getId());
-        notifica(req.getSession(), "Caricati tutti gli utenti");
+        goodMessage(req.getSession(), "Caricati tutti gli utenti");
       } else {
-        notifica(req.getSession(), "non hai i permessi");
+        errorMessage(req.getSession(), "non hai i permessi per vedere la lista utenti");
       }
     } catch (SQLException e) {
-      notifica(req.getSession(), "Impossibile ottenere il catalogo");
-      notificautente(req.getSession(), "Impossibile ottenere il catalogo");
+      errorMessage(req.getSession(), "Impossibile ottenere il catalogo");
     }
 
     return View.visualizzaUtenti(listaUtenti, req);
