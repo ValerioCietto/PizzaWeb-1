@@ -43,8 +43,8 @@ public class View {
         html += "<div class='slot_add_pizza'></div>";
         html += "</div>";
         html += "<input type='button' name='addPizza' value ='Aggiungi Pizza' onclick='Prenotazione.addPizza()'/>";
-        html += "<div class='data_consegna'> Consegna: <input type ='date' name='data' required pattern='/(0000-00-00 00:00)|((20\\d\\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01]) (0[0-9]|[12][0-4]):([0-5][0-9]))$/' placeholder=\"AAAA-MM-GG hh:mm\"  title=\"orario prenotazione: AAAA-MM-GG hh:mm\"/></div>";
-        html += "<!--<script>$('input[name=\"data\"]').val(new Date().toISOString().substring(0, 16))</script>-->";
+        html += "<div class='data_consegna'> Consegna: <input type ='datetime-local' name='data' required placeholder=\"AAAA-MM-GG hh:mm\"  title=\"orario prenotazione: AAAA-MM-GGThh:mm\"/></div>";
+        html += "<!--<script>$('input[name=\"datetime-local\"]').val(new Date().toISOString().substring(0, 16))</script>-->";
         html += "<input type='button' value ='prenota' onclick='Prenotazione.addPrenotazione()'/>";
         html += "</form>";
 
@@ -196,7 +196,7 @@ public class View {
       html += "<span>Quantità:  </span>";
       html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
       html += "<span>  Data:  </span>";
-      html += "<input type ='date' name='data'>";
+      html += "<input type ='datetime-local' name='data'>";
       html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
       html += "<input type='hidden' name='action' value='modPrenotazione'>";
       html += "<input type='button' value='Modifica' onclick='return Prenotazione.modPrenotazioneUser(this)'>";
@@ -230,7 +230,7 @@ public class View {
     html += "<span> Quantità:  </span>";
     html += "<input type ='number' name='quantita' min='0' max='100' value = '0'>";
     html += "<span>  Data:  </span>";
-    html += "<input type ='date' name='data'>";
+    html += "<input type ='datetime-local' name='data'>";
     html += "<input type='hidden' name='id' value=" + al1.getIdPrenotazione() + ">";
     html += "<input type='button' value='Modifica ordine' onclick='return Prenotazione.modPrenotazioneUser(this)'>";
     html += "<select name = 'stato'>";

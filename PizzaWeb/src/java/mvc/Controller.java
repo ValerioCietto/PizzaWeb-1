@@ -491,7 +491,7 @@ public class Controller extends HttpServlet {
     String username = user.getUsername();
     JSONArray jarr = null;
     HashMap<String, Integer> carrello = new HashMap<>();
-    String data = req.getParameter("data");
+    String data = req.getParameter("data").replace("T", " ");
     try {
       jarr = new JSONArray(req.getParameter("lista"));
       for (int i = 0; i < jarr.length(); i++) {
@@ -562,7 +562,7 @@ public class Controller extends HttpServlet {
                 p.setQuantita(quantita);
               }
               //gestione data
-              String data = req.getParameter("data");
+              String data = req.getParameter("data").replace("T", " ");
               if (data != null && !data.equals("")) {
                 p.setData(data);
               }
@@ -628,7 +628,7 @@ public class Controller extends HttpServlet {
 
             //gestione data
             if (req.getParameter("data") != null) {
-              String data = req.getParameter("data");
+              String data = req.getParameter("data").replace("T", " ");
               if (data != null && !data.equals("")) {
                 p.setData(data);
                 goodMessage(s, "modificata data");

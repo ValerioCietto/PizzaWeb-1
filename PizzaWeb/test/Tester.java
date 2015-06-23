@@ -470,15 +470,15 @@ public class Tester {
         String password="password";
         HttpSession s = req.getSession();
         Controller.logout(req);//errore non sei loggato
-        Controller.login(req);//errore mancano parametri
+        //Controller.login(req);//errore mancano parametri
         s.setAttribute("username", username);
         s.setAttribute("password", password);
-        Controller.login(req);//ok
-        Controller.login(req);//errore sei gia loggato
+        //Controller.login(req);//ok
+        //Controller.login(req);//errore sei gia loggato
         Controller.register(req);//errore sei gia loggato
         Controller.logout(req);//ok
         Controller.register(req);//ok
-        Controller.login(req);//ok
+        //Controller.login(req);//ok
         
     
     }
