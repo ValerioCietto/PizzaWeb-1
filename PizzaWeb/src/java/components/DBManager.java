@@ -4,7 +4,7 @@ import java.sql.*;
 
 /**
  * Classe dell'oggetto Pizza
- * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino, Giuseppe Mammolo;
  */
 ////////////////////////////////////////////////////////////////////////////////
 

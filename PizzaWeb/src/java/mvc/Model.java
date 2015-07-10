@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Classe dell'oggetto Pizza
  *
- * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino;
+ * @author Alessandro Genovese, Anna Di Leva, Mirko Costantino, Giuseppe Mammolo;
  */
 ////////////////////////////////////////////////////////////////////////////////
 public final class Model {

@@ -25,7 +25,6 @@ public class UserBean {
   private String ruolo;
   private String view;
   private ArrayList<String> message = new ArrayList<>();
-  private ArrayList<Pizza> carrello = new ArrayList<Pizza>();
 
   public UserBean() {}
 
@@ -79,15 +78,4 @@ public class UserBean {
     return view;
   }
 
-  public void addPizza(Pizza p) {
-    carrello.add(p);
-  }
-
-  public void svuota() {
-    carrello.clear();
-  }
-
-  public ArrayList<Pizza> getCarrello() {
-    return carrello;
-  }
 }

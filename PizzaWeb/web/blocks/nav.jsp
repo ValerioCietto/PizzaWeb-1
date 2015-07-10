@@ -41,7 +41,7 @@
           </div>
           <div>
             <input type='hidden' name='action' value= 'register'>
-            <input type='button'  name = "register" value= 'register' onclick="Account.checkJoin()">
+            <input type='submit'  name = "register" value= 'register' onclick="return Account.checkJoin()">
           </div>
         </form>
       </div>
