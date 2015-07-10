@@ -126,14 +126,12 @@ public class Controller extends HttpServlet {
                     logout(request);
                     break;
                 //////////////////////////////////////
-
                 case "addPrenotazione":
                     addPrenotazioni(request, out);
                     break;
             }
 
         }
-
         RequestDispatcher rd;
         //request e non named perchè richiediamo una jsp
         rd = getServletContext().getRequestDispatcher("/index.jsp");
@@ -325,7 +323,7 @@ public class Controller extends HttpServlet {
                     errorMessage(s, prezzoS + " non double");
                     return null;
                 }
-                if (nome != null && ingredienti != null && !nome.equals("") && !ingredienti.equals("") && prezzo > 0) {
+                if (nome != null && Model.getPizza(nome) == null && ingredienti != null && !nome.equals("") && !ingredienti.equals("") && prezzo > 0) {
                     Pizza p = new Pizza(nome, ingredienti, prezzo);
                     Model.addPizza(p);
                     goodMessage(s, "pizza aggiunta");
@@ -458,7 +456,6 @@ public class Controller extends HttpServlet {
                     } else {
                         errorMessage(s, "prenotazione non aggiunta");
                     }
-
                 }
             }
         } catch (JSONException | SQLException ex) {
@@ -532,11 +529,13 @@ public class Controller extends HttpServlet {
                                 if (i > 0) {
                                     p.setIdUtente(i);
                                     goodMessage(s, "modificato idNome");
+                                } else {
+                                    errorMessage(s, "Utente non trovato");
                                 }
                             }
                         }
                         //gestione pizza
-                        if (req.getParameter("pizza") != null) {
+                        if (req.getParameter("pizza") != null && !req.getParameter("pizza").equals("")) {
                             int pizza = Model.getIdPizza(req.getParameter("pizza") + "");
                             if (pizza > 0) {
                                 p.setIdPizza(pizza);

@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 
-function Re () {}
+function Re() {
+}
 
 
 Re.checkUsername = function (str) {
@@ -19,18 +20,18 @@ Re.checkPassword = function (str) {
 
 
 Re.checkText = function (str) {
-  var re = /^[\w\s\,]+$/;
-   return str === "" || re.test(str);
+    var re = /^[\w\s\,]+$/;
+    return str === "" || re.test(str);
 };
 
 Re.checkDouble = function (double) {
-  return Re.checkNumber(double);  
+    return Re.checkNumber(double);
 };
 
 Re.checkNumber = function (double) {
-  return !isNaN(double) || Number(double)===double; 
+    return !isNaN(double) || Number(double) === double;
 };
 
 Re.checkData = function (date) {
-  return /(0000-00-00T00:00)|((20\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):([0-5][0-9]))$/.test(date);
+    return /(0000-00-00T00:00)|((20\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):([0-5][0-9]))$/.test(date);
 }; 
