@@ -1,1 +1,0 @@
- - Aggiungere l'eliminazione della prenotazione lato utente

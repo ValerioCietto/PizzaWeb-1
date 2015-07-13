@@ -9,7 +9,7 @@
         <title>Da Purrer</title>
         <link rel="stylesheet" href="css/pizzacss.css" type="text/css"> 
         <link rel="stylesheet" href="css/article.css" type="text/css"> 
-        <link rel="stylesheet" href="css/footer.css" type="text/css"> 
+        <link rel="stylesheet" href="css/footer.css" type="text/css">
         <link rel="stylesheet" href="css/article.css" type="text/css"> 
         <link rel="stylesheet" href="css/header.css" type="text/css"> 
         <link rel="stylesheet" href="css/nav.css" type="text/css"> 

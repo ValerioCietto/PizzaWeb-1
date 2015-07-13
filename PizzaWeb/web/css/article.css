@@ -1,40 +1,39 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 15-giu-2015, 20.25.17
-    Author     : Giuseppe
-*/
+article {
+    background-color: #ffe7d8;
+    overflow-y: auto;
+    min-height: 600px;
+    width: 80%;
+}
 
+#content {
+    position: relative;
+    float: right;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
 
-/*
-###################### MESSAGGI #######################
-*/
-
-
+}
 
 #message {
-  margin: 10px;
+    margin: 10px;
 }
 
 #message p {
-  display: block;
-  margin: 1px;
-  padding: 2px;
+    display: block;
+    margin: 1px;
+    padding: 2px;
 }
 
 #message .good {
-  background-color: #33ff33
+    background-color: #33ff33
 }
 
 #message .warning {
-  background-color: #ffff33
+    background-color: #ffff33
 }
 
 #message .error {
-  background-color: #ff3333;
+    background-color: #ff3333;
 }
 
 
@@ -44,9 +43,8 @@ and open the template in the editor.
 
 
 article span{
-    
     margin: 0px 10px 0px 10px;
-    
+
 }
 
 
@@ -59,33 +57,27 @@ article .pizza, article .prenotazione, article .utente{
 }
 
 article .pizza {
-  position: relative;
-  text-align: left;
+    position: relative;
+    text-align: left;
 }
 
 
 article .pizza .nome {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 article .pizza .prezzo_block {
-  display: inline-block;
-  position: absolute;
-  right: 80px;
+    display: inline-block;
+    position: absolute;
+    right: 80px;
 }
-
-article .pizza .prezzo{
-}
-
 
 article .pizza .ingredienti_block {
-  font-size: 10px;
-  
+    font-size: 10px;
 }
 
 article .pizza .ingredienti {
-  font-style: oblique;
-  
+    font-style: oblique;
 }
 
 /*
@@ -93,7 +85,7 @@ article .pizza .ingredienti {
 */
 
 #page{
-  display: none;
+    display: none;
 }
 
 
@@ -102,15 +94,14 @@ article .pizza .ingredienti {
 */
 
 .pren_pizza {
-  
-  position: relative;
+    position: relative;
 }
 
 input[name="addPizza"] {
-  margin-top: 5px;
-  margin-bottom: 20px;
-  
-  
+    margin-top: 5px;
+    margin-bottom: 20px;
+
+
 }
 
 
@@ -124,14 +115,13 @@ input[name="addPizza"] {
 */
 
 div.utente {
-  position: relative;
+    position: relative;
 }
 
 div.utente .info {
-
-  font-size: large;
-  margin-top: 60px;
-  margin-bottom: 30px;
+    font-size: large;
+    margin-top: 60px;
+    margin-bottom: 30px;
 }
 
 div.utente .info .username, div.utente .info .password, div.utente .info .permission {

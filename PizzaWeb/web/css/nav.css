@@ -1,114 +1,106 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 15-giu-2015, 20.23.41
-    Author     : Giuseppe
-*/
-
-
-/* LOGIN CSS */
+nav {
+    background-color: #af1c22;
+    text-align: center;   
+    width: 19.9%;
+    float: left;
+    padding: 0px;
+    margin: 0px;
+} 
 
 nav #account_system {
-  position: relative;
-  margin-top: 10px;
-  margin-left: 10px;
+    position: relative;
+    margin-top: 10px;
+    margin-left: 10px;
 }
 
 nav #operazioni {
-  margin-top: 50px;
-  position: relative;
-  margin-left: 10px;
+    margin-top: 50px;
+    position: relative;
+    margin-left: 10px;
 }
 
 nav #account_system div{
-  width: 90%;
-  color: black;
+    width: 90%;
+    color: black;
 }
 
 nav #account_system div form input{
-  width:80%;
+    width:80%;
 }
 nav #account_system #terminale{
-  background-color: black;
-  color: greenyellow;
-  margin: 1%;
-  width: 98%;
+    background-color: black;
+    color: greenyellow;
+    margin: 1%;
+    width: 98%;
 }
 
 /* LOGIN MENU */
 
 nav #account_system form {
-  position: relative;
+    position: relative;
 }
 
 nav #account_system form .row {
-  margin-top: 10px;
-  position: relative;
+    margin-top: 10px;
+    position: relative;
 }
 
 nav #account_system form .row label {
-  display: block;
-  position: relative;
+    display: block;
+    position: relative;
 }
 
 
 nav #account_system form input {
-  height: 2em;
-
-
+    height: 2em;
 }
 
 nav #account_system form input[type="text"] , nav #account_system form  input[type="password"] {
-  background-color: #e2e2e2;
-  width: auto;
-  padding-left: 1em;
-  padding-right: 1em;
-  position: relative;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-
-
+    background-color: #e2e2e2;
+    width: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+    position: relative;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
 }
 
 nav #account_system  input[type="button"], nav #account_system  input[type="submit"], nav #account_system button {
-  width: auto;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+    width: auto;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
 }
 
 nav #account_system input[name="login_button"] {
-  display: inline-block;
-  position: relative;
-  width: 5em;
-  margin-top: 10px;
-  padding: 0px;
+    display: inline-block;
+    position: relative;
+    width: 5em;
+    margin-top: 10px;
+    padding: 0px;
 
 }
 nav  #account_system input[name="join_button"] {
-  display: inline-block;
-  position: relative;
-  width: 5em;
+    display: inline-block;
+    position: relative;
+    width: 5em;
 }
 
 nav  #account_system input[name="register"] {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 /* FINE LOGIN MENU */
 
 
 nav #account_system .back_button {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 nav  #account_system .join_div_form {
-  position: relative;
-  left: 0px;
+    position: relative;
+    left: 0px;
 }
 
 /* FINE EX ASIDE*/
@@ -122,29 +114,15 @@ nav div{
     color: black;
 }
 
-
-
 /* MENU BUTTON*/
 nav .menu_button {
-  cursor: pointer;
-  border: 1px solid black;
-  padding: 15px;
-  background-color: #ffdf8b;
-}
-
-nav .button_catalogo {
-  
-}
-
-nav .button_prenotazioni {
-  
-}
-
-nav .button_utenti {
-  
+    cursor: pointer;
+    border: 1px solid black;
+    padding: 15px;
+    background-color: #ffdf8b;
 }
 
 nav .empatize_button {
-  font-weight: bold;
-  background-color: #ffaa2f;
+    font-weight: bold;
+    background-color: #ffaa2f;
 }
