@@ -28,7 +28,7 @@ import org.json.JSONObject;
 @WebServlet(name = "Servlet", urlPatterns = {"/Servlet"})
 
 public class Controller extends HttpServlet {
-
+    
 ////////////////////////////////////////////////////////////////////////////////
 // GESTIONE DELLE PAGINE
     /**

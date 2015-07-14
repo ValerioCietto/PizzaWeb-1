@@ -21,13 +21,13 @@
 
     <body>
         <div id="container">
-            <%@include file="blocks/header.jsp" %>
+            <%@include file="view/header.jsp" %>
 
             <div id="content">
-                <%@include file="blocks/nav.jsp"%>
-                <%@include file="blocks/article.jsp"%>
+                <%@include file="view/nav.jsp"%>
+                <%@include file="view/article.jsp"%>
             </div>
-            <%@include file="blocks/footer.jsp"%>
+            <%@include file="view/footer.jsp"%>
         </div>
     </body>
 </html>

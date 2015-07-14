@@ -189,7 +189,7 @@ public class View {
         html += "<span></br>Quantità:  </span>";
         html += "<span class='quantità'>" + al1.getQuantita() + "</span>";
         html += "<span></br>Data:  </span>";
-        html += "<span class='data'>" + al1.getData() + "</span>";
+        html += "<span class='data'>" + al1.getDataEU() + "</span>";
         html += "<span></br>Stato:  </span>";
         html += "<span class='stato'>" + al1.getStato() + "</span>";
         if (!al1.getStato().equals("Consegnato")) {
@@ -220,7 +220,7 @@ public class View {
         html += "<span></br>Quantità:  </span>";
         html += "<span class='quantità'>" + al1.getQuantita() + "</span>";
         html += "<span></br>Data:  </span>";
-        html += "<span class='data'>" + al1.getData() + "</span>";
+        html += "<span class='data'>" + al1.getDataEU() + "</span>";
         html += "<span></br>Stato:  </span>";
         html += "<span class='stato'>" + al1.getStato() + "</span>";
         html += "<form action='/PizzaWeb/Servlet' method='post' >";

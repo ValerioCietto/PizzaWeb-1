@@ -126,6 +126,10 @@ public class Prenotazione {
     public String getData() {
         return data;
     }
+    
+    public String getDataEU() {
+        return data.substring(8, 10) +"-"+data.substring(5, 7)+"-"+data.substring(0, 4) + data.substring(10);
+    }
 
     /**
      * Restituisce lo stato della prenotazione;
